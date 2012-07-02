@@ -6,9 +6,9 @@ namespace Migr8.Test.Tests
     [TestFixture]
     public class when_there_are_no_migrations : DbFixtureFor<DatabaseMigrator>
     {
-        protected override DatabaseMigrator SetUp()
+        protected override DatabaseMigrator Create()
         {
-            return new DatabaseMigrator(ConnectionString, testDatabaseName);
+            return new DatabaseMigrator(TestDbConnectionString);
         }
 
         [Test]

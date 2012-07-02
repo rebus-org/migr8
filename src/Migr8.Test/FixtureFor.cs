@@ -20,6 +20,7 @@ namespace Migr8.Test
         {
             try
             {
+                Console.WriteLine("Tearing down");
                 TearDown();
             }
             catch (Exception e)

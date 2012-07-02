@@ -2,26 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
 
 namespace Migr8
 {
     public class DatabaseContext : IDisposable
     {
-        readonly bool usingExternallyProvidedDbConnection;
+        static int contextCounter = 0;
+
+        readonly bool dbConnectionIsOwned;
         readonly IDbConnection dbConnection;
         IDbTransaction dbTransaction;
+        readonly int instanceId = Interlocked.Increment(ref contextCounter);
 
         public DatabaseContext(IDbConnection dbConnection)
         {
             this.dbConnection = dbConnection;
-            usingExternallyProvidedDbConnection = true;
+            dbConnectionIsOwned = false;
         }
 
         public DatabaseContext(string connectionString)
             : this(new SqlConnection(connectionString))
         {
+            dbConnectionIsOwned = true;
             dbConnection.Open();
-            usingExternallyProvidedDbConnection = false;
         }
 
         public DatabaseContext NewTransaction()
@@ -34,37 +38,47 @@ namespace Migr8
             return this;
         }
 
-        public DatabaseContext Using(string databaseName)
-        {
-            ExecuteNonQuery("use " + databaseName);
-            return this;
-        }
-
         public void Commit()
         {
             if (dbTransaction == null)
             {
-                throw new InvalidOperationException("Cannot commit when there's not transaction");
+                throw new InvalidOperationException("Cannot commit when no transaction has been started!");
             }
-            Console.WriteLine("TX: Commit");
+            Log("TX: Commit");
             dbTransaction.Commit();
             dbTransaction = null;
         }
 
         public void Dispose()
         {
-            if (dbTransaction != null)
+            try
             {
-                Console.WriteLine("TX: Rollback");
-                dbTransaction.Rollback();
-                dbTransaction.Dispose();
-                dbTransaction = null;
-            }
+                if (dbTransaction != null)
+                {
+                    Log("TX: Rollback");
+                    try
+                    {
+                        dbTransaction.Rollback();
+                    }
+                    catch { }
 
-            if (!usingExternallyProvidedDbConnection)
+                    dbTransaction.Dispose();
+                    dbTransaction = null;
+                }
+            }
+            catch (Exception e)
             {
-                dbConnection.Dispose();
-                Console.WriteLine("Connection disposed");
+                Log("Error during TX Rollback: {0}", e);
+                throw;
+            }
+            finally
+            {
+                if (dbConnectionIsOwned)
+                {
+                    dbConnection.Close();
+                    dbConnection.Dispose();
+                    Log("Connection disposed");
+                }
             }
         }
 
@@ -119,6 +133,31 @@ namespace Migr8
                     throw;
                 }
             }
+        }
+
+        void Log(string message, params object[] objs)
+        {
+            Console.WriteLine("CTX " + instanceId + ": " + message, objs);
+        }
+
+        public void KillConnections(string databaseName)
+        {
+            ExecuteNonQuery(
+                string.Format(
+                    @"
+DECLARE @DatabaseName nvarchar(50)
+SET @DatabaseName = N'{0}'
+
+DECLARE @SQL varchar(max)
+
+SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
+FROM MASTER..SysProcesses
+WHERE DBId = DB_ID(@DatabaseName) AND SPId <> @@SPId
+
+--SELECT @SQL 
+EXEC(@SQL)
+",
+                    databaseName));
         }
     }
 }

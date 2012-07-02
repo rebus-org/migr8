@@ -1,26 +1,46 @@
 using System;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
+using System.Net;
 using System.Threading;
-using NUnit.Framework;
+using Shouldly;
 
 namespace Migr8.Test
 {
     public abstract class DbFixtureFor<TSut> : FixtureFor<TSut>
     {
-        static int counter = 0;
+        static int counter;
         protected string testDatabaseName;
+        protected bool dropDatabase = true;
 
-        protected string ConnectionString
+        protected string TestDbConnectionString
         {
-            get { return ConfigurationManager.ConnectionStrings["masterdb"].ConnectionString; }
+            get { return ConnectionString(testDatabaseName); }
         }
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
+        protected string MasterDbConnectionString
         {
-            testDatabaseName = String.Format("migr8_test_{0}", Interlocked.Increment(ref counter));
+            get { return ConnectionString("master"); }
+        }
+
+        protected string ConnectionString(string databaseName)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["masterdb"];
+            connectionString.ShouldNotBe(null);
+
+            var modifiedConnectionString = connectionString.ConnectionString.Replace("master", databaseName);
+            modifiedConnectionString.ShouldContain(databaseName);
+
+            return modifiedConnectionString;
+        }
+
+        protected override TSut SetUp()
+        {
+            SqlConnection.ClearAllPools();
+
+            //testDatabaseName = string.Format("migr8_test_{0}", Interlocked.Increment(ref counter));
+            testDatabaseName = "migr8_test";
+
             Console.WriteLine(@"Test fixture
 
     {0}
@@ -29,40 +49,50 @@ uses test database
 
     {1}", GetType().Name, testDatabaseName);
 
-            MasterDb(c => c.ExecuteNonQuery("drop database " + testDatabaseName, ignoreException: true));
-            MasterDb(c => c.ExecuteNonQuery("create database " + testDatabaseName, ignoreException: true));
+            MasterDb(c =>
+            {
+                Console.WriteLine("Dropping {0}", testDatabaseName);
+                c.ExecuteNonQuery("drop database " + testDatabaseName, ignoreException: true);
+
+                Console.WriteLine("Creating {0}", testDatabaseName);
+                c.ExecuteNonQuery("create database " + testDatabaseName, ignoreException: true);
+            });
+
+            return Create();
         }
 
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
+        protected override void TearDown()
         {
-            MasterDb(c => c.ExecuteNonQuery("drop database " + testDatabaseName));
+            MasterDb(c =>
+                         {
+                             Console.WriteLine("Dropping {0}", testDatabaseName);
+                             c.ExecuteNonQuery("drop database " + testDatabaseName);
+                         });
+        }
+
+        protected abstract TSut Create();
+
+        protected void DoNotDropDatabase()
+        {
+            dropDatabase = false;
         }
 
         protected void MasterDb(Action<DatabaseContext> masterDbConnectionHandler)
         {
-            using (var context = new DatabaseContext(ConnectionString))
+            using (var context = new DatabaseContext(MasterDbConnectionString))
             {
+                context.KillConnections(testDatabaseName);
+
                 masterDbConnectionHandler(context);
             }
         }
 
-        protected internal void TestDb(Action<DatabaseContext> masterDbConnectionHandler)
+        protected void TestDb(Action<DatabaseContext> masterDbConnectionHandler)
         {
-            using (var context = new DatabaseContext(GetTestDbConnection()))
+            using (var context = new DatabaseContext(TestDbConnectionString))
             {
                 masterDbConnectionHandler(context);
             }
-        }
-
-        protected IDbConnection GetTestDbConnection()
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["masterdb"].ConnectionString;
-
-            var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            return connection;
         }
     }
 }

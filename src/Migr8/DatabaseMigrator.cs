@@ -8,23 +8,21 @@ namespace Migr8
     {
         readonly bool ownsTheDbConnection;
         readonly IDbConnection dbConnection;
-        readonly string databaseName;
 
-        public DatabaseMigrator(IDbConnection dbConnection, string databaseName)
-            : this(dbConnection, databaseName, false)
+        public DatabaseMigrator(IDbConnection dbConnection)
+            : this(dbConnection, false)
         {
         }
 
-        public DatabaseMigrator(string connectionString, string databaseName)
-            : this(new SqlConnection(connectionString), databaseName, true)
+        public DatabaseMigrator(string connectionString)
+            : this(new SqlConnection(connectionString), true)
         {
         }
 
-        DatabaseMigrator(IDbConnection dbConnection, string databaseName, bool ownsTheDbConnection)
+        DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection)
         {
             this.ownsTheDbConnection = ownsTheDbConnection;
             this.dbConnection = dbConnection;
-            this.databaseName = databaseName;
 
             if (ownsTheDbConnection)
             {
@@ -37,6 +35,7 @@ namespace Migr8
             if (ownsTheDbConnection)
             {
                 Console.WriteLine("Disposing connection");
+                dbConnection.Close();
                 dbConnection.Dispose();
             }
             else
@@ -54,11 +53,9 @@ namespace Migr8
         {
             using (var context = new DatabaseContext(dbConnection))
             {
-                context
-                    .Using(databaseName)
-                    .NewTransaction();
+                context.NewTransaction();
 
-                var sql = string.Format("select * from sys.extended_properties where [class] = '0' and [name] = '{0}'",
+                var sql = string.Format("select * from sys.extended_properties where [class] = 0 and [name] = '{0}'",
                                         ExtProp.DatabaseVersion);
 
                 var properties = context.ExecuteQuery(sql);
