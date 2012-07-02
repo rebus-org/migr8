@@ -2,6 +2,8 @@
 [Bb]in/
 [Oo]bj/
 
+packages/
+
 # mstest test results
 TestResults
 

@@ -6,7 +6,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\scripts\build.proj = ..\scripts\build.proj
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8", "Migr8\Migr8.csproj", "{3FCCF05F-29D0-4363-BF58-DEBF8F287854}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8.Test", "Migr8.Test\Migr8.Test.csproj", "{F755BB4A-04EF-4CAD-801D-5D59CC84A71A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A7310FA2-EC70-4F23-AC08-B4A5D337BE50}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FCCF05F-29D0-4363-BF58-DEBF8F287854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCCF05F-29D0-4363-BF58-DEBF8F287854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCCF05F-29D0-4363-BF58-DEBF8F287854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCCF05F-29D0-4363-BF58-DEBF8F287854}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F755BB4A-04EF-4CAD-801D-5D59CC84A71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F755BB4A-04EF-4CAD-801D-5D59CC84A71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F755BB4A-04EF-4CAD-801D-5D59CC84A71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F755BB4A-04EF-4CAD-801D-5D59CC84A71A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
