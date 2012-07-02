@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FakeItEasy;
+using NUnit.Framework;
 using Shouldly;
 
 namespace Migr8.Test.Tests
@@ -8,7 +9,7 @@ namespace Migr8.Test.Tests
     {
         protected override DatabaseMigrator Create()
         {
-            return new DatabaseMigrator(TestDbConnectionString);
+            return new DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>());
         }
 
         [Test]
@@ -20,7 +21,19 @@ namespace Migr8.Test.Tests
             sut.MigrateDatabase();
 
             // assert
-            TestDb(db => db.DatabaseProperties().ShouldContainKeyAndValue("migr8_database_version", 1.ToString()));
+            TestDb(db => db.DatabaseProperties().ShouldContainKey(Constants.DatabaseVersionPropertyName));
+        }
+
+        [Test]
+        public void database_version_starts_with_0()
+        {
+            // arrange
+
+            // act
+            sut.MigrateDatabase();
+
+            // assert
+            TestDb(db => db.DatabaseProperties()[Constants.DatabaseVersionPropertyName].ShouldBe(0.ToString()));
         }
     }
 }

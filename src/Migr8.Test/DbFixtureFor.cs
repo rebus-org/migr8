@@ -1,7 +1,6 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Net;
 using System.Threading;
 using Shouldly;
 
@@ -38,8 +37,7 @@ namespace Migr8.Test
         {
             SqlConnection.ClearAllPools();
 
-            //testDatabaseName = string.Format("migr8_test_{0}", Interlocked.Increment(ref counter));
-            testDatabaseName = "migr8_test";
+            testDatabaseName = string.Format("migr8_test_{0}", Interlocked.Increment(ref counter));
 
             Console.WriteLine(@"Test fixture
 
@@ -63,11 +61,18 @@ uses test database
 
         protected override void TearDown()
         {
-            MasterDb(c =>
-                         {
-                             Console.WriteLine("Dropping {0}", testDatabaseName);
-                             c.ExecuteNonQuery("drop database " + testDatabaseName);
-                         });
+            if (dropDatabase)
+            {
+                MasterDb(c =>
+                             {
+                                 Console.WriteLine("Dropping {0}", testDatabaseName);
+                                 c.ExecuteNonQuery("drop database " + testDatabaseName);
+                             });
+            }
+            else
+            {
+                Console.WriteLine("Database {0} was not dropped!", testDatabaseName);
+            }
         }
 
         protected abstract TSut Create();

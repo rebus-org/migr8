@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbFixtureFor.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Tests\when_executing_migrations.cs" />
     <Compile Include="Tests\when_migrating_empty_database.cs" />
     <Compile Include="Tests\when_there_are_no_migrations.cs" />
     <Compile Include="FixtureFor.cs" />

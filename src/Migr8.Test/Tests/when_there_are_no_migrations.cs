@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FakeItEasy;
+using NUnit.Framework;
 using Shouldly;
 
 namespace Migr8.Test.Tests
@@ -8,11 +9,11 @@ namespace Migr8.Test.Tests
     {
         protected override DatabaseMigrator Create()
         {
-            return new DatabaseMigrator(TestDbConnectionString);
+            return new DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>());
         }
 
         [Test]
-        public void migrator_does_nothing()
+        public void database_stays_empty()
         {
             // arrange
             

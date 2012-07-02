@@ -97,7 +97,7 @@ namespace Migr8
                 using (var reader = command.ExecuteReader())
                 {
                     var fieldCount = reader.FieldCount;
-                    while (reader.NextResult())
+                    while (reader.Read())
                     {
                         var row = new Dictionary<string, object>();
                         for (var index = 0; index < fieldCount; index++)
