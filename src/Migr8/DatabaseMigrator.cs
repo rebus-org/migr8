@@ -25,6 +25,11 @@ namespace Migr8
             this.ownsTheDbConnection = ownsTheDbConnection;
             this.dbConnection = dbConnection;
             this.databaseName = databaseName;
+
+            if (ownsTheDbConnection)
+            {
+                dbConnection.Open();
+            }
         }
 
         public void Dispose()
