@@ -50,6 +50,7 @@
     <Compile Include="ISingleSqlStatement.cs" />
     <Compile Include="IMigration.cs" />
     <Compile Include="IProvideMigrations.cs" />
+    <Compile Include="Migrate.cs" />
     <Compile Include="MigrationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
