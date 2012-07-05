@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -52,9 +53,15 @@ namespace Migr8
             try
             {
                 EnsureDatabaseHasVersionMetaData();
+                
                 var databaseVersionNumber = GetDatabaseVersionNumber();
+                
+                var migrationsToExecute = provideMigrations
+                    .GetAllMigrations()
+                    .Where(m => m.TargetDatabaseVersion > databaseVersionNumber)
+                    .ToList();
 
-                var migrationsToExecute = provideMigrations.GetAllMigrations().Where(m => m.TargetDatabaseVersion > databaseVersionNumber);
+                ValidateSequence(databaseVersionNumber, migrationsToExecute);
 
                 foreach (var migration in migrationsToExecute.OrderBy(m => m.TargetDatabaseVersion))
                 {
@@ -63,7 +70,30 @@ namespace Migr8
             }
             catch (Exception e)
             {
-                throw new ApplicationException(string.Format("Something bad happened during migration"), e);
+                throw new DatabaseMigrationException(e, "Something bad happened during migration");
+            }
+        }
+
+        void ValidateSequence(int initialDatabaseVersionNumber, IEnumerable<IMigration> migrationsToExecute)
+        {
+            var expectedVersionNumberOfMigration = initialDatabaseVersionNumber + 1;
+            foreach (var migration in migrationsToExecute.OrderBy(m => m.TargetDatabaseVersion))
+            {
+                if (migration.TargetDatabaseVersion > expectedVersionNumberOfMigration)
+                {
+                    throw new DatabaseMigrationException(
+                        "Sequence of migrations seems to be broken! A migration is missing that would bring the database to version {0}",
+                        expectedVersionNumberOfMigration);
+                }
+
+                if (migration.TargetDatabaseVersion < expectedVersionNumberOfMigration)
+                {
+                    throw new DatabaseMigrationException(
+                        "Sequence contains more than one migration that would bring the database to version {0}",
+                        migration.TargetDatabaseVersion);
+                }
+
+                expectedVersionNumberOfMigration++;
             }
         }
 
@@ -82,15 +112,15 @@ namespace Migr8
                         }
                         catch (Exception e)
                         {
-                            throw new ApplicationException(
-                                string.Format(@"The following SQL could not be executed:
+                            throw new DatabaseMigrationException(e,
+                                @"The following SQL could not be executed:
 
 {0}
 
 Exception:
 
 {1}",
-                                              sqlStatement, e), e);
+                                              sqlStatement, e);
                         }
                     }
 
@@ -106,7 +136,7 @@ Exception:
             }
             catch (Exception e)
             {
-                throw new ApplicationException(string.Format("The migration {0} (db version -> {1}) could not be executed", migration.Description, migration.TargetDatabaseVersion), e);
+                throw new DatabaseMigrationException(e, "The migration {0} (db version -> {1}) could not be executed", migration.Description, migration.TargetDatabaseVersion);
             }
         }
 

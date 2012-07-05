@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AssemblyScanner.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="DatabaseMigrationException.cs" />
     <Compile Include="DatabaseMigrator.cs" />
     <Compile Include="DbConnectionExtensions.cs" />
     <Compile Include="ExtProp.cs" />

@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyScanner\when_scanning_assembly.cs" />
+    <Compile Include="DatabaseMigrator\when_sequence_contains_duplicates.cs" />
+    <Compile Include="DatabaseMigrator\when_sequence_is_broken.cs" />
     <Compile Include="DbFixtureFor.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DatabaseMigrator\when_executing_migrations.cs" />
