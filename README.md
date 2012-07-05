@@ -2,9 +2,9 @@
 
 Execute the migrations - either in a dedicated command line app, or - my favorite - whenever your app starts up, just before it connects to the database:
 
-	Migrate.Database("server=.;initial catalog=whatever;integrated secutiry=sspi");
+	Migrate.Database("db");
 
-and then, elsewhere in the calling assembly, you define these bad boys:
+where `db` is a key in the `connectionStrings` section of your app.config/web.config, and then, elsewhere in the calling assembly, you define these bad boys:
 
     [Migration(1, "Create table for the Timeout Manager to use")]
     class CreateRebusTimeoutsTable : ISqlMigration

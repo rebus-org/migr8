@@ -20,7 +20,6 @@ namespace Migr8
         public DatabaseMigrator(IDbConnection dbConnection, IProvideMigrations provideMigrations)
             : this(dbConnection, false, provideMigrations)
         {
-            Assembly.Get
         }
 
         public DatabaseMigrator(string connectionString, IProvideMigrations provideMigrations)
