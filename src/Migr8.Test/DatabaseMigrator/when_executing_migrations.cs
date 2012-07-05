@@ -1,6 +1,9 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
+using System.Linq;
 
 namespace Migr8.Test.DatabaseMigrator
 {
@@ -31,11 +34,32 @@ CREATE TABLE [dbo].[Acknowledgements](
         #endregion
 
         IProvideMigrations provideMigrations;
+        List<string> raisedEvents;
 
         protected override Migr8.DatabaseMigrator Create()
         {
+            raisedEvents = new List<string>();
             provideMigrations = A.Fake<IProvideMigrations>();
-            return new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations);
+            var migrator = new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations);
+            migrator.BeforeExecute += BeforeExecute;
+            migrator.AfterExecuteSuccess += AfterExecuteSuccess;
+            migrator.AfterExecuteError += AfterExecuteError;
+            return migrator;
+        }
+
+        void BeforeExecute(IMigration migration)
+        {
+            raisedEvents.Add(string.Format("BEFORE {0}", migration.TargetDatabaseVersion));
+        }
+
+        void AfterExecuteSuccess(IMigration migration)
+        {
+            raisedEvents.Add(string.Format("AFTER {0}", migration.TargetDatabaseVersion));
+        }
+
+        void AfterExecuteError(IMigration migration, Exception exception)
+        {
+            raisedEvents.Add(string.Format("AFTER {0} (ERROR)", migration.TargetDatabaseVersion));
         }
 
         [Test]
@@ -112,11 +136,32 @@ CREATE TABLE [dbo].[Acknowledgements](
                        });
         }
 
+        [Test]
+        public void before_and_after_events_are_raised()
+        {
+            // arrange
+            A.CallTo(() => provideMigrations.GetAllMigrations())
+                .Returns(new[]
+                             {
+                                 NewMigration(3, "will throw!!!"),
+                                 NewMigration(2, "--"),
+                                 NewMigration(1, "--"),
+                             });
+
+
+            // act
+            try{ sut.MigrateDatabase();}
+            catch{}
+
+            // assert
+            string.Join(",", raisedEvents).ShouldBe("BEFORE 1,AFTER 1,BEFORE 2,AFTER 2,BEFORE 3,AFTER 3 (ERROR)");
+        }
+
         IMigration NewMigration(int targetDatabaseVersion, string sql)
         {
             var migration = A.Fake<IMigration>();
             A.CallTo(() => migration.TargetDatabaseVersion).Returns(targetDatabaseVersion);
-            A.CallTo(() => migration.SqlStatements).Returns(new[] {sql});
+            A.CallTo(() => migration.SqlStatements).Returns(new[] { sql });
             return migration;
         }
     }

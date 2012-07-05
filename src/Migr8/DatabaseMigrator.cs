@@ -12,6 +12,10 @@ namespace Migr8
         readonly IProvideMigrations provideMigrations;
         readonly IDbConnection dbConnection;
 
+        public event Action<IMigration> BeforeExecute = delegate { };
+        public event Action<IMigration> AfterExecuteSuccess = delegate { };
+        public event Action<IMigration, Exception> AfterExecuteError = delegate { };
+
         public DatabaseMigrator(IDbConnection dbConnection, IProvideMigrations provideMigrations)
             : this(dbConnection, false, provideMigrations)
         {
@@ -99,6 +103,8 @@ namespace Migr8
 
         void ExecuteMigration(IMigration migration)
         {
+            BeforeExecute(migration);
+
             try
             {
                 using (var context = new DatabaseContext(dbConnection))
@@ -133,9 +139,13 @@ Exception:
 
                     context.Commit();
                 }
+
+                AfterExecuteSuccess(migration);
             }
             catch (Exception e)
             {
+                AfterExecuteError(migration, e);
+
                 throw new DatabaseMigrationException(e, "The migration {0} (db version -> {1}) could not be executed", migration.Description, migration.TargetDatabaseVersion);
             }
         }
