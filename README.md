@@ -34,7 +34,7 @@ and then, elsewhere in the calling assembly, you define these bad boys:
         }
     }
 
-    [Migration(2, "Create a table for the Timeout Manager to use")]
+    [Migration(2, "Create a table for Rebus publishers to use")]
     class CreateRebusSubscriptionsTable : ISqlMigration
     {
         public string Sql
