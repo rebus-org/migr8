@@ -58,6 +58,16 @@ and then, elsewhere in the calling assembly, you define these bad boys:
         }
     }
 
+If you want to be more explicit, you can also go
+
+	// this is how all the migrations are picked up
+    var provideMigrations = new AssemblyScanner(typeof(AnEntity).Assembly, typeof(AnotherEntity).Assembly);
+
+	// this one finds out which ones to execute, validates the sequence, and executes
+	new DatabaseMigrator(myConnectionString, provideMigrations).MigrateDatabase();
+
+# Brief info
+
 The version number of the database is stored in an extended property called `migr8_database_version`. 
 
 Each migration is executed in a transaction, execution stops if one fails.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 
 namespace Migr8
 {
@@ -19,6 +20,7 @@ namespace Migr8
         public DatabaseMigrator(IDbConnection dbConnection, IProvideMigrations provideMigrations)
             : this(dbConnection, false, provideMigrations)
         {
+            Assembly.Get
         }
 
         public DatabaseMigrator(string connectionString, IProvideMigrations provideMigrations)
