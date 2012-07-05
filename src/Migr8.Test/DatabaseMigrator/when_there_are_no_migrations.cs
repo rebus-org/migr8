@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using Shouldly;
 
-namespace Migr8.Test.Tests
+namespace Migr8.Test.DatabaseMigrator
 {
     [TestFixture]
-    public class when_there_are_no_migrations : DbFixtureFor<DatabaseMigrator>
+    public class when_there_are_no_migrations : DbFixtureFor<Migr8.DatabaseMigrator>
     {
-        protected override DatabaseMigrator Create()
+        protected override Migr8.DatabaseMigrator Create()
         {
-            return new DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>());
+            return new Migr8.DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>());
         }
 
         [Test]

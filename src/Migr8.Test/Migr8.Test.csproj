@@ -55,11 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyScanner\when_scanning_assembly.cs" />
     <Compile Include="DbFixtureFor.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Tests\when_executing_migrations.cs" />
-    <Compile Include="Tests\when_migrating_empty_database.cs" />
-    <Compile Include="Tests\when_there_are_no_migrations.cs" />
+    <Compile Include="DatabaseMigrator\when_executing_migrations.cs" />
+    <Compile Include="DatabaseMigrator\when_migrating_empty_database.cs" />
+    <Compile Include="DatabaseMigrator\when_there_are_no_migrations.cs" />
     <Compile Include="FixtureFor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

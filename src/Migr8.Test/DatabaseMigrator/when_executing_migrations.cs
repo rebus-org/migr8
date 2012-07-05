@@ -2,10 +2,10 @@
 using NUnit.Framework;
 using Shouldly;
 
-namespace Migr8.Test.Tests
+namespace Migr8.Test.DatabaseMigrator
 {
     [TestFixture]
-    public class when_executing_migrations : DbFixtureFor<DatabaseMigrator>
+    public class when_executing_migrations : DbFixtureFor<Migr8.DatabaseMigrator>
     {
         #region oh my god it's not pretty
         const string RealisticSqlSnippet = @"
@@ -32,10 +32,10 @@ CREATE TABLE [dbo].[Acknowledgements](
 
         IProvideMigrations provideMigrations;
 
-        protected override DatabaseMigrator Create()
+        protected override Migr8.DatabaseMigrator Create()
         {
             provideMigrations = A.Fake<IProvideMigrations>();
-            return new DatabaseMigrator(TestDbConnectionString, provideMigrations);
+            return new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations);
         }
 
         [Test]

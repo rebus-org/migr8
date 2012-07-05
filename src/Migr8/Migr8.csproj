@@ -41,12 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyScanner.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseMigrator.cs" />
     <Compile Include="DbConnectionExtensions.cs" />
     <Compile Include="ExtProp.cs" />
+    <Compile Include="ISingleSqlStatement.cs" />
     <Compile Include="IMigration.cs" />
     <Compile Include="IProvideMigrations.cs" />
+    <Compile Include="MigrationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
