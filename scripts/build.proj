@@ -1,10 +1,14 @@
 ﻿<Project DefaultTargets="build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <AllProjects Include="..\src\**\*.csproj" />
+    <AllProjects Include="..\src\**\*.csproj" Exclude="..\src\**\*.Test.csproj"/>
+    <NuSpecFiles Include="$(ScriptsFolder)\*.nuspec" />
   </ItemGroup>
 
   <PropertyGroup>
-    <BuildOutputFolder>..\deploy</BuildOutputFolder>
+    <ToolsFolder>..\tools</ToolsFolder>
+    <ScriptsFolder>..\scripts</ScriptsFolder>
+    <BuildOutputFolder>..\deploy\NET40</BuildOutputFolder>
+    <NuGet>$(ToolsFolder)\NuGet\NuGet.exe</NuGet>
   </PropertyGroup>
 
   <Target Name="build" DependsOnTargets="compile_projects;copy_build_output" />
@@ -17,6 +21,10 @@
 
   <Target Name="copy_build_output">
     <Copy SourceFiles="@(BuildOutput)" DestinationFolder="$(BuildOutputFolder)" />
+  </Target>
+
+  <Target Name="createNugetPackage" DependsOnTargets="build">
+    <Exec Command="$(NuGet) pack %(NuSpecFiles.FullPath) -OutputDirectory $(BuildOutputFolder)"/>
   </Target>
 
 </Project>
