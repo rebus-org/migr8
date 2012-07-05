@@ -1,7 +1,10 @@
 # Migr8
 
+Execute the migrations - either in a dedicated command line app, or - my favorite - whenever your app starts up, just before it connects to the database:
+
 	Migrate.Database("server=.;initial catalog=whatever;integrated secutiry=sspi");
 
+and then, elsewhere in the calling assembly, you define these bad boys:
 
     [Migration(1, "Create table for the Timeout Manager to use")]
     class CreateRebusTimeoutsTable : ISqlMigration
@@ -54,3 +57,17 @@
 			}
         }
     }
+
+The version number of the database is stored in an extended property called `migr8_database_version`. 
+
+Each migration is executed in a transaction, execution stops if one fails.
+
+Events are raised before/after and in the event of an error.
+
+If you `go` in your SQL script, the preceding block will be executed - just like you're used to, just without the compilation errors if you rename stuff.
+
+# What to do?
+
+First: Use migr8 if you need to treat your database with some evolutionary friction-free schema and data migrations.
+
+Second: _lean back, chill....._
