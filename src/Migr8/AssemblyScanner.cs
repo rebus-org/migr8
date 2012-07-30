@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Migr8
 {
@@ -34,10 +35,8 @@ namespace Migr8
                            {
                                Description = attribute.Description,
                                TargetDatabaseVersion = attribute.DatabaseVersionNumber,
-                               SqlStatements =
-                                   instance.Sql.Split(new[] {"go", "GO", "gO", "Go"},
-                                                      StringSplitOptions.RemoveEmptyEntries)
-                                   .Select(sql => sql.Trim())
+                               SqlStatements = Regex.Split(instance.Sql, @"^go *\;? *", RegexOptions.Multiline | RegexOptions.IgnoreCase)
+                                   .Where(sql => !string.IsNullOrWhiteSpace(sql))
                                    .ToList(),
                            };
             }

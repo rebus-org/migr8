@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
-using System.Linq;
 
 namespace Migr8.Test.DatabaseMigrator
 {

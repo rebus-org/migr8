@@ -26,17 +26,30 @@ namespace Migr8.Test.AssemblyScanner
             migrations.Count.ShouldBe(2);
             migrations.ShouldContain(m => m.TargetDatabaseVersion == 1);
             migrations.ShouldContain(m => m.TargetDatabaseVersion == 2);
+        }
 
+        [Test]
+        public void using_go_results_in_multiple_sql_statements()
+        {
+            // arrange
+
+
+            // act
+            var migrations = sut.GetAllMigrations().ToList();
+
+            // assert
             var firstMigration = migrations.Single(m => m.TargetDatabaseVersion == 1);
             firstMigration.Description.ShouldBe("This is my first migration");
-            firstMigration.SqlStatements.Count().ShouldBe(1);
-            firstMigration.SqlStatements.ShouldContain("blah!");
+            var firstMigrationSqlStatementsTrimmed = firstMigration.SqlStatements.Select(s => s.Trim());
+            firstMigrationSqlStatementsTrimmed.Count().ShouldBe(1);
+            firstMigrationSqlStatementsTrimmed.ShouldContain("blah!");
 
             var secondMigration = migrations.Single(m => m.TargetDatabaseVersion == 2);
             secondMigration.Description.ShouldBe("This is the next migration");
-            secondMigration.SqlStatements.Count().ShouldBe(2);
-            secondMigration.SqlStatements.ShouldContain("hello world!");
-            secondMigration.SqlStatements.ShouldContain("another sql statement");
+            var secondMigrationSqlStatementsTrimmed = secondMigration.SqlStatements.Select(s => s.Trim());
+            secondMigrationSqlStatementsTrimmed.Count().ShouldBe(2);
+            secondMigrationSqlStatementsTrimmed.ShouldContain("hello world!");
+            secondMigrationSqlStatementsTrimmed.ShouldContain("another sql statement");
         }
     }
 
@@ -56,9 +69,11 @@ namespace Migr8.Test.AssemblyScanner
         {
             get { return @"hello world!
 
-go
+GO;
 
-another sql statement"; }
+another sql statement
+
+go"; }
         }
     }
 }

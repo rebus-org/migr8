@@ -8,12 +8,13 @@ namespace Migr8
 {
     public class DatabaseContext : IDisposable
     {
-        static int contextCounter = 0;
+        static int contextCounter;
 
         readonly bool dbConnectionIsOwned;
         readonly IDbConnection dbConnection;
-        IDbTransaction dbTransaction;
         readonly int instanceId = Interlocked.Increment(ref contextCounter);
+
+        IDbTransaction dbTransaction;
 
         public DatabaseContext(IDbConnection dbConnection)
         {

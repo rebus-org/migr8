@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 
 namespace Migr8
 {
@@ -43,13 +42,8 @@ namespace Migr8
         {
             if (ownsTheDbConnection)
             {
-                Console.WriteLine("Disposing connection");
                 dbConnection.Close();
                 dbConnection.Dispose();
-            }
-            else
-            {
-                Console.WriteLine("Didn't dispose connection because it was provided from the outside");
             }
         }
 
@@ -58,9 +52,9 @@ namespace Migr8
             try
             {
                 EnsureDatabaseHasVersionMetaData();
-                
+
                 var databaseVersionNumber = GetDatabaseVersionNumber();
-                
+
                 var migrationsToExecute = provideMigrations
                     .GetAllMigrations()
                     .Where(m => m.TargetDatabaseVersion > databaseVersionNumber)
