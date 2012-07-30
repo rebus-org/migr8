@@ -22,8 +22,22 @@ namespace Migr8
         }
 
         public DatabaseMigrator(string connectionString, IProvideMigrations provideMigrations)
-            : this(new SqlConnection(connectionString), true, provideMigrations)
+            : this(CreateDbConnection(connectionString), true, provideMigrations)
         {
+        }
+
+        static SqlConnection CreateDbConnection(string connectionString)
+        {
+            try
+            {
+                return new SqlConnection(connectionString);
+            }
+            catch (Exception e)
+            {
+                var errorMessage = string.Format("Could not create SQL connection using the specified connection string: '{0}'", connectionString);
+                
+                throw new ArgumentException(errorMessage, e);
+            }
         }
 
         DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection, IProvideMigrations provideMigrations)
