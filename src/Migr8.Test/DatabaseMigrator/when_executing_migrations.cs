@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FakeItEasy;
+using Migr8.DB;
+using Migr8.Internal;
 using NUnit.Framework;
 using Shouldly;
 

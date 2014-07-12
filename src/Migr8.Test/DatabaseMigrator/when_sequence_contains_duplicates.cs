@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Migr8.Internal;
 using NUnit.Framework;
 using Shouldly;
 

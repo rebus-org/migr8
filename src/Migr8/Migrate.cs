@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using Migr8.Internal;
 
 namespace Migr8
 {

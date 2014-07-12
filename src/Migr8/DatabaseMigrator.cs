@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Migr8.DB;
+using Migr8.Internal;
 
 namespace Migr8
 {
@@ -11,6 +13,7 @@ namespace Migr8
         readonly bool ownsTheDbConnection;
         readonly IProvideMigrations provideMigrations;
         readonly IDbConnection dbConnection;
+        private IDatabaseCommunicator communicator;
 
         public event Action<IMigration> BeforeExecute = delegate { };
         public event Action<IMigration> AfterExecuteSuccess = delegate { };
@@ -35,16 +38,17 @@ namespace Migr8
             catch (Exception e)
             {
                 var errorMessage = string.Format("Could not create SQL connection using the specified connection string: '{0}'", connectionString);
-                
+
                 throw new ArgumentException(errorMessage, e);
             }
         }
 
-        DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection, IProvideMigrations provideMigrations)
+        private DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection, IProvideMigrations provideMigrations)
         {
             this.ownsTheDbConnection = ownsTheDbConnection;
             this.provideMigrations = provideMigrations;
             this.dbConnection = dbConnection;
+            communicator = new ExtendedPropertiesCommunicator();
 
             if (ownsTheDbConnection)
             {
@@ -142,10 +146,8 @@ Exception:
                     var currentVersion = GetDatabaseVersionNumber(context);
                     var newVersion = currentVersion + 1;
 
-                    context.ExecuteNonQuery(
-                        string.Format("exec sys.sp_updateextendedproperty @name=N'{0}', @value=N'{1}'",
-                                      ExtProp.DatabaseVersion, newVersion.ToString()));
-
+                    communicator.UpdateVersion(context, newVersion);
+                
                     context.Commit();
                 }
 
@@ -160,7 +162,7 @@ Exception:
         }
 
 
-        int GetDatabaseVersionNumber()
+        private int GetDatabaseVersionNumber()
         {
             using (var context = new DatabaseContext(dbConnection))
             {
@@ -168,33 +170,17 @@ Exception:
             }
         }
 
-        int GetDatabaseVersionNumber(DatabaseContext context)
+        private int GetDatabaseVersionNumber(DatabaseContext context)
         {
-            var versionProperty = context
-                .ExecuteQuery(
-                    string.Format("select * from sys.extended_properties where [class] = 0 and [name] = '{0}'",
-                                  ExtProp.DatabaseVersion))
-                .Single();
-            var currentVersion = int.Parse(versionProperty["value"].ToString());
-            return currentVersion;
+            return communicator.GetDatabaseVersionNumber(context);
         }
 
-        void EnsureDatabaseHasVersionMetaData()
+        private void EnsureDatabaseHasVersionMetaData()
         {
             using (var context = new DatabaseContext(dbConnection))
             {
                 context.NewTransaction();
-
-                var sql = string.Format("select * from sys.extended_properties where [class] = 0 and [name] = '{0}'",
-                                        ExtProp.DatabaseVersion);
-
-                var properties = context.ExecuteQuery(sql);
-
-                if (properties.Count == 0)
-                {
-                    context.ExecuteNonQuery(string.Format("exec sys.sp_addextendedproperty @name=N'{0}', @value=N'{1}'", ExtProp.DatabaseVersion, "0"));
-                }
-
+                communicator.EnsureSchema(context);
                 context.Commit();
             }
         }

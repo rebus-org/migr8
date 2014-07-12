@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Migr8.Internal;
 using NUnit.Framework;
 using Shouldly;
 using System.Linq;
@@ -6,11 +7,11 @@ using System.Linq;
 namespace Migr8.Test.AssemblyScanner
 {
     [TestFixture]
-    public class when_scanning_assembly : FixtureFor<Migr8.AssemblyScanner>
+    public class when_scanning_assembly : FixtureFor<Internal.AssemblyScanner>
     {
-        protected override Migr8.AssemblyScanner SetUp()
+        protected override Internal.AssemblyScanner SetUp()
         {
-            return new Migr8.AssemblyScanner(Assembly.GetExecutingAssembly());
+            return new Internal.AssemblyScanner(Assembly.GetExecutingAssembly());
         }
 
         [Test]

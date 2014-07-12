@@ -42,15 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyScanner.cs" />
-    <Compile Include="DatabaseContext.cs" />
+    <Compile Include="DB\ExtendedPropertiesCommunicator.cs" />
+    <Compile Include="DB\IDatabaseCommunicator.cs" />
+    <Compile Include="Internal\AssemblyScanner.cs" />
+    <Compile Include="DB\DatabaseContext.cs" />
     <Compile Include="DatabaseMigrationException.cs" />
     <Compile Include="DatabaseMigrator.cs" />
-    <Compile Include="DbConnectionExtensions.cs" />
-    <Compile Include="ExtProp.cs" />
-    <Compile Include="ISingleSqlStatement.cs" />
-    <Compile Include="IMigration.cs" />
-    <Compile Include="IProvideMigrations.cs" />
+    <Compile Include="DB\DbConnectionExtensions.cs" />
+    <Compile Include="DB\ExtProp.cs" />
+    <Compile Include="Internal\ISingleSqlStatement.cs" />
+    <Compile Include="Internal\IMigration.cs" />
+    <Compile Include="Internal\IProvideMigrations.cs" />
     <Compile Include="Migrate.cs" />
     <Compile Include="MigrationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
