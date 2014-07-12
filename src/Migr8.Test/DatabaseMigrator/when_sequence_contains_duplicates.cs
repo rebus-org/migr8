@@ -24,7 +24,7 @@ namespace Migr8.Test.DatabaseMigrator
                                  NewMigration(5, "--"),
                              });
             
-            return new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations);
+            return new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations, new Options());
         }
 
         [Test]

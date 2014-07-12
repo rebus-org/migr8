@@ -18,5 +18,11 @@ namespace Migr8.DB
 
             return tables.Select(r => r["name"].ToString()).ToList();
         }
+
+        public static T GetSingleValue<T>(this DatabaseContext context, string tableName, string valueName)
+        {
+            var property = context.ExecuteQuery(string.Format("SELECT * FROM dbo.{0}", tableName)).Single();
+            return (T) property[valueName];
+        }
     }
 }

@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace Migr8.DB
 {
-    public class ExtendedPropertiesCommunicator : IDatabaseCommunicator
+    public class ExtendedPropertiesPersister : IVersionPersister
     {
         public void EnsureSchema(DatabaseContext context)
         {

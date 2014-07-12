@@ -10,26 +10,26 @@ namespace Migr8
 {
     public class DatabaseMigrator : IDisposable
     {
-        readonly bool ownsTheDbConnection;
-        readonly IProvideMigrations provideMigrations;
-        readonly IDbConnection dbConnection;
-        private IDatabaseCommunicator communicator;
+        private readonly bool _ownsTheDbConnection;
+        private readonly IProvideMigrations _provideMigrations;
+        private readonly IDbConnection _dbConnection;
+        private readonly IVersionPersister _communicator;
 
         public event Action<IMigration> BeforeExecute = delegate { };
         public event Action<IMigration> AfterExecuteSuccess = delegate { };
         public event Action<IMigration, Exception> AfterExecuteError = delegate { };
 
-        public DatabaseMigrator(IDbConnection dbConnection, IProvideMigrations provideMigrations)
-            : this(dbConnection, false, provideMigrations)
+        public DatabaseMigrator(IDbConnection dbConnection, IProvideMigrations provideMigrations, Options options)
+            : this(dbConnection, false, provideMigrations, options)
         {
         }
 
-        public DatabaseMigrator(string connectionString, IProvideMigrations provideMigrations)
-            : this(CreateDbConnection(connectionString), true, provideMigrations)
+        public DatabaseMigrator(string connectionString, IProvideMigrations provideMigrations, Options options)
+            : this(CreateDbConnection(connectionString), true, provideMigrations, options)
         {
         }
 
-        static SqlConnection CreateDbConnection(string connectionString)
+        private static SqlConnection CreateDbConnection(string connectionString)
         {
             try
             {
@@ -43,12 +43,21 @@ namespace Migr8
             }
         }
 
-        private DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection, IProvideMigrations provideMigrations)
+        private DatabaseMigrator(IDbConnection dbConnection, bool ownsTheDbConnection, IProvideMigrations provideMigrations, Options options)
         {
-            this.ownsTheDbConnection = ownsTheDbConnection;
-            this.provideMigrations = provideMigrations;
-            this.dbConnection = dbConnection;
-            communicator = new ExtendedPropertiesCommunicator();
+            _ownsTheDbConnection = ownsTheDbConnection;
+            _provideMigrations = provideMigrations;
+            _dbConnection = dbConnection;
+
+            if (options.VersionTableName != null)
+            {
+                _communicator = new TablePersister(options.VersionTableName);
+            }
+
+            if (_communicator == null) //use default
+            {
+                _communicator = new ExtendedPropertiesPersister();
+            }
 
             if (ownsTheDbConnection)
             {
@@ -58,10 +67,10 @@ namespace Migr8
 
         public void Dispose()
         {
-            if (ownsTheDbConnection)
+            if (_ownsTheDbConnection)
             {
-                dbConnection.Close();
-                dbConnection.Dispose();
+                _dbConnection.Close();
+                _dbConnection.Dispose();
             }
         }
 
@@ -73,8 +82,9 @@ namespace Migr8
 
                 var databaseVersionNumber = GetDatabaseVersionNumber();
 
-                var migrationsToExecute = provideMigrations
-                    .GetAllMigrations()
+                var allMigrations = _provideMigrations
+                    .GetAllMigrations();
+                var migrationsToExecute = allMigrations
                     .Where(m => m.TargetDatabaseVersion > databaseVersionNumber)
                     .ToList();
 
@@ -120,7 +130,7 @@ namespace Migr8
 
             try
             {
-                using (var context = new DatabaseContext(dbConnection))
+                using (var context = new DatabaseContext(_dbConnection))
                 {
                     context.NewTransaction();
                     foreach (var sqlStatement in migration.SqlStatements)
@@ -146,8 +156,8 @@ Exception:
                     var currentVersion = GetDatabaseVersionNumber(context);
                     var newVersion = currentVersion + 1;
 
-                    communicator.UpdateVersion(context, newVersion);
-                
+                    _communicator.UpdateVersion(context, newVersion);
+
                     context.Commit();
                 }
 
@@ -164,7 +174,7 @@ Exception:
 
         private int GetDatabaseVersionNumber()
         {
-            using (var context = new DatabaseContext(dbConnection))
+            using (var context = new DatabaseContext(_dbConnection))
             {
                 return GetDatabaseVersionNumber(context);
             }
@@ -172,15 +182,15 @@ Exception:
 
         private int GetDatabaseVersionNumber(DatabaseContext context)
         {
-            return communicator.GetDatabaseVersionNumber(context);
+            return _communicator.GetDatabaseVersionNumber(context);
         }
 
         private void EnsureDatabaseHasVersionMetaData()
         {
-            using (var context = new DatabaseContext(dbConnection))
+            using (var context = new DatabaseContext(_dbConnection))
             {
                 context.NewTransaction();
-                communicator.EnsureSchema(context);
+                _communicator.EnsureSchema(context);
                 context.Commit();
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace Migr8.DB
 {
-    public interface IDatabaseCommunicator
+    public interface IVersionPersister
     {
         void EnsureSchema(DatabaseContext context);
         int GetDatabaseVersionNumber(DatabaseContext context);

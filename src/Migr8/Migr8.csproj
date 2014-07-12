@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\ExtendedPropertiesCommunicator.cs" />
-    <Compile Include="DB\IDatabaseCommunicator.cs" />
+    <Compile Include="DB\ExtendedPropertiesPersister.cs" />
+    <Compile Include="DB\IVersionPersister.cs" />
+    <Compile Include="DB\TablePersister.cs" />
     <Compile Include="Internal\AssemblyScanner.cs" />
     <Compile Include="DB\DatabaseContext.cs" />
     <Compile Include="DatabaseMigrationException.cs" />
