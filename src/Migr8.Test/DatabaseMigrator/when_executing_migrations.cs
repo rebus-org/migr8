@@ -1,6 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Linq;
 using FakeItEasy;
+using Migr8.DB;
+using Migr8.Internal;
 using NUnit.Framework;
 using Shouldly;
 
@@ -32,14 +36,20 @@ CREATE TABLE [dbo].[Acknowledgements](
 ";
         #endregion
 
-        IProvideMigrations provideMigrations;
-        List<string> raisedEvents;
+        IProvideMigrations _provideMigrations;
+        List<string> _raisedEvents;
+        private string _defaultVersionTableName = "DBVersion";
 
         protected override Migr8.DatabaseMigrator Create()
         {
-            raisedEvents = new List<string>();
-            provideMigrations = A.Fake<IProvideMigrations>();
-            var migrator = new Migr8.DatabaseMigrator(TestDbConnectionString, provideMigrations);
+            return Create(new Options());
+        }
+
+        private Migr8.DatabaseMigrator Create(Options option)
+        {
+            _raisedEvents = new List<string>();
+            _provideMigrations = A.Fake<IProvideMigrations>();
+            var migrator = new Migr8.DatabaseMigrator(TestDbConnectionString, _provideMigrations, option);
             migrator.BeforeExecute += BeforeExecute;
             migrator.AfterExecuteSuccess += AfterExecuteSuccess;
             migrator.AfterExecuteError += AfterExecuteError;
@@ -48,24 +58,35 @@ CREATE TABLE [dbo].[Acknowledgements](
 
         void BeforeExecute(IMigration migration)
         {
-            raisedEvents.Add(string.Format("BEFORE {0}", migration.TargetDatabaseVersion));
+            _raisedEvents.Add(string.Format("BEFORE {0}", migration.TargetDatabaseVersion));
         }
 
         void AfterExecuteSuccess(IMigration migration)
         {
-            raisedEvents.Add(string.Format("AFTER {0}", migration.TargetDatabaseVersion));
+            _raisedEvents.Add(string.Format("AFTER {0}", migration.TargetDatabaseVersion));
         }
 
         void AfterExecuteError(IMigration migration, Exception exception)
         {
-            raisedEvents.Add(string.Format("AFTER {0} (ERROR)", migration.TargetDatabaseVersion));
+            _raisedEvents.Add(string.Format("AFTER {0} (ERROR)", migration.TargetDatabaseVersion));
         }
 
-        [Test]
-        public void database_version_number_is_incremented()
+        [TestCase(0)]
+        [TestCase(1)]
+        public void database_version_number_is_incremented(int persisterType)
         {
             // arrange
-            A.CallTo(() => provideMigrations.GetAllMigrations())
+            var options = new Options();
+            switch (persisterType)
+            {
+                case 1:
+                    options.UseVersionTableName(_defaultVersionTableName);
+                    break;
+                case 0:
+                    break;
+            }
+            sut = Create(options);
+            A.CallTo(() => _provideMigrations.GetAllMigrations())
                 .Returns(new[]
                              {
                                  NewMigration(1, RealisticSqlSnippet),
@@ -78,21 +99,48 @@ CREATE TABLE [dbo].[Acknowledgements](
             sut.MigrateDatabase();
 
             // assert
-            TestDb(db =>
-                       {
-                           db.TableNames().Count.ShouldBe(0);
-                           db.DatabaseProperties().ShouldContainKey(Constants.DatabaseVersionPropertyName);
-                           db.DatabaseProperties()[Constants.DatabaseVersionPropertyName].ShouldBe("4");
-                       });
+            if (persisterType == 0)
+            {
+                TestDb(db =>
+                {
+                    db.TableNames().Count().ShouldBe(0);
+                    db.DatabaseProperties().ShouldContainKey(Constants.DatabaseVersionPropertyName);
+                    db.DatabaseProperties()[Constants.DatabaseVersionPropertyName].ShouldBe("4");
+                });
+            }
+            else if (persisterType == 1)
+            {
+                TestDb(db =>
+                {
+                    db.TableNames().Except(new[] { _defaultVersionTableName }).Count().ShouldBe(0);
+                    db.GetSingleValue<int>(_defaultVersionTableName, "MigrationVersion").ShouldBe(4);
+                });
+            }
         }
 
-        [Test]
-        public void only_current_and_future_migrations_are_executed()
+        [TestCase(0)]
+        [TestCase(1)]
+        public void only_current_and_future_migrations_are_executed(int persisterType)
         {
             // arrange
-            TestDb(db => db.ExecuteNonQuery(string.Format("exec sys.sp_addextendedproperty @name=N'{0}', @value=N'3'", Constants.DatabaseVersionPropertyName)));
+            var options = new Options();
+            switch (persisterType)
+            {
+                case 1:
+                    options.UseVersionTableName(_defaultVersionTableName);
+                    TestDb(db =>
+                    {
+                        new TablePersister(_defaultVersionTableName).EnsureSchema(db);
+                        new TablePersister(_defaultVersionTableName).UpdateVersion(db, 3);
+                    });
+                    break;
+                case 0:
+                    TestDb(db => db.ExecuteNonQuery(string.Format("exec sys.sp_addextendedproperty @name=N'{0}', @value=N'3'", Constants.DatabaseVersionPropertyName)));
+                    break;
+            }
+            sut = Create(options);
 
-            A.CallTo(() => provideMigrations.GetAllMigrations())
+            A.CallTo(() => _provideMigrations.GetAllMigrations())
                 .Returns(new[]
                              {
                                  NewMigration(1, "!!!!will generate an error if executed!!!!!"),
@@ -107,8 +155,8 @@ CREATE TABLE [dbo].[Acknowledgements](
             // assert
             TestDb(db =>
                        {
-                           db.TableNames().Count.ShouldBe(1);
-                           db.TableNames().ShouldContain("test1");
+                           db.TableNames().Except(new[] { _defaultVersionTableName }).Count().ShouldBe(1);
+                           db.TableNames().Except(new[] { _defaultVersionTableName }).ShouldContain("test1");
                        });
         }
 
@@ -116,7 +164,7 @@ CREATE TABLE [dbo].[Acknowledgements](
         public void migrations_are_executed_in_order()
         {
             // arrange
-            A.CallTo(() => provideMigrations.GetAllMigrations())
+            A.CallTo(() => _provideMigrations.GetAllMigrations())
                 .Returns(new[]
                              {
                                  NewMigration(3, "create table test1 (id int identity(1,1) not null)"),
@@ -139,7 +187,7 @@ CREATE TABLE [dbo].[Acknowledgements](
         public void before_and_after_events_are_raised()
         {
             // arrange
-            A.CallTo(() => provideMigrations.GetAllMigrations())
+            A.CallTo(() => _provideMigrations.GetAllMigrations())
                 .Returns(new[]
                              {
                                  NewMigration(3, "will throw!!!"),
@@ -149,11 +197,11 @@ CREATE TABLE [dbo].[Acknowledgements](
 
 
             // act
-            try{ sut.MigrateDatabase();}
-            catch{}
+            try { sut.MigrateDatabase(); }
+            catch { }
 
             // assert
-            string.Join(",", raisedEvents).ShouldBe("BEFORE 1,AFTER 1,BEFORE 2,AFTER 2,BEFORE 3,AFTER 3 (ERROR)");
+            string.Join(",", _raisedEvents).ShouldBe("BEFORE 1,AFTER 1,BEFORE 2,AFTER 2,BEFORE 3,AFTER 3 (ERROR)");
         }
 
         IMigration NewMigration(int targetDatabaseVersion, string sql)

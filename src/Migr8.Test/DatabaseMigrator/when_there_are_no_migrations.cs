@@ -1,4 +1,6 @@
 ﻿using FakeItEasy;
+using Migr8.DB;
+using Migr8.Internal;
 using NUnit.Framework;
 using Shouldly;
 
@@ -9,7 +11,7 @@ namespace Migr8.Test.DatabaseMigrator
     {
         protected override Migr8.DatabaseMigrator Create()
         {
-            return new Migr8.DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>());
+            return new Migr8.DatabaseMigrator(TestDbConnectionString, A.Fake<IProvideMigrations>(), new Options());
         }
 
         [Test]

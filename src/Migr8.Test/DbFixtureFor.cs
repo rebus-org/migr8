@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading;
+using Migr8.DB;
 using Shouldly;
 
 namespace Migr8.Test
