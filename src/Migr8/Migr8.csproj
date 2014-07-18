@@ -52,7 +52,7 @@
     <Compile Include="DB\DbConnectionExtensions.cs" />
     <Compile Include="DB\ExtProp.cs" />
     <Compile Include="Internal\ISingleSqlStatement.cs" />
-    <Compile Include="Internal\IMigration.cs" />
+    <Compile Include="IMigration.cs" />
     <Compile Include="Internal\IProvideMigrations.cs" />
     <Compile Include="Migrate.cs" />
     <Compile Include="MigrationAttribute.cs" />

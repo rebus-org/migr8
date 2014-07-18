@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Migr8.Internal
+namespace Migr8
 {
     public interface IMigration
     {
