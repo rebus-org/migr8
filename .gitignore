@@ -3,6 +3,7 @@
 [Oo]bj/
 
 packages/
+deploy/
 
 # mstest test results
 TestResults

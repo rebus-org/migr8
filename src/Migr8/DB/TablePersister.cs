@@ -13,20 +13,29 @@ namespace Migr8.DB
 
         public void EnsureSchema(DatabaseContext context)
         {
-            var sql = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.TABLES 
-				WHERE TABLE_SCHEMA = 'dbo' 
-				AND  TABLE_NAME = '{0}'", _tableName);
+            var sql = string.Format(@"
+
+SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_SCHEMA = 'dbo' 
+    AND  TABLE_NAME = '{0}'
+
+", _tableName);
 
             var properties = context.ExecuteQuery(sql);
 
             if (properties.Count == 0)
             {
                 var newSchemaSql = string.Format(@"
-                    CREATE TABLE dbo.{0}
-					(
-						MigrationVersion int NOT NULL
-					)  ON [PRIMARY]
-					INSERT INTO dbo.{0} VALUES('0')",
+
+CREATE TABLE [dbo].[{0}]
+(
+	[MigrationVersion] int NOT NULL,
+    CONSTRAINT PK_MigrationVersion PRIMARY KEY CLUSTERED ([MigrationVersion])
+);
+
+INSERT INTO [dbo].[{0}] VALUES('0');
+
+",
                     _tableName);
 
                 context.ExecuteNonQuery(newSchemaSql);
