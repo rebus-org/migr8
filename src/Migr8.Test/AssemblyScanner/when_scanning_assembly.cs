@@ -18,15 +18,16 @@ namespace Migr8.Test.AssemblyScanner
         public void assembly_attributes_are_picked_up()
         {
             // arrange
-            
+
 
             // act
             var migrations = sut.GetAllMigrations().ToList();
 
             // assert
-            migrations.Count.ShouldBe(2);
+            migrations.Count.ShouldBe(3);
             migrations.ShouldContain(m => m.TargetDatabaseVersion == 1);
             migrations.ShouldContain(m => m.TargetDatabaseVersion == 2);
+            migrations.ShouldContain(m => m.TargetDatabaseVersion == 3);
         }
 
         [Test]
@@ -41,16 +42,23 @@ namespace Migr8.Test.AssemblyScanner
             // assert
             var firstMigration = migrations.Single(m => m.TargetDatabaseVersion == 1);
             firstMigration.Description.ShouldBe("This is my first migration");
-            var firstMigrationSqlStatementsTrimmed = firstMigration.SqlStatements.Select(s => s.Trim());
+            var firstMigrationSqlStatementsTrimmed = firstMigration.SqlStatements.Select(s => s.Trim()).ToList();
             firstMigrationSqlStatementsTrimmed.Count().ShouldBe(1);
             firstMigrationSqlStatementsTrimmed.ShouldContain("blah!");
 
             var secondMigration = migrations.Single(m => m.TargetDatabaseVersion == 2);
             secondMigration.Description.ShouldBe("This is the next migration");
-            var secondMigrationSqlStatementsTrimmed = secondMigration.SqlStatements.Select(s => s.Trim());
+            var secondMigrationSqlStatementsTrimmed = secondMigration.SqlStatements.Select(s => s.Trim()).ToList();
             secondMigrationSqlStatementsTrimmed.Count().ShouldBe(2);
             secondMigrationSqlStatementsTrimmed.ShouldContain("hello world!");
             secondMigrationSqlStatementsTrimmed.ShouldContain("another sql statement");
+
+            var thirdMigration = migrations.Single(m => m.TargetDatabaseVersion == 3);
+            thirdMigration.Description.ShouldBe("This is the third badly spaced migration");
+            var thirdMigrationSqlStatementsTrimmed = secondMigration.SqlStatements.Select(s => s.Trim()).ToList();
+            thirdMigrationSqlStatementsTrimmed.Count().ShouldBe(2);
+            thirdMigrationSqlStatementsTrimmed.ShouldContain("hello world!");
+            thirdMigrationSqlStatementsTrimmed.ShouldContain("another sql statement");
         }
     }
 
@@ -68,13 +76,34 @@ namespace Migr8.Test.AssemblyScanner
     {
         public string Sql
         {
-            get { return @"hello world!
+            get
+            {
+                return @"hello world!
 
 GO;
 
 another sql statement
 
-go"; }
+go";
+            }
+        }
+    }
+
+    [Migration(3, "This is the third badly spaced migration")]
+    class CreateThirdIndex : ISqlMigration
+    {
+        public string Sql
+        {
+            get
+            {
+                return @"hello world!
+
+                        GO;
+
+another sql statement
+
+go";
+            }
         }
     }
 }

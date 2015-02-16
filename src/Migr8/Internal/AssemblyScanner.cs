@@ -35,7 +35,7 @@ namespace Migr8.Internal
                            {
                                Description = attribute.Description,
                                TargetDatabaseVersion = attribute.DatabaseVersionNumber,
-                               SqlStatements = Regex.Split(instance.Sql, @"^go *\;? *", RegexOptions.Multiline | RegexOptions.IgnoreCase)
+                               SqlStatements = Regex.Split(instance.Sql, @"\s*^go *\;? *", RegexOptions.Multiline | RegexOptions.IgnoreCase)
                                    .Where(sql => !string.IsNullOrWhiteSpace(sql))
                                    .ToList(),
                            };
