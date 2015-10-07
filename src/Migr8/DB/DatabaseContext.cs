@@ -13,17 +13,19 @@ namespace Migr8.DB
         readonly bool dbConnectionIsOwned;
         readonly IDbConnection dbConnection;
         readonly int instanceId = Interlocked.Increment(ref contextCounter);
+        private readonly int? _commandTimeout;
 
         IDbTransaction dbTransaction;
 
-        public DatabaseContext(IDbConnection dbConnection)
+        public DatabaseContext(IDbConnection dbConnection, int? commandTimeout = null)
         {
             this.dbConnection = dbConnection;
+            _commandTimeout = commandTimeout;
             dbConnectionIsOwned = false;
         }
 
-        public DatabaseContext(string connectionString)
-            : this(new SqlConnection(connectionString))
+        public DatabaseContext(string connectionString, int? commandTimeout = null)
+            : this(new SqlConnection(connectionString), commandTimeout)
         {
             dbConnectionIsOwned = true;
             dbConnection.Open();
@@ -92,6 +94,11 @@ namespace Migr8.DB
                     command.Transaction = dbTransaction;
                 }
 
+                if (_commandTimeout != null)
+                {
+                    command.CommandTimeout = _commandTimeout.Value;
+                }
+
                 command.CommandText = sql;
                 var rows = new List<Dictionary<string, object>>();
 
@@ -120,6 +127,11 @@ namespace Migr8.DB
                 if (dbTransaction != null)
                 {
                     command.Transaction = dbTransaction;
+                }
+
+                if (_commandTimeout != null)
+                {
+                    command.CommandTimeout = _commandTimeout.Value;
                 }
 
                 command.CommandText = sql;
