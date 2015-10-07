@@ -14,6 +14,7 @@ namespace Migr8
         private readonly IProvideMigrations _provideMigrations;
         private readonly IDbConnection _dbConnection;
         private readonly IVersionPersister _communicator;
+        private readonly int? _transactionTimeout;
 
         public event Action<IMigration> BeforeExecute = delegate { };
         public event Action<IMigration> AfterExecuteSuccess = delegate { };
@@ -52,6 +53,11 @@ namespace Migr8
             if (options.VersionTableName != null)
             {
                 _communicator = new TablePersister(options.VersionTableName);
+            }
+
+            if (options.CommandTimeout != null)
+            {
+                _transactionTimeout = options.CommandTimeout;
             }
 
             if (_communicator == null) //use default
@@ -130,9 +136,10 @@ namespace Migr8
 
             try
             {
-                using (var context = new DatabaseContext(_dbConnection))
+                using (var context = new DatabaseContext(_dbConnection, _transactionTimeout))
                 {
                     context.NewTransaction();
+
                     foreach (var sqlStatement in migration.SqlStatements)
                     {
                         try

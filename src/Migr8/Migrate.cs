@@ -50,10 +50,16 @@ namespace Migr8
     public class Options
     {
         private string _versionTableName;
+        private int? _commandTimeout;
 
         internal string VersionTableName
         {
             get { return _versionTableName; }
+        }
+
+        internal int? CommandTimeout
+        {
+            get { return _commandTimeout; }
         }
 
         /// <summary>
@@ -65,6 +71,17 @@ namespace Migr8
         {
             tablename = tablename.Trim('[', ']');
             _versionTableName = tablename;
+            return this;
+        }
+
+        /// <summary>
+        /// This will override the default command timeout of 30 seconds.
+        /// </summary>
+        /// <param name="timeoutInSeconds">SQL Command timeout in seconds</param>
+        /// <returns></returns>
+        public Options UseCommandTimeout(int timeoutInSeconds)
+        {
+            _commandTimeout = timeoutInSeconds;
             return this;
         }
     }
