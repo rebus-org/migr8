@@ -13,8 +13,9 @@ if "%1%"=="" (
 
 echo Building version %1% 
 
-git commit -am"Committing last changes version %1%"
-git push
+echo Please make sure that you have committed the last changes!
+
+pause
 
 "%msbuild%" "%~dp0\build.proj" /t:createNugetPackage /p:Version=%1%
 
