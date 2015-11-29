@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Migr8.Internals;
 
@@ -55,5 +56,7 @@ namespace Migr8
         {
             return _migrations;
         }
+
+        internal static Migrations None => new Migrations(Enumerable.Empty<IExecutableSqlMigration>());
     }
 }

@@ -23,13 +23,23 @@ namespace Migr8.Internals
         {
             var executableSqlMigrations = migrations.ToList();
 
-            _writer.Write($"Migr8 has {executableSqlMigrations.Count} migrations - will execute now");
+            if (executableSqlMigrations.Count == 0)
+            {
+                _writer.Write("Found no migrations");
+                return;
+            }
+
+            _writer.Write($"Migr8 found {executableSqlMigrations.Count} migrations");
 
             while (true)
             {
                 var didExecuteMigration = TryDoWork(executableSqlMigrations);
 
-                if (!didExecuteMigration) break;
+                if (!didExecuteMigration)
+                {
+                    _writer.Write("No more migrations to run");
+                    break;
+                }
             }
         }
 
