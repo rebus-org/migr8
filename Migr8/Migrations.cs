@@ -10,18 +10,28 @@ namespace Migr8
     /// </summary>
     public class Migrations
     {
+        /// <summary>
+        /// Gets all migrations found in the assembly calling this method.
+        /// </summary>
         public static Migrations FromThisAssembly()
         {
             var callingAssembly = Assembly.GetCallingAssembly();
             return GetFromAssembly(callingAssembly);
         }
 
+        /// <summary>
+        /// Gets all migrations found when scanning the assembly of the type <typeparamref name="T"/>.
+        /// The type <typeparamref name="T"/> does not need to be a migration type, though.
+        /// </summary>
         public static Migrations FromAssemblyOf<T>()
         {
-            var assembly = typeof (T).Assembly;
+            var assembly = typeof(T).Assembly;
             return GetFromAssembly(assembly);
         }
 
+        /// <summary>
+        /// Gets all migrations found in the specified assembly.
+        /// </summary>
         public static Migrations FromAssembly(Assembly assembly)
         {
             return GetFromAssembly(assembly);

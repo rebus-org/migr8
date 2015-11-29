@@ -1,30 +1,33 @@
 ﻿<Project DefaultTargets="createNugetPackage" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <AllProjects Include="..\src\**\*.csproj" Exclude="..\src\**\*.Test.csproj"/>
-    <NuSpecFiles Include="$(ScriptsFolder)\*.nuspec" />
+    <AllProjects Include="..\Migr8\*.csproj" />
+    <NuSpecFiles Include="..\Migr8\*.nuspec" />
   </ItemGroup>
 
   <PropertyGroup>
     <ToolsFolder>..\tools</ToolsFolder>
     <ScriptsFolder>..\scripts</ScriptsFolder>
-    <BuildOutputFolder>..\deploy\NET40</BuildOutputFolder>
+    <BuildOutputFolder>..\deploy</BuildOutputFolder>
     <NuGet>$(ToolsFolder)\NuGet\NuGet.exe</NuGet>
   </PropertyGroup>
 
-  <Target Name="build" DependsOnTargets="compile_projects;copy_build_output" />
+  <Target Name="build" DependsOnTargets="compile_project" />
 
-  <Target Name="compile_projects">
-    <MSBuild Projects="@(AllProjects)" Targets="build" StopOnFirstFailure="true" Properties="Configuration=Release">
-      <Output TaskParameter="TargetOutputs" ItemName="BuildOutput" />
-    </MSBuild>
+  <Target Name="compile_project">
+    <MSBuild Projects="@(AllProjects)" Targets="rebuild" StopOnFirstFailure="true" Properties="Configuration=Release"/>
   </Target>
 
-  <Target Name="copy_build_output">
-    <Copy SourceFiles="@(BuildOutput)" DestinationFolder="$(BuildOutputFolder)" />
+  <Target Name="check_version">
+    <Error Condition="'$(Version)' == ''" Text="You need to specify the version to build when calling this script!"/>
   </Target>
 
-  <Target Name="createNugetPackage" DependsOnTargets="build">
-    <Exec Command="$(NuGet) pack %(NuSpecFiles.FullPath) -OutputDirectory $(BuildOutputFolder)"/>
+  <Target Name="cleanup_output_directory">
+    <RemoveDir Directories="$(BuildOutputFolder)" ContinueOnError="true"/>
+    <MakeDir Directories="$(BuildOutputFolder)"/>
+  </Target>
+
+  <Target Name="createNugetPackage" DependsOnTargets="build; check_version; cleanup_output_directory">
+    <Exec Command="$(NuGet) pack %(NuSpecFiles.FullPath) -OutputDirectory $(BuildOutputFolder) -Version $(Version)"/>
   </Target>
 
 </Project>

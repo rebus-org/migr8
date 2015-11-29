@@ -3,8 +3,14 @@ using Migr8.Internals;
 
 namespace Migr8
 {
+    /// <summary>
+    /// Specifies the options to use when running migrations. Use the constructor's optional arguments to customize things.
+    /// </summary>
     public class Options
     {
+        /// <summary>
+        /// Specifies the default table name which will be used to log migrations.
+        /// </summary>
         public const string DefaultMigrationTableName = "__Migr8";
 
         /// <summary>
