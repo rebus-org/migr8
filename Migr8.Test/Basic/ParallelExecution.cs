@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Migr8.Internals;
 using NUnit.Framework;
 
 namespace Migr8.Test.Basic

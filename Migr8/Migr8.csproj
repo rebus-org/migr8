@@ -35,19 +35,24 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleWriter.cs" />
-    <Compile Include="ExclusiveDbConnection.cs" />
-    <Compile Include="DatabaseMigrator.cs" />
-    <Compile Include="DatabaseMigratorCore.cs" />
-    <Compile Include="IExecutableSqlMigration.cs" />
-    <Compile Include="IWriter.cs" />
+    <Compile Include="Internals\AssemblyScanner.cs" />
+    <Compile Include="Internals\ConsoleWriter.cs" />
+    <Compile Include="Internals\ExclusiveDbConnection.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="Internals\DatabaseMigratorCore.cs" />
+    <Compile Include="Internals\IExecutableSqlMigration.cs" />
+    <Compile Include="Internals\IWriter.cs" />
+    <Compile Include="Internals\LogActionWriter.cs" />
+    <Compile Include="ISqlMigration.cs" />
+    <Compile Include="MigrationAttribute.cs" />
     <Compile Include="MigrationException.cs" />
+    <Compile Include="Migrations.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,5 +15,10 @@ namespace Migr8
             : base(message, exception)
         {
         }
+
+        public MigrationException(string message)
+            : base(message)
+        {
+        }
     }
 }

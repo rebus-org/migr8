@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\CheckApiWorks.cs" />
     <Compile Include="Basic\Errors.cs" />
     <Compile Include="Basic\ParallelExecution.cs" />
     <Compile Include="Basic\SimpleScenario.cs" />

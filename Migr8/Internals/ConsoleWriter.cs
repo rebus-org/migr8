@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Migr8
+namespace Migr8.Internals
 {
-    public class ConsoleWriter : IWriter
+    class ConsoleWriter : IWriter
     {
         public void Write(string text)
         {

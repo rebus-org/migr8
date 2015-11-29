@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Migr8.Internals;
 using NUnit.Framework;
 
 namespace Migr8.Test.Basic

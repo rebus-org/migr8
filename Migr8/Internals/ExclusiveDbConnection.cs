@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Migr8
+namespace Migr8.Internals
 {
-    public class ExclusiveDbConnection : IDisposable
+    class ExclusiveDbConnection : IDisposable
     {
         readonly SqlConnection _connection;
         readonly SqlTransaction _transaction;

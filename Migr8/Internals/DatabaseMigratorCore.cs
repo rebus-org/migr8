@@ -4,12 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Migr8
+namespace Migr8.Internals
 {
     class DatabaseMigratorCore
     {
-        public const string DefaultMigrationTableName = "__Migr8";
-
         readonly IWriter _writer;
         readonly string _connectionString;
         readonly string _migrationTableName;
@@ -18,7 +16,7 @@ namespace Migr8
         {
             _writer = writer;
             _connectionString = connectionString;
-            _migrationTableName = migrationTableName ?? DefaultMigrationTableName;
+            _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
         }
 
         public void Execute(IEnumerable<IExecutableSqlMigration> migrations)
@@ -94,7 +92,7 @@ namespace Migr8
 
         IExecutableSqlMigration GetNextMigration(ExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
-            var executedMigrationIds = connection.Select<string>("Id", $"SELECT [Id] FROM [{_migrationTableName}]");
+            var executedMigrationIds = connection.Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]");
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))
@@ -155,7 +153,8 @@ namespace Migr8
                     command.CommandText = $@"
 
 CREATE TABLE [{migrationTableName}] (
-    [Id] NVARCHAR(200) NOT NULL,
+    [Id] INT IDENTITY(1,1),
+    [MigrationId] NVARCHAR(200) NOT NULL,
     [Sql] NVARCHAR(MAX) NOT NULL,
     [Time] DATETIME2 NOT NULL,
     [UserName] NVARCHAR(MAX) NOT NULL,
@@ -164,6 +163,18 @@ CREATE TABLE [{migrationTableName}] (
 
     CONSTRAINT [PK_{migrationTableName}_Id] PRIMARY KEY ([Id])
 );
+
+";
+
+                    command.ExecuteNonQuery();
+                }
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = $@"
+
+ALTER TABLE [{migrationTableName}] 
+    ADD CONSTRAINT [UNIQUE_{migrationTableName}_MigrationId] UNIQUE ([MigrationId]);
 
 ";
 
@@ -185,7 +196,7 @@ CREATE TABLE [{migrationTableName}] (
                 command.CommandText =
                     $@"
 INSERT INTO [{_migrationTableName}] (
-    [Id],
+    [MigrationId],
     [Sql],
     [Time],
     [UserName],

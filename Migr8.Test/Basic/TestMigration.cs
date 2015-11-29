@@ -1,4 +1,6 @@
-﻿namespace Migr8.Test.Basic
+﻿using Migr8.Internals;
+
+namespace Migr8.Test.Basic
 {
     class TestMigration : IExecutableSqlMigration
     {

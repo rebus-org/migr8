@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Migr8.Internals;
 using Migr8.Test.Basic;
 using NUnit.Framework;
 

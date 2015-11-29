@@ -21,7 +21,7 @@ namespace Migr8.Test
 
         static void ResetDatabase()
         {
-            DropTable(DatabaseMigratorCore.DefaultMigrationTableName);
+            DropTable(Options.DefaultMigrationTableName);
 
             foreach (var tableName in GetTableNames())
             {

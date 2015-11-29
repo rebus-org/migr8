@@ -1,4 +1,4 @@
-﻿namespace Migr8
+﻿namespace Migr8.Internals
 {
     interface IExecutableSqlMigration
     {
