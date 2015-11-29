@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 
 namespace Migr8.Test.Basic
@@ -12,7 +10,7 @@ namespace Migr8.Test.Basic
 
         protected override void SetUp()
         {
-            _migrator = new DatabaseMigratorCore(new ConsoleWriter(),  TestConfig.ConnectionString);
+            _migrator = new DatabaseMigratorCore(new ConsoleWriter(), TestConfig.ConnectionString);
         }
 
         [Test]
@@ -33,21 +31,29 @@ namespace Migr8.Test.Basic
 
             var tableNames = GetTableNames();
 
-            Assert.That(tableNames, Is.EqualTo(new[] {"Table1", "Table2", "Table3"}));
+            Assert.That(tableNames, Is.EqualTo(new[] { "Table1", "Table2", "Table3" }));
         }
 
-        class TestMigration : IExecutableSqlMigration
+        [Test]
+        public void PicksUpFromWhereItLeft()
         {
-            public TestMigration(int number, string sequenceId, string sql)
+            var allMigrations = new[]
             {
-                Number = number;
-                Id = $"{number}-{sequenceId}";
-                Sql = sql;
-            }
+                new TestMigration(1, "test", "CREATE TABLE [Table1] ([Id] int)"),
+                new TestMigration(2, "test", "CREATE TABLE [Table2] ([Id] int)"),
+                new TestMigration(3, "test", "CREATE TABLE [Table3] ([Id] int)"),
+            };
 
-            public int Number { get;}
-            public string Id { get; }
-            public string Sql { get;  }
+            _migrator.Execute(allMigrations.Take(2));
+
+            var tableNameAfterFirstTwoMigrations = GetTableNames();
+
+            _migrator.Execute(allMigrations);
+
+            var tableNameAfterAllMigrations = GetTableNames();
+
+            Assert.That(tableNameAfterFirstTwoMigrations, Is.EqualTo(new[] { "Table1", "Table2" }));
+            Assert.That(tableNameAfterAllMigrations, Is.EqualTo(new[] { "Table1", "Table2", "Table3" }));
         }
     }
 }

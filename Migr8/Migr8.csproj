@@ -47,6 +47,7 @@
     <Compile Include="DatabaseMigratorCore.cs" />
     <Compile Include="IExecutableSqlMigration.cs" />
     <Compile Include="IWriter.cs" />
+    <Compile Include="MigrationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

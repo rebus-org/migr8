@@ -44,10 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Basic\Errors.cs" />
+    <Compile Include="Basic\ParallelExecution.cs" />
     <Compile Include="Basic\SimpleScenario.cs" />
+    <Compile Include="Basic\SqlStatements.cs" />
+    <Compile Include="Basic\TestMigration.cs" />
+    <Compile Include="Branches\CommonScenario.cs" />
+    <Compile Include="Ordering\CheckSequence.cs" />
     <Compile Include="TestConfig.cs" />
     <Compile Include="FixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

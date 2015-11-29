@@ -5,7 +5,7 @@ namespace Migr8
 {
     public class DatabaseMigrator
     {
-        DatabaseMigratorCore _migrator;
+        readonly DatabaseMigratorCore _migrator;
 
         public DatabaseMigrator(string connectionStringOrConnectionStringName)
         {
