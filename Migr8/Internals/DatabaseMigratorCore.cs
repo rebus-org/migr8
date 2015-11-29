@@ -156,6 +156,7 @@ CREATE TABLE [{migrationTableName}] (
     [Id] INT IDENTITY(1,1),
     [MigrationId] NVARCHAR(200) NOT NULL,
     [Sql] NVARCHAR(MAX) NOT NULL,
+    [Description] NVARCHAR(MAX) NOT NULL,
     [Time] DATETIME2 NOT NULL,
     [UserName] NVARCHAR(MAX) NOT NULL,
     [UserDomainName] NVARCHAR(MAX) NOT NULL,
@@ -198,6 +199,7 @@ ALTER TABLE [{migrationTableName}]
 INSERT INTO [{_migrationTableName}] (
     [MigrationId],
     [Sql],
+    [Description],
     [Time],
     [UserName],
     [UserDomainName],
@@ -205,6 +207,7 @@ INSERT INTO [{_migrationTableName}] (
 ) VALUES (
     @id,
     @sql,
+    @description,
     @time,
     @userName,
     @userDomainName,
@@ -213,6 +216,7 @@ INSERT INTO [{_migrationTableName}] (
 ";
                 command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
                 command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
+                command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
                 command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
                 command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.UserName;
                 command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.UserDomainName;

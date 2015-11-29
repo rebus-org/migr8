@@ -57,20 +57,23 @@ namespace Migr8.Internals
         {
             var id = $"{attribute.SequenceNumber}-{attribute.OptionalBranchSpecification ?? "master"}";
             var sql = instance.Sql;
+            var description = attribute.Description;
 
-            return new ExecutableSqlMigration(id, sql);
+            return new ExecutableSqlMigration(id, sql, description);
         }
 
         class ExecutableSqlMigration : IExecutableSqlMigration
         {
-            public ExecutableSqlMigration(string id, string sql)
+            public ExecutableSqlMigration(string id, string sql, string description)
             {
                 Id = id;
                 Sql = sql;
+                Description = description;
             }
 
             public string Id { get; }
             public string Sql { get; }
+            public string Description { get; }
 
             public override string ToString()
             {
