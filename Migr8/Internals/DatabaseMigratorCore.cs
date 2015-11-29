@@ -31,6 +31,18 @@ namespace Migr8.Internals
 
             _writer.Write($"Migr8 found {executableSqlMigrations.Count} migrations");
 
+            var duplicatedMigrations = executableSqlMigrations
+                .GroupBy(m => m.Id)
+                .Where(g => g.Count() > 1)
+                .ToList();
+
+            if (duplicatedMigrations.Any())
+            {
+                var duplicatedIds = string.Join(", ", duplicatedMigrations.SelectMany(g => g.Select(m => m.Id)));
+
+                throw new MigrationException($"Cannot execute migrations because the following migrations are duplicates: {duplicatedIds}");
+            }
+
             while (true)
             {
                 var didExecuteMigration = TryDoWork(executableSqlMigrations);
@@ -102,22 +114,36 @@ namespace Migr8.Internals
 
         IExecutableSqlMigration GetNextMigration(ExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
-            var executedMigrationIds = connection.Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]");
+            var executedMigrationIds = connection
+                .Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]")
+                .ToList();
+
+            executedMigrationIds.Sort(CompareMigrationId);
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))
                 .ToList();
 
-            remainingMigrations.Sort(ByMigrationId);
+            remainingMigrations.Sort((m1, m2) => CompareMigrationId(m1.Id, m2.Id));
 
-            return remainingMigrations.FirstOrDefault();
+            var nextMigration = remainingMigrations.FirstOrDefault();
+
+            if (executedMigrationIds.Any() && nextMigration != null)
+            {
+                var id1 = executedMigrationIds.First();
+                var id2 = nextMigration.Id;
+
+                if (CompareMigrationId(id1, id2) > 0)
+                {
+                    throw new MigrationException($"Cannot execute migrations because migration {id2} should have been executed before {id1}, which has already been executed!");
+                }
+            }
+
+            return nextMigration;
         }
 
-        static int ByMigrationId(IExecutableSqlMigration m1, IExecutableSqlMigration m2)
+        static int CompareMigrationId(string id1, string id2)
         {
-            var id1 = m1.Id;
-            var id2 = m2.Id;
-
             var id1Tokens = id1.Split('-');
             var id2Tokens = id2.Split('-');
 

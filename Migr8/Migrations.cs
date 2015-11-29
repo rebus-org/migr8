@@ -47,7 +47,7 @@ namespace Migr8
 
         readonly List<IExecutableSqlMigration> _migrations = new List<IExecutableSqlMigration>();
 
-        Migrations(IEnumerable<IExecutableSqlMigration> migrations)
+        internal Migrations(IEnumerable<IExecutableSqlMigration> migrations)
         {
             _migrations.AddRange(migrations);
         }

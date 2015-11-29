@@ -52,6 +52,8 @@
     <Compile Include="Basic\TestMigration.cs" />
     <Compile Include="Branches\CommonScenario.cs" />
     <Compile Include="Bugs\NoMigrations.cs" />
+    <Compile Include="Constraints\DoesNotAcceptDuplicatedIds.cs" />
+    <Compile Include="Constraints\DoesNotAcceptMigrationsThatShouldHaveBeenExecutedByNow.cs" />
     <Compile Include="Ordering\CheckSequence.cs" />
     <Compile Include="TestConfig.cs" />
     <Compile Include="FixtureBase.cs" />
