@@ -46,6 +46,25 @@ namespace Migr8
             return new Migrations(migrations);
         }
 
+        /// <summary>
+        /// Filters the migrations to include those that satisfy the given predicate
+        /// </summary>
+        public Migrations Where(Predicate<ExecutableMigration> predicate)
+        {
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            var netListOfMigrations = _migrations
+                .Where(e =>
+                {
+                    var migration = new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description, e.SqlMigration);
+
+                    return predicate(migration);
+                })
+                .ToList();
+
+            return new Migrations(netListOfMigrations);
+        }
+
         readonly List<IExecutableSqlMigration> _migrations = new List<IExecutableSqlMigration>();
 
         internal Migrations(IEnumerable<IExecutableSqlMigration> migrations)
@@ -59,10 +78,5 @@ namespace Migr8
         }
 
         internal static Migrations None => new Migrations(Enumerable.Empty<IExecutableSqlMigration>());
-
-        public Migrations Where(Predicate<Migration> predicate)
-        {
-            return new Migrations(_migrations.Where(e => predicate(new Migration(e.SequenceNumber, e.BranchSpecification))));
-        }
     }
 }

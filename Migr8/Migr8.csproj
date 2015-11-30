@@ -50,7 +50,7 @@
     <Compile Include="Internals\IWriter.cs" />
     <Compile Include="Internals\LogActionWriter.cs" />
     <Compile Include="ISqlMigration.cs" />
-    <Compile Include="Migration.cs" />
+    <Compile Include="ExecutableMigration.cs" />
     <Compile Include="MigrationAttribute.cs" />
     <Compile Include="MigrationException.cs" />
     <Compile Include="Migrations.cs" />

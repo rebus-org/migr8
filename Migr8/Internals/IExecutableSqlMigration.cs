@@ -7,5 +7,6 @@
         string Description { get; }
         int SequenceNumber { get; }
         string BranchSpecification { get; }
+        ISqlMigration SqlMigration { get; }
     }
 }
