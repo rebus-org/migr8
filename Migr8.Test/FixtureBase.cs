@@ -19,7 +19,7 @@ namespace Migr8.Test
             SetUp();
         }
 
-        static void ResetDatabase()
+        public static void ResetDatabase()
         {
             DropTable(Options.DefaultMigrationTableName);
 

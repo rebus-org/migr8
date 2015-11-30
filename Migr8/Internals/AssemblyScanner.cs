@@ -55,25 +55,31 @@ namespace Migr8.Internals
 
         static IExecutableSqlMigration CreateExecutableSqlMigration(MigrationAttribute attribute, ISqlMigration instance)
         {
-            var id = $"{attribute.SequenceNumber}-{attribute.OptionalBranchSpecification ?? "master"}";
+            var sequenceNumber = attribute.SequenceNumber;
+            var branchSpecification = attribute.OptionalBranchSpecification ?? "master";
+            var id = $"{sequenceNumber}-{branchSpecification}";
             var sql = instance.Sql;
             var description = attribute.Description;
 
-            return new ExecutableSqlMigration(id, sql, description);
+            return new ExecutableSqlMigration(id, sql, description, sequenceNumber, branchSpecification);
         }
 
         class ExecutableSqlMigration : IExecutableSqlMigration
         {
-            public ExecutableSqlMigration(string id, string sql, string description)
+            public ExecutableSqlMigration(string id, string sql, string description, int sequenceNumber, string branchSpecification)
             {
                 Id = id;
                 Sql = sql;
                 Description = description;
+                SequenceNumber = sequenceNumber;
+                BranchSpecification = branchSpecification;
             }
 
             public string Id { get; }
             public string Sql { get; }
             public string Description { get; }
+            public int SequenceNumber { get; }
+            public string BranchSpecification { get;  }
 
             public override string ToString()
             {

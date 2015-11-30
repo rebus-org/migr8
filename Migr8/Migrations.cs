@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Migr8.Internals;
@@ -58,5 +59,10 @@ namespace Migr8
         }
 
         internal static Migrations None => new Migrations(Enumerable.Empty<IExecutableSqlMigration>());
+
+        public Migrations Where(Predicate<Migration> predicate)
+        {
+            return new Migrations(_migrations.Where(e => predicate(new Migration(e.SequenceNumber, e.BranchSpecification))));
+        }
     }
 }
