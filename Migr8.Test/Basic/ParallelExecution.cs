@@ -30,13 +30,12 @@ namespace Migr8.Test.Basic
         [TestCase(2, 10)]
         [TestCase(4, 20)]
         [TestCase(6, 50)]
-        [TestCase(10, 100)]
         public void DoesNotFail(int numberOfThreads, int numberOfMigrations)
         {
             Try(numberOfThreads, numberOfMigrations);
         }
 
-        [TestCase(1000)]
+        [TestCase(100)]
         public void ManyRuns(int iterations)
         {
             var random = new Random(DateTime.Now.GetHashCode());
