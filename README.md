@@ -17,7 +17,7 @@ calling assembly, you define these bad boys:
 	            [due_time] [datetime2](7) NOT NULL,
 	            [headers] [nvarchar](MAX) NOT NULL,
 	            [body] [varbinary](MAX) NOT NULL,
-                CONSTRAINT [PK_{0}] PRIMARY KEY NONCLUSTERED 
+                CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
                 (
 	                [id] ASC
                 )
@@ -32,7 +32,7 @@ calling assembly, you define these bad boys:
             CREATE TABLE [dbo].[RebusSubscriptions] (
 	            [topic] [nvarchar](200) NOT NULL,
 	            [address] [nvarchar](200) NOT NULL,
-                CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED 
+                CONSTRAINT [PK_RebusSubscriptions] PRIMARY KEY CLUSTERED 
                 (
 	                [topic] ASC,
 	                [address] ASC
