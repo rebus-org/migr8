@@ -48,7 +48,7 @@ For example, two developers working in the `feature/first-cool-thing` and `featu
 Luckily, they chose to use Migr8 to evolve their database, so they just go ahead and create
 
     [Migration(3, "Table for the first cool thing", branchSpecification: "first-cool-thing")]
-    class CreateRebusSubscriptionsTable : ISqlMigration
+    class CreateTableForTheFirstCoolThing : ISqlMigration
     {
         public string Sql => @"
             CREATE TABLE [dbo].[firstCoolTable] ([id] int)
@@ -58,7 +58,7 @@ Luckily, they chose to use Migr8 to evolve their database, so they just go ahead
 and
 
     [Migration(3, "Table for the next cool thing", branchSpecification: "next-cool-thing")]
-    class CreateRebusSubscriptionsTable : ISqlMigration
+    class CreateTableForTheNextCoolThing : ISqlMigration
     {
         public string Sql => @"
             CREATE TABLE [dbo].[nextCoolTable] ([id] int)
