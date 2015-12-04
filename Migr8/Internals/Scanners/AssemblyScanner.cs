@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Migr8.Internals
+namespace Migr8.Internals.Scanners
 {
     class AssemblyScanner
     {

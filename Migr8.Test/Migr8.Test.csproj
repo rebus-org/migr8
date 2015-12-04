@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\CheckFileApi.cs" />
     <Compile Include="Api\CheckFiltering.cs" />
     <Compile Include="Api\CheckApiWorks.cs" />
     <Compile Include="Api\MyMigrations.cs" />
@@ -70,6 +71,18 @@
       <Project>{73AACF2F-120D-49B0-AD67-AB1F2A937BB1}</Project>
       <Name>Migr8</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Api\Mix\0001-master.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Api\Mix\Subdir1\0002-feature-subdir1.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Api\Mix\Subdir2\0002-feature-subdir2.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

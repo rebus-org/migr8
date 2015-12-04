@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1E3F4CA-B665-4D3A-AA2E-398B9C2711D8}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\build.bat = scripts\build.bat
 		scripts\build.proj = scripts\build.proj
-		..\README.md = ..\README.md
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE.md = LICENSE.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A7310FA2-EC70-4F23-AC08-B4A5D337BE50}"

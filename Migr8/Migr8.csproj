@@ -41,8 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internals\AssemblyScanner.cs" />
+    <Compile Include="Internals\Scanners\AssemblyScanner.cs" />
     <Compile Include="Internals\ConsoleWriter.cs" />
+    <Compile Include="Internals\Scanners\DirectoryScanner.cs" />
     <Compile Include="Internals\ExclusiveDbConnection.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Internals\DatabaseMigratorCore.cs" />

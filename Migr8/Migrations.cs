@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Migr8.Internals;
+using Migr8.Internals.Scanners;
 
 namespace Migr8
 {
@@ -12,6 +13,26 @@ namespace Migr8
     /// </summary>
     public class Migrations
     {
+        /// <summary>
+        /// Gets migrations from files in the specified directory and its subdirectories. Scans for files whose name
+        /// matches the pattern "&lt;sequence-number&gt;-&lt;branch-specification&gt;.sql", e.g.
+        /// "1-master.sql", "2-master-sql", "0001-feature-awesomeness.sql", etc. are valid migration names.
+        /// </summary>
+        public static Migrations FromFilesIn(string directory)
+        {
+            return GetFromDirectory(directory);
+        }
+
+        /// <summary>
+        /// Gets migrations from files in the current directory and its subdirectories. Scans for files whose name
+        /// matches the pattern "&lt;sequence-number&gt;-&lt;branch-specification&gt;.sql", e.g.
+        /// "1-master.sql", "2-master-sql", "0001-feature-awesomeness.sql", etc. are valid migration names.
+        /// </summary>
+        public static Migrations FromFilesInCurrentDirectory()
+        {
+            return GetFromDirectory(AppDomain.CurrentDomain.BaseDirectory);
+        }
+
         /// <summary>
         /// Gets all migrations found in the assembly calling this method.
         /// </summary>
@@ -37,6 +58,13 @@ namespace Migr8
         public static Migrations FromAssembly(Assembly assembly)
         {
             return GetFromAssembly(assembly);
+        }
+
+        static Migrations GetFromDirectory(string directory)
+        {
+            var scanner = new DirectoryScanner(directory);
+            var migrations = scanner.GetMigrations();
+            return new Migrations(migrations);
         }
 
         static Migrations GetFromAssembly(Assembly assembly)
