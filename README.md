@@ -43,7 +43,7 @@ In the example above, I've created two migrations which will be executed in they
 
 Since you will most likely not be the only one developing things in your application, you might have adopted a _git flow_-inspired branching model, where each developer will create a branch to work in.
 
-For example, two developers working in the `feature/first-cool-thing` and `feature/next-cool-thing` branches might need to create the next migration. In the old days, they would have to compete about integrating _migration 3_ back into master, and one of them would have to change his migration to be number 4.
+For example, two developers working in the `feature/first-cool-thing` and `feature/next-cool-thing` branches might need to create the next migration. In the old days, one of them would be the unfortunate one to last integrate _migration 3_ back into master, it would be necessary to change the migration to be number 4 and probably execute the other developer's migration manually.
 
 Luckily, they chose to use Migr8 to evolve their database, so they just go ahead and create
 
