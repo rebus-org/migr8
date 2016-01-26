@@ -9,12 +9,20 @@
     <ScriptsFolder>..\scripts</ScriptsFolder>
     <BuildOutputFolder>..\deploy</BuildOutputFolder>
     <NuGet>$(ToolsFolder)\NuGet\NuGet.exe</NuGet>
+    <IlMerge>$(ToolsFolder)\IlMerge\IlMerge.exe</IlMerge>
+    <ReleaseDir>..\Migr8\bin\Release</ReleaseDir>
+    <MergeOutputDir>$(ReleaseDir)\merged</MergeOutputDir>
   </PropertyGroup>
 
   <Target Name="build" DependsOnTargets="compile_project" />
 
   <Target Name="compile_project">
+    <RemoveDir Directories="$(MergeOutputDir)" ContinueOnError="True"/>
+    <MakeDir Directories="$(MergeOutputDir)"/>
+
     <MSBuild Projects="@(AllProjects)" Targets="rebuild" StopOnFirstFailure="true" Properties="Configuration=Release"/>
+    
+    <Exec Command="$(Ilmerge) /out:$(MergeOutputDir)\Migr8.dll $(ReleaseDir)\Migr8.dll $(ReleaseDir)\Npgsql.dll /targetplatform:&quot;v4,$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5&quot; /internalize"/>
   </Target>
 
   <Target Name="check_version">

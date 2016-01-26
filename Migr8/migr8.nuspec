@@ -14,7 +14,7 @@
     <tags>sql-server migration schema</tags>
   </metadata>
   <files>
-    <file src="bin\Release\Migr8.dll" target="lib\NET45" />
+    <file src="bin\Release\merged\Migr8.dll" target="lib\NET45" />
     <file src="bin\Release\Migr8.xml" target="lib\NET45" />
   </files>
 </package>
