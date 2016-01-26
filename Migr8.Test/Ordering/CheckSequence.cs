@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Migr8.Internals;
 using Migr8.Test.Basic;
@@ -37,16 +38,32 @@ namespace Migr8.Test.Ordering
         {
             _migrator.Execute(AllMigrations);
 
-            using (var connection = new SqlServerExclusiveDbConnection(TestConfig.ConnectionString))
+            using (var connection = new SqlConnection(TestConfig.ConnectionString))
             {
-                var actualNumbers = connection
-                    .Select<int>("Number", "SELECT [Number] FROM [Table] ORDER BY [Id]")
-                    .ToArray();
+                connection.Open();
 
-                var expectedNumbers = new[] {1,2,3,4,5,6,7,8,9,10,11};
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT [Number] FROM [Table] ORDER BY [Id]";
 
-                Assert.That(actualNumbers, Is.EqualTo(expectedNumbers),
-                    $"Expected {string.Join(", ", expectedNumbers)} but got {string.Join(", ", actualNumbers)}");
+                    var actualNumbers = new List<int>();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            actualNumbers.Add((int)reader["Number"]);
+                        }
+                    }
+                    //var actualNumbers = connection
+                    //    .Select<int>("Number", "SELECT [Number] FROM [Table] ORDER BY [Id]")
+                    //    .ToArray();
+
+                    var expectedNumbers = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
+                    Assert.That(actualNumbers, Is.EqualTo(expectedNumbers),
+                        $"Expected {string.Join(", ", expectedNumbers)} but got {string.Join(", ", actualNumbers)}");
+                }
             }
         }
     }

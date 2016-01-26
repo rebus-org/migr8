@@ -4,7 +4,7 @@
     {
         public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString)
         {
-            return null;
+            return new PostgresqlExclusiveDbConnection(connectionString);
         }
     }
 }

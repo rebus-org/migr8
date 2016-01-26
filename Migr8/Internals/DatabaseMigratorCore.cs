@@ -118,9 +118,10 @@ namespace Migr8.Internals
 
         IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
-            var executedMigrationIds = connection
-                .Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]")
-                .ToList();
+            var executedMigrationIds = connection.GetExecutedMigrationIds(_migrationTableName);
+            //var executedMigrationIds = connection
+            //    .Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]")
+            //    .ToList();
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))

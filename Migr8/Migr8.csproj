@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Db.cs" />
     <Compile Include="Internals\Databases\PostgreSqlDb.cs" />
+    <Compile Include="Internals\Databases\PostgresqlExclusiveDbConnection.cs" />
     <Compile Include="Internals\Databases\SqlServerDb.cs" />
     <Compile Include="Internals\IDb.cs" />
     <Compile Include="Internals\IExclusiveDbConnection.cs" />
