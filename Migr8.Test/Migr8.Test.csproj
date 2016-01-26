@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -57,7 +61,9 @@
     <Compile Include="Bugs\NoMigrations.cs" />
     <Compile Include="Constraints\DoesNotAcceptDuplicatedIds.cs" />
     <Compile Include="Constraints\DoesNotAcceptMigrationsThatShouldHaveBeenExecutedByNow.cs" />
+    <Compile Include="PostgresFixtureBase.cs" />
     <Compile Include="Ordering\CheckSequence.cs" />
+    <Compile Include="Postgres\PostgresIntegrationTest.cs" />
     <Compile Include="TestConfig.cs" />
     <Compile Include="FixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
