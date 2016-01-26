@@ -1,5 +1,7 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using Migr8.Internals;
+using Migr8.Internals.Databases;
 
 namespace Migr8
 {
@@ -26,6 +28,7 @@ namespace Migr8
                                 ?? connectionStringOrConnectionStringName;
 
             var migrator = new DatabaseMigratorCore(
+                db: GetDatabase(options.Db),
                 migrationTableName: options.MigrationTableName,
                 writer: options.GetWriter(),
                 connectionString: connectionString);
@@ -33,6 +36,19 @@ namespace Migr8
             var executableSqlMigrations = migrations.GetMigrations();
 
             migrator.Execute(executableSqlMigrations);
+        }
+
+        static IDb GetDatabase(Db db)
+        {
+            switch (db)
+            {
+                case Db.SqlServer:
+                    return new SqlServerDb();
+                case Db.PostgreSql:
+                    return new PostgreSqlDb();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(db), db, "Unknown database type");
+            }
         }
     }
 }

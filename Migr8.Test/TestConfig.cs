@@ -2,6 +2,6 @@
 {
     public static class TestConfig
     {
-        public static string ConnectionString => "server=.\\SQLEXPRESS; database=migr8_test; trusted_connection=true";
+        public static string ConnectionString => "server=.; database=migr8_test; trusted_connection=true";
     }
 }

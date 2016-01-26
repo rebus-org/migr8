@@ -10,12 +10,14 @@ namespace Migr8.Internals
     {
         readonly IWriter _writer;
         readonly string _connectionString;
+        readonly IDb _db;
         readonly string _migrationTableName;
 
-        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null)
+        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null, IDb db = null)
         {
             _writer = writer;
             _connectionString = connectionString;
+            _db = db;
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
         }
 

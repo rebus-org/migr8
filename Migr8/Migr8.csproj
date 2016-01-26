@@ -31,6 +31,10 @@
     <DocumentationFile>bin\Release\Migr8.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -41,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Db.cs" />
+    <Compile Include="Internals\Databases\PostgreSqlDb.cs" />
+    <Compile Include="Internals\Databases\SqlServerDb.cs" />
+    <Compile Include="Internals\IDb.cs" />
     <Compile Include="Internals\Scanners\AssemblyScanner.cs" />
     <Compile Include="Internals\ConsoleWriter.cs" />
     <Compile Include="Internals\Scanners\DirectoryScanner.cs" />
@@ -62,6 +70,7 @@
     <None Include="migr8.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

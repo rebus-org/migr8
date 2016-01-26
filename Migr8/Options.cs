@@ -18,23 +18,31 @@ namespace Migr8
         /// </summary>
         /// <param name="migrationTableName">Optionally specifies the name of the table in which executed migrations will be logged. Defaults to <see cref="DefaultMigrationTableName"/>.</param>
         /// <param name="logAction">Optionally specifies a log action to use, which can be used to track progress as the migrator is running. Defaults to printing output to the console.</param>
+        /// <param name="db">Specifies which database to work with</param>
         public Options(
             string migrationTableName = DefaultMigrationTableName,
-            Action<string> logAction = null)
+            Action<string> logAction = null,
+            Db? db = null)
         {
             MigrationTableName = migrationTableName;
             LogAction = logAction;
+            Db = db ?? Db.SqlServer;
         }
 
         /// <summary>
         /// Sets the name used to track and log executed migrations. Defaults to <see cref="DefaultMigrationTableName"/>.
         /// </summary>
-        internal string MigrationTableName { get; set; }
+        internal string MigrationTableName { get; }
 
         /// <summary>
         /// Sets a log action to call when printing output. Defaults to printing to the console.
         /// </summary>
-        internal Action<string> LogAction { get; set; }
+        internal Action<string> LogAction { get;  }
+
+        /// <summary>
+        /// Sets the database type to work on
+        /// </summary>
+        internal Db Db { get; }
 
         internal IWriter GetWriter()
         {
