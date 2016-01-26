@@ -2,6 +2,9 @@
 {
     class PostgreSqlDb : IDb
     {
-         
+        public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString)
+        {
+            return null;
+        }
     }
 }

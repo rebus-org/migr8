@@ -1,6 +1,7 @@
-﻿namespace Migr8
+﻿namespace Migr8.Internals
 {
-    public interface IDb
+    interface IDb
     {
+        IExclusiveDbConnection GetExclusiveDbConnection(string connectionString);
     }
 }

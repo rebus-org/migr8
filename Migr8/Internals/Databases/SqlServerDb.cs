@@ -2,6 +2,9 @@
 {
     class SqlServerDb : IDb
     {
-         
+        public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString)
+        {
+            return new SqlServerExclusiveDbConnection(connectionString);
+        }
     }
 }

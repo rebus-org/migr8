@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Migr8.Internals.Databases;
 
 namespace Migr8.Internals
 {
@@ -17,7 +17,7 @@ namespace Migr8.Internals
         {
             _writer = writer;
             _connectionString = connectionString;
-            _db = db;
+            _db = db ?? new SqlServerDb();
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
         }
 
@@ -47,7 +47,7 @@ namespace Migr8.Internals
             }
         }
 
-        static void AssertHasNoDuplicateIds(List<IExecutableSqlMigration> executableSqlMigrations)
+        static void AssertHasNoDuplicateIds(IEnumerable<IExecutableSqlMigration> executableSqlMigrations)
         {
             var duplicatedMigrations = executableSqlMigrations
                 .GroupBy(m => m.Id)
@@ -65,7 +65,7 @@ namespace Migr8.Internals
 
         bool ExecuteNextMigration(List<IExecutableSqlMigration> migrations)
         {
-            using (var connection = new ExclusiveDbConnection(_connectionString))
+            using (var connection = _db.GetExclusiveDbConnection(_connectionString))
             {
                 EnsureMigrationTableExists(connection);
 
@@ -91,7 +91,7 @@ namespace Migr8.Internals
             }
         }
 
-        void ExecuteMigration(IExecutableSqlMigration migration, ExclusiveDbConnection connection)
+        void ExecuteMigration(IExecutableSqlMigration migration, IExclusiveDbConnection connection)
         {
             LogMigration(connection, migration);
 
@@ -110,17 +110,13 @@ namespace Migr8.Internals
 
             foreach (var sqlStatement in sqlStatements)
             {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = sqlStatement;
-                    command.ExecuteNonQuery();
-                }
+                connection.ExecuteStatement(sqlStatement);
             }
 
             _writer.Write($"Migration {id} executed");
         }
 
-        IExecutableSqlMigration GetNextMigration(ExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
+        IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
             var executedMigrationIds = connection
                 .Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]")
@@ -204,7 +200,7 @@ namespace Migr8.Internals
             return v1.CompareTo(v2);
         }
 
-        void EnsureMigrationTableExists(ExclusiveDbConnection connection)
+        void EnsureMigrationTableExists(IExclusiveDbConnection connection)
         {
             var tableNames = connection.GetTableNames();
 
@@ -214,43 +210,11 @@ namespace Migr8.Internals
             }
         }
 
-        void CreateMigrationTable(string migrationTableName, ExclusiveDbConnection connection)
+        void CreateMigrationTable(string migrationTableName, IExclusiveDbConnection connection)
         {
             try
             {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $@"
-
-CREATE TABLE [{migrationTableName}] (
-    [Id] INT IDENTITY(1,1),
-    [MigrationId] NVARCHAR(200) NOT NULL,
-    [Sql] NVARCHAR(MAX) NOT NULL,
-    [Description] NVARCHAR(MAX) NOT NULL,
-    [Time] DATETIME2 NOT NULL,
-    [UserName] NVARCHAR(MAX) NOT NULL,
-    [UserDomainName] NVARCHAR(MAX) NOT NULL,
-    [MachineName] NVARCHAR(MAX) NOT NULL,
-
-    CONSTRAINT [PK_{migrationTableName}_Id] PRIMARY KEY ([Id])
-);
-
-";
-
-                    command.ExecuteNonQuery();
-                }
-
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $@"
-
-ALTER TABLE [{migrationTableName}] 
-    ADD CONSTRAINT [UNIQUE_{migrationTableName}_MigrationId] UNIQUE ([MigrationId]);
-
-";
-
-                    command.ExecuteNonQuery();
-                }
+                connection.CreateMigrationTable(migrationTableName);
 
                 _writer.Write($"Created migration table '{migrationTableName}'");
             }
@@ -260,40 +224,9 @@ ALTER TABLE [{migrationTableName}]
             }
         }
 
-        void LogMigration(ExclusiveDbConnection connection, IExecutableSqlMigration migration)
+        void LogMigration(IExclusiveDbConnection connection, IExecutableSqlMigration migration)
         {
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText =
-                    $@"
-INSERT INTO [{_migrationTableName}] (
-    [MigrationId],
-    [Sql],
-    [Description],
-    [Time],
-    [UserName],
-    [UserDomainName],
-    [MachineName]
-) VALUES (
-    @id,
-    @sql,
-    @description,
-    @time,
-    @userName,
-    @userDomainName,
-    @machineName
-)
-";
-                command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
-                command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
-                command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
-                command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
-                command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.UserName;
-                command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.UserDomainName;
-                command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
-
-                command.ExecuteNonQuery();
-            }
+            connection.LogMigration( migration, _migrationTableName);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Migr8.Test.Ordering
         {
             _migrator.Execute(AllMigrations);
 
-            using (var connection = new ExclusiveDbConnection(TestConfig.ConnectionString))
+            using (var connection = new SqlServerExclusiveDbConnection(TestConfig.ConnectionString))
             {
                 var actualNumbers = connection
                     .Select<int>("Number", "SELECT [Number] FROM [Table] ORDER BY [Id]")

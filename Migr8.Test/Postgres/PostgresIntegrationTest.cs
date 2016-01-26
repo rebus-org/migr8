@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Migr8.Test.Basic;
 using NUnit.Framework;
 
 namespace Migr8.Test.Postgres
@@ -9,7 +9,16 @@ namespace Migr8.Test.Postgres
         [Test]
         public void Run()
         {
-            Console.WriteLine("JGIEOJGEIOGJEOI");
+            Database.Migrate(TestConfig.PostgresConnectionString, GetMigrations(), new Options(db: Db.PostgreSql));
+        }
+
+        static Migrations GetMigrations()
+        {
+            return new Migrations(new[]
+            {
+                new TestMigration(1, "master", ""), 
+                new TestMigration(2, "master", ""), 
+            });
         }
     }
 }

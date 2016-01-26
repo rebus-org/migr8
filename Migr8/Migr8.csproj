@@ -49,10 +49,11 @@
     <Compile Include="Internals\Databases\PostgreSqlDb.cs" />
     <Compile Include="Internals\Databases\SqlServerDb.cs" />
     <Compile Include="Internals\IDb.cs" />
+    <Compile Include="Internals\IExclusiveDbConnection.cs" />
     <Compile Include="Internals\Scanners\AssemblyScanner.cs" />
     <Compile Include="Internals\ConsoleWriter.cs" />
     <Compile Include="Internals\Scanners\DirectoryScanner.cs" />
-    <Compile Include="Internals\ExclusiveDbConnection.cs" />
+    <Compile Include="Internals\SqlServerExclusiveDbConnection.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Internals\DatabaseMigratorCore.cs" />
     <Compile Include="Internals\IExecutableSqlMigration.cs" />
