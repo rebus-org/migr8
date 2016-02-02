@@ -76,9 +76,7 @@
       <Name>Migr8</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Postgres\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Api\Mix\0001-master.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -150,7 +150,6 @@ treated as the migration's description.
 One last thing - if you prefer to log things using a logging library, e.g. like the excellent
 [Serilog](https://github.com/serilog/serilog), you can make Migr8 output its text to Serilog like this:
 
-
     var options = new Options(logAction: text => Log.Information(text));
     
     Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);

@@ -15,8 +15,15 @@ namespace Migr8.Npgsql.Test
         {
             return new Migrations(new[]
             {
-                new TestMigration(1, "master", ""), 
-                new TestMigration(2, "master", ""), 
+                new TestMigration(1, "master", @"
+CREATE TABLE ""bimmelim"" (
+    ""id"" bigserial primary key,
+    ""text"" text
+);
+"), 
+                new TestMigration(2, "master", @"
+INSERT INTO ""bimmelim"" (""text"") VALUES ('HEJ DU');
+"), 
             });
         }
     }
