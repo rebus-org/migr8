@@ -1,7 +1,6 @@
-﻿using Migr8.Test.Basic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Migr8.Test.Postgres
+namespace Migr8.Npgsql.Test
 {
     [TestFixture]
     public class PostgresIntegrationTest : PostgresFixtureBase
@@ -9,7 +8,7 @@ namespace Migr8.Test.Postgres
         [Test]
         public void Run()
         {
-            Database.Migrate(TestConfig.PostgresConnectionString, GetMigrations(), new Options(db: Db.PostgreSql));
+            Database.Migrate(TestConfig.PostgresConnectionString, GetMigrations());
         }
 
         static Migrations GetMigrations()

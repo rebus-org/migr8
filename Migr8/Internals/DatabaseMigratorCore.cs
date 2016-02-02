@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Migr8.Internals.Databases;
 
 namespace Migr8.Internals
 {
@@ -17,7 +16,7 @@ namespace Migr8.Internals
         {
             _writer = writer;
             _connectionString = connectionString;
-            _db = db ?? new SqlServerDb();
+            _db = db ?? Database.GetDatabase();
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
         }
 

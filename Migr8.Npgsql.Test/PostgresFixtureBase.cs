@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using Npgsql;
 using NUnit.Framework;
 
-namespace Migr8.Test
+namespace Migr8.Npgsql.Test
 {
     public abstract class PostgresFixtureBase
     {

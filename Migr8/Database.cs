@@ -1,7 +1,5 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Migr8.Internals;
-using Migr8.Internals.Databases;
 
 namespace Migr8
 {
@@ -12,7 +10,7 @@ namespace Migr8
     /// Migrations are classes decorated with the <see cref="MigrationAttribute"/>, which must implement <see cref="ISqlMigration"/>
     /// in order to provide some SQL to be executed.
     /// </summary>
-    public static class Database
+    public static partial class Database
     {
         /// <summary>
         /// Executes the given migrations on the specified database.
@@ -28,7 +26,7 @@ namespace Migr8
                                 ?? connectionStringOrConnectionStringName;
 
             var migrator = new DatabaseMigratorCore(
-                db: GetDatabase(options.Db),
+                db: GetDatabase(),
                 migrationTableName: options.MigrationTableName,
                 writer: options.GetWriter(),
                 connectionString: connectionString);
@@ -36,19 +34,6 @@ namespace Migr8
             var executableSqlMigrations = migrations.GetMigrations();
 
             migrator.Execute(executableSqlMigrations);
-        }
-
-        static IDb GetDatabase(Db db)
-        {
-            switch (db)
-            {
-                case Db.SqlServer:
-                    return new SqlServerDb();
-                case Db.PostgreSql:
-                    return new PostgreSqlDb();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(db), db, "Unknown database type");
-            }
         }
     }
 }

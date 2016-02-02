@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{73AACF2F-120D-49B0-AD67-AB1F2A937BB1}</ProjectGuid>
+    <ProjectGuid>{2CC26B11-BC37-4F43-A650-92C94198F433}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Migr8</RootNamespace>
-    <AssemblyName>Migr8</AssemblyName>
+    <AssemblyName>Migr8.Npgsql</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,11 +28,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Migr8.XML</DocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Migr8.Npgsql.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
@@ -42,39 +40,75 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database_Sql.cs" />
-    <Compile Include="Db.cs" />
-    <Compile Include="SqlServer\SqlServerDb.cs" />
-    <Compile Include="Internals\IDb.cs" />
-    <Compile Include="Internals\IExclusiveDbConnection.cs" />
-    <Compile Include="Internals\Scanners\AssemblyScanner.cs" />
-    <Compile Include="Internals\ConsoleWriter.cs" />
-    <Compile Include="Internals\Scanners\DirectoryScanner.cs" />
-    <Compile Include="SqlServer\SqlServerExclusiveDbConnection.cs" />
-    <Compile Include="Database.cs" />
-    <Compile Include="Internals\DatabaseMigratorCore.cs" />
-    <Compile Include="Internals\IExecutableSqlMigration.cs" />
-    <Compile Include="Internals\IWriter.cs" />
-    <Compile Include="Internals\LogActionWriter.cs" />
-    <Compile Include="ISqlMigration.cs" />
-    <Compile Include="ExecutableMigration.cs" />
-    <Compile Include="MigrationAttribute.cs" />
-    <Compile Include="MigrationException.cs" />
-    <Compile Include="Migrations.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="..\Migr8\Database.cs">
+      <Link>Database.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Db.cs">
+      <Link>Db.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\ExecutableMigration.cs">
+      <Link>ExecutableMigration.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\ConsoleWriter.cs">
+      <Link>Internals\ConsoleWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs">
+      <Link>Internals\DatabaseMigratorCore.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\IDb.cs">
+      <Link>Internals\IDb.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs">
+      <Link>Internals\IExclusiveDbConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs">
+      <Link>Internals\IExecutableSqlMigration.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\IWriter.cs">
+      <Link>Internals\IWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\LogActionWriter.cs">
+      <Link>Internals\LogActionWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs">
+      <Link>Internals\Scanners\AssemblyScanner.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs">
+      <Link>Internals\Scanners\DirectoryScanner.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\ISqlMigration.cs">
+      <Link>ISqlMigration.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\MigrationAttribute.cs">
+      <Link>MigrationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\MigrationException.cs">
+      <Link>MigrationException.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Migrations.cs">
+      <Link>Migrations.cs</Link>
+    </Compile>
+    <Compile Include="..\Migr8\Options.cs">
+      <Link>Options.cs</Link>
+    </Compile>
+    <Compile Include="Database_Postgres.cs" />
+    <Compile Include="Postgres\PostgreSqlDb.cs" />
+    <Compile Include="Postgres\PostgresqlExclusiveDbConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="migr8.nuspec">
+    <None Include="migr8.npgsql.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

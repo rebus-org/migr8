@@ -21,12 +21,10 @@ namespace Migr8
         /// <param name="db">Specifies which database to work with</param>
         public Options(
             string migrationTableName = DefaultMigrationTableName,
-            Action<string> logAction = null,
-            Db? db = null)
+            Action<string> logAction = null)
         {
             MigrationTableName = migrationTableName;
             LogAction = logAction;
-            Db = db ?? Db.SqlServer;
         }
 
         /// <summary>
@@ -38,11 +36,6 @@ namespace Migr8
         /// Sets a log action to call when printing output. Defaults to printing to the console.
         /// </summary>
         internal Action<string> LogAction { get;  }
-
-        /// <summary>
-        /// Sets the database type to work on
-        /// </summary>
-        internal Db Db { get; }
 
         internal IWriter GetWriter()
         {

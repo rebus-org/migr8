@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Migr8.Internals;
+using Npgsql;
+using NpgsqlTypes;
 
-namespace Migr8.Internals
+namespace Migr8.Postgres
 {
-    class SqlServerExclusiveDbConnection : IExclusiveDbConnection
+    class PostgresqlExclusiveDbConnection : IExclusiveDbConnection
     {
-        readonly SqlConnection _connection;
-        readonly SqlTransaction _transaction;
+        readonly NpgsqlConnection _connection;
+        readonly NpgsqlTransaction _transaction;
 
-        public SqlServerExclusiveDbConnection(string connectionString)
+        public PostgresqlExclusiveDbConnection(string connectionString)
         {
-            _connection = new SqlConnection(connectionString);
+            _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
         }
@@ -30,17 +32,17 @@ namespace Migr8.Internals
 
         public HashSet<string> GetTableNames()
         {
-            var tableNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            var tableNames = new HashSet<string>();
 
             using (var command = CreateCommand())
             {
-                command.CommandText = "SELECT [TABLE_NAME] FROM [information_schema].[tables]";
+                command.CommandText = @"SELECT * FROM ""information_schema"".""tables"" WHERE ""table_schema"" NOT IN ('pg_catalog', 'information_schema')";
 
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        tableNames.Add((string)reader["TABLE_NAME"]);
+                        tableNames.Add(reader["table_name"].ToString());
                     }
                 }
             }
@@ -53,14 +55,14 @@ namespace Migr8.Internals
             using (var command = CreateCommand())
             {
                 command.CommandText = $@"
-INSERT INTO [{migrationTableName}] (
-    [MigrationId],
-    [Sql],
-    [Description],
-    [Time],
-    [UserName],
-    [UserDomainName],
-    [MachineName]
+INSERT INTO ""{migrationTableName}"" (
+    ""MigrationId"",
+    ""Sql"",
+    ""Description"",
+    ""Time"",
+    ""UserName"",
+    ""UserDomainName"",
+    ""MachineName""
 ) VALUES (
     @id,
     @sql,
@@ -72,13 +74,13 @@ INSERT INTO [{migrationTableName}] (
 )
 ";
 
-                command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
-                command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
-                command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
-                command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
-                command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.UserName;
-                command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.UserDomainName;
-                command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
+                command.Parameters.Add("id", NpgsqlDbType.Text).Value = migration.Id;
+                command.Parameters.Add("sql", NpgsqlDbType.Text).Value = migration.Sql;
+                command.Parameters.Add("description", NpgsqlDbType.Text).Value = migration.Description;
+                command.Parameters.Add("time", NpgsqlDbType.TimestampTZ).Value = DateTime.Now;
+                command.Parameters.Add("userName", NpgsqlDbType.Text).Value = Environment.UserName;
+                command.Parameters.Add("userDomainName", NpgsqlDbType.Text).Value = Environment.UserDomainName;
+                command.Parameters.Add("machineName", NpgsqlDbType.Text).Value = Environment.MachineName;
 
                 command.ExecuteNonQuery();
             }
@@ -90,17 +92,15 @@ INSERT INTO [{migrationTableName}] (
             {
                 command.CommandText =
                     $@"
-CREATE TABLE [{migrationTableName}] (
-    [Id] INT IDENTITY(1,1),
-    [MigrationId] NVARCHAR(200) NOT NULL,
-    [Sql] NVARCHAR(MAX) NOT NULL,
-    [Description] NVARCHAR(MAX) NOT NULL,
-    [Time] DATETIME2 NOT NULL,
-    [UserName] NVARCHAR(MAX) NOT NULL,
-    [UserDomainName] NVARCHAR(MAX) NOT NULL,
-    [MachineName] NVARCHAR(MAX) NOT NULL,
-
-    CONSTRAINT [PK_{migrationTableName}_Id] PRIMARY KEY ([Id])
+CREATE TABLE ""{migrationTableName}"" (
+    ""Id"" BIGSERIAL PRIMARY KEY,
+    ""MigrationId"" TEXT NOT NULL,
+    ""Sql"" TEXT NOT NULL,
+    ""Description"" TEXT NOT NULL,
+    ""Time"" TIMESTAMP WITH TIME ZONE NOT NULL,
+    ""UserName"" TEXT NOT NULL,
+    ""UserDomainName"" TEXT NOT NULL,
+    ""MachineName"" TEXT NOT NULL
 );
 ";
 
@@ -109,10 +109,10 @@ CREATE TABLE [{migrationTableName}] (
 
             using (var command = CreateCommand())
             {
-                command.CommandText = 
+                command.CommandText =
                     $@"
-ALTER TABLE [{migrationTableName}] 
-    ADD CONSTRAINT [UNIQUE_{migrationTableName}_MigrationId] UNIQUE ([MigrationId]);
+ALTER TABLE ""{migrationTableName}""
+    ADD CONSTRAINT ""UNIQUE_{migrationTableName}_MigrationId"" UNIQUE (""MigrationId"");
 ";
 
                 command.ExecuteNonQuery();
@@ -133,7 +133,7 @@ ALTER TABLE [{migrationTableName}]
             var list = new List<string>();
             using (var command = CreateCommand())
             {
-                command.CommandText = $"SELECT [MigrationId] FROM [{migrationTableName}]";
+                command.CommandText = $@"SELECT ""MigrationId"" FROM ""{migrationTableName}""";
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -144,9 +144,10 @@ ALTER TABLE [{migrationTableName}]
                 }
             }
             return list;
+
         }
 
-        SqlCommand CreateCommand()
+        NpgsqlCommand CreateCommand()
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;

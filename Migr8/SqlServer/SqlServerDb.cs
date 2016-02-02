@@ -1,4 +1,6 @@
-﻿namespace Migr8.Internals.Databases
+﻿using Migr8.Internals;
+
+namespace Migr8.SqlServer
 {
     class SqlServerDb : IDb
     {
