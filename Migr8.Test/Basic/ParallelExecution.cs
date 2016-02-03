@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -17,14 +15,6 @@ namespace Migr8.Test.Basic
         protected override void SetUp()
         {
             _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
-        }
-
-        class ThreadPrintingConsoleWriter : IWriter
-        {
-            public void Write(string text)
-            {
-                Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}]: {text}");
-            }
         }
 
         [TestCase(2, 10)]

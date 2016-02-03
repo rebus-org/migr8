@@ -104,5 +104,15 @@ namespace Migr8.Npgsql.Test
 
             return list;
         }
+
+        protected void Log(string obj)
+        {
+            Console.WriteLine($"INFO: {obj}");
+        }
+
+        protected void LogVerbose(string obj)
+        {
+            Console.WriteLine($"VERBOSE: {obj}");
+        }
     }
 }

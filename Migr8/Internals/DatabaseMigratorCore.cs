@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -18,6 +19,10 @@ namespace Migr8.Internals
             _connectionString = connectionString;
             _db = db ?? Database.GetDatabase();
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
+
+            _writer.Verbose($"Database migrator core initialized with connection string '{_connectionString}'");
+            _writer.Verbose($"Storing migration log in table '{_migrationTableName}'");
+            _writer.Verbose($"DB implementation: {_db}");
         }
 
         public void Execute(IEnumerable<IExecutableSqlMigration> migrations)
@@ -26,13 +31,15 @@ namespace Migr8.Internals
 
             if (executableSqlMigrations.Count == 0)
             {
-                _writer.Write("Found no migrations");
+                _writer.Info("Found no migrations");
                 return;
             }
 
-            _writer.Write($"Migr8 found {executableSqlMigrations.Count} migrations");
+            _writer.Info($"Migr8 found {executableSqlMigrations.Count} migrations");
 
             AssertHasNoDuplicateIds(executableSqlMigrations);
+
+            var stopwatchTotal = Stopwatch.StartNew();
 
             while (true)
             {
@@ -40,16 +47,25 @@ namespace Migr8.Internals
 
                 if (!didExecuteMigration)
                 {
-                    _writer.Write("No more migrations to run");
+                    _writer.Info($"No more migrations to run (execution took {stopwatchTotal.Elapsed.TotalSeconds:0.0} s)");
                     break;
                 }
             }
         }
 
-        static void AssertHasNoDuplicateIds(IEnumerable<IExecutableSqlMigration> executableSqlMigrations)
+        void AssertHasNoDuplicateIds(IEnumerable<IExecutableSqlMigration> executableSqlMigrations)
         {
-            var duplicatedMigrations = executableSqlMigrations
+            var sqlMigrationsList = executableSqlMigrations.ToList();
+
+            var migrationIds = sqlMigrationsList.Select(m => m.Id).Distinct();
+
+            _writer.Verbose($"Found the following migration IDs: {string.Join(", ", migrationIds)}");
+
+            _writer.Verbose("Checking for duplicate IDs among migrations");
+
+            var duplicatedMigrations = sqlMigrationsList
                 .GroupBy(m => m.Id)
+                .ToList()
                 .Where(g => g.Count() > 1)
                 .ToList();
 
@@ -64,17 +80,25 @@ namespace Migr8.Internals
 
         bool ExecuteNextMigration(List<IExecutableSqlMigration> migrations)
         {
+            _writer.Verbose("Opening access to database");
+
             using (var connection = _db.GetExclusiveDbConnection(_connectionString))
             {
                 EnsureMigrationTableExists(connection);
+
+                _writer.Verbose("Getting next migration to run...");
 
                 var nextMigration = GetNextMigration(connection, migrations);
 
                 if (nextMigration == null)
                 {
+                    _writer.Verbose("Found no migration");
                     return false;
                 }
 
+                _writer.Verbose($"Found migration {nextMigration.Id} - executing!");
+
+                var executionStopwatch = Stopwatch.StartNew();
                 try
                 {
                     ExecuteMigration(nextMigration, connection);
@@ -85,17 +109,24 @@ namespace Migr8.Internals
                 }
                 catch (Exception exception)
                 {
-                    throw new MigrationException($"Could not execute migration with ID '{nextMigration.Id}': {nextMigration.Sql}", exception);
+                    throw new MigrationException(
+                        $"Could not execute migration with ID '{nextMigration.Id}': {nextMigration.Sql}", exception);
+                }
+                finally
+                {
+                    _writer.Verbose($"Execution of migration {nextMigration.Id} took {executionStopwatch.Elapsed.TotalSeconds:0.0} s");
                 }
             }
         }
 
         void ExecuteMigration(IExecutableSqlMigration migration, IExclusiveDbConnection connection)
         {
-            LogMigration(connection, migration);
-
             var id = migration.Id;
             var sql = migration.Sql;
+
+            _writer.Verbose($"Inserting log row for migration {id}");
+
+            LogMigration(connection, migration);
 
             const RegexOptions options = RegexOptions.Multiline
                                          | RegexOptions.IgnorePatternWhitespace
@@ -105,22 +136,24 @@ namespace Migr8.Internals
 
             var sqlStatements = Regex.Split(sql, searchPattern, options)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => x.Trim(' ', '\r', '\n'));
+                .Select(x => x.Trim(' ', '\r', '\n'))
+                .ToList();
+
+            _writer.Verbose($"Migration {id} contains {sqlStatements.Count} individual SQL statements");
 
             foreach (var sqlStatement in sqlStatements)
             {
+                _writer.Verbose($"Executing statement: {sqlStatement}");
+
                 connection.ExecuteStatement(sqlStatement);
             }
 
-            _writer.Write($"Migration {id} executed");
+            _writer.Info($"Migration {id} executed");
         }
 
         IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
             var executedMigrationIds = connection.GetExecutedMigrationIds(_migrationTableName);
-            //var executedMigrationIds = connection
-            //    .Select<string>("MigrationId", $"SELECT [MigrationId] FROM [{_migrationTableName}]")
-            //    .ToList();
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))
@@ -206,6 +239,8 @@ namespace Migr8.Internals
 
             if (!tableNames.Contains(_migrationTableName))
             {
+                _writer.Verbose($"Database does not contain migration log table '{_migrationTableName}' - will create it now");
+
                 CreateMigrationTable(_migrationTableName, connection);
             }
         }
@@ -216,7 +251,7 @@ namespace Migr8.Internals
             {
                 connection.CreateMigrationTable(migrationTableName);
 
-                _writer.Write($"Created migration table '{migrationTableName}'");
+                _writer.Info($"Created migration table '{migrationTableName}'");
             }
             catch (Exception exception)
             {

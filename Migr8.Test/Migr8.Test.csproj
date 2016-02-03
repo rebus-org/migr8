@@ -57,6 +57,7 @@
     <Compile Include="Basic\SimpleScenario.cs" />
     <Compile Include="Basic\SqlStatements.cs" />
     <Compile Include="Basic\TestMigration.cs" />
+    <Compile Include="Basic\ThreadPrintingConsoleWriter.cs" />
     <Compile Include="Branches\CommonScenario.cs" />
     <Compile Include="Bugs\NoMigrations.cs" />
     <Compile Include="Constraints\DoesNotAcceptDuplicatedIds.cs" />

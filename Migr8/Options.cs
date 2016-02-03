@@ -18,33 +18,35 @@ namespace Migr8
         /// </summary>
         /// <param name="migrationTableName">Optionally specifies the name of the table in which executed migrations will be logged. Defaults to <see cref="DefaultMigrationTableName"/>.</param>
         /// <param name="logAction">Optionally specifies a log action to use, which can be used to track progress as the migrator is running. Defaults to printing output to the console.</param>
-        /// <param name="db">Specifies which database to work with</param>
+        /// <param name="verboseLogAction">Optionally specifies a log action to use for detailed logging, which can be used to track progress as the migrator is running. Defaults to not doing anything.</param>
         public Options(
             string migrationTableName = DefaultMigrationTableName,
-            Action<string> logAction = null)
+            Action<string> logAction = null,
+            Action<string> verboseLogAction = null)
         {
             MigrationTableName = migrationTableName;
             LogAction = logAction;
+            VerboseLogAction = verboseLogAction;
         }
 
-        /// <summary>
-        /// Sets the name used to track and log executed migrations. Defaults to <see cref="DefaultMigrationTableName"/>.
-        /// </summary>
         internal string MigrationTableName { get; }
 
-        /// <summary>
-        /// Sets a log action to call when printing output. Defaults to printing to the console.
-        /// </summary>
-        internal Action<string> LogAction { get;  }
+        internal Action<string> LogAction { get; }
+
+        internal Action<string> VerboseLogAction { get; }
 
         internal IWriter GetWriter()
         {
-            if (LogAction != null)
-            {
-                return new LogActionWriter(LogAction);
-            }
+            return new LogActionWriter(LogAction ?? LogToConsole, VerboseLogAction ?? DoNothing);
+        }
 
-            return new ConsoleWriter();
+        static void LogToConsole(string text)
+        {
+            Console.WriteLine(text);
+        }
+
+        static void DoNothing(string text)
+        {
         }
     }
 }

@@ -25,10 +25,12 @@ namespace Migr8
             var connectionString = ConfigurationManager.ConnectionStrings[connectionStringOrConnectionStringName]?.ConnectionString
                                 ?? connectionStringOrConnectionStringName;
 
+            var writer = options.GetWriter();
+
             var migrator = new DatabaseMigratorCore(
                 db: GetDatabase(),
                 migrationTableName: options.MigrationTableName,
-                writer: options.GetWriter(),
+                writer: writer,
                 connectionString: connectionString);
 
             var executableSqlMigrations = migrations.GetMigrations();

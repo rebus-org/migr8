@@ -2,6 +2,7 @@
 {
     interface IWriter
     {
-        void Write(string text);
+        void Info(string text);
+        void Verbose(string text);
     }
 }

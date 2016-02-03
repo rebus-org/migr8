@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using Migr8.Internals;
 using Migr8.Test.Basic;
 using NUnit.Framework;
@@ -14,7 +13,7 @@ namespace Migr8.Test.Ordering
 
         protected override void SetUp()
         {
-            _migrator = new DatabaseMigratorCore(new ConsoleWriter(), TestConfig.ConnectionString);
+            _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 
         static readonly TestMigration[] AllMigrations = {

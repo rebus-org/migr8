@@ -13,7 +13,7 @@ namespace Migr8.Test.Branches
 
         protected override void SetUp()
         {
-            _migrator = new DatabaseMigratorCore(new ConsoleWriter(), TestConfig.ConnectionString);
+            _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 
         static readonly TestMigration[] AllMigrations = {

@@ -55,9 +55,6 @@
     <Compile Include="..\Migr8\ExecutableMigration.cs">
       <Link>ExecutableMigration.cs</Link>
     </Compile>
-    <Compile Include="..\Migr8\Internals\ConsoleWriter.cs">
-      <Link>Internals\ConsoleWriter.cs</Link>
-    </Compile>
     <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs">
       <Link>Internals\DatabaseMigratorCore.cs</Link>
     </Compile>

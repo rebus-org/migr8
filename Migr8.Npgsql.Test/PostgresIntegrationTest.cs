@@ -8,7 +8,7 @@ namespace Migr8.Npgsql.Test
         [Test]
         public void Run()
         {
-            Database.Migrate(TestConfig.PostgresConnectionString, GetMigrations());
+            Database.Migrate(TestConfig.PostgresConnectionString, GetMigrations(), new Options(logAction: Log, verboseLogAction: LogVerbose));
         }
 
         static Migrations GetMigrations()

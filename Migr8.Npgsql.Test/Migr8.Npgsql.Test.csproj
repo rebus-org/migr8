@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnotherPostgresTest.cs" />
     <Compile Include="PostgresFixtureBase.cs" />
     <Compile Include="PostgresIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +63,14 @@
       <Project>{2CC26B11-BC37-4F43-A650-92C94198F433}</Project>
       <Name>Migr8.Npgsql</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\002-master.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\001-master.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
