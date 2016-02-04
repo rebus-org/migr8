@@ -145,7 +145,14 @@ namespace Migr8.Internals
             {
                 _writer.Verbose($"Executing statement: {sqlStatement}");
 
-                connection.ExecuteStatement(sqlStatement);
+                try
+                {
+                    connection.ExecuteStatement(sqlStatement);
+                }
+                catch (Exception exception)
+                {
+                    throw new MigrationException($"Error executing SQL statement: '{sqlStatement}'", exception);
+                }
             }
 
             _writer.Info($"Migration {id} executed");
