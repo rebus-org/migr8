@@ -83,7 +83,7 @@ namespace Migr8.Test
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT [TABLE_NAME] FROM [information_schema].[tables]";
+                    command.CommandText = "SELECT [TABLE_NAME] FROM [information_schema].[tables] WHERE [TABLE_TYPE] = 'BASE TABLE'";
 
                     using (var reader = command.ExecuteReader())
                     {
