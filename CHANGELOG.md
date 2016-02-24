@@ -7,3 +7,4 @@
 * `0.9.3` - actually works
 * `0.9.4` - added validation that prevents accidentally executing migrations, that come before those that have already been executed
 * `0.9.5` - added ability to pick up `Migrations.FromFilesIn(aDirectory)` or just `Migrations.FromFilesInCurrentDirectory()`
+* `0.9.6` - increased SQL migration command timeout to 10 minutes

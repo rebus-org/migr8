@@ -151,6 +151,7 @@ ALTER TABLE ""{migrationTableName}""
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
+            sqlCommand.CommandTimeout = 60*10;//10 minutes
             return sqlCommand;
         }
     }
