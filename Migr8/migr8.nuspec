@@ -10,7 +10,7 @@
     <projectUrl>http://mookid.dk/oncode/migr8</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Lightweight database migration tool for SQL Server that works well with feature branches and general parallelization of development efforts.</description>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2012-2016</copyright>
     <tags>sql-server migration schema</tags>
   </metadata>
   <files>
