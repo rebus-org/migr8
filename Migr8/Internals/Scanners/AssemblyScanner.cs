@@ -16,24 +16,32 @@ namespace Migr8.Internals.Scanners
 
         public IEnumerable<IExecutableSqlMigration> GetMigrations()
         {
-            return _assembly
-                .GetTypes()
-                .Select(t => new
-                {
-                    Type = t,
-                    Attribute = t.GetCustomAttributes(typeof(MigrationAttribute), false)
-                        .Cast<MigrationAttribute>()
-                        .FirstOrDefault()
-                })
-                .Where(a => a.Attribute != null)
-                .Select(a => new
-                {
-                    Type = a.Type,
-                    Attribute = a.Attribute,
-                    Instance = CreateSqlMigrationInstance(a.Type)
-                })
-                .Select(a => CreateExecutableSqlMigration(a.Attribute, a.Instance))
-                .ToList();
+	        try
+	        {
+		        return _assembly
+			        .GetTypes()
+			        .Select(t => new
+			        {
+				        Type = t,
+				        Attribute = t.GetCustomAttributes(typeof(MigrationAttribute), false)
+					        .Cast<MigrationAttribute>()
+					        .FirstOrDefault()
+			        })
+			        .Where(a => a.Attribute != null)
+			        .Select(a => new
+			        {
+				        Type = a.Type,
+				        Attribute = a.Attribute,
+				        Instance = CreateSqlMigrationInstance(a.Type)
+			        })
+			        .Select(a => CreateExecutableSqlMigration(a.Attribute, a.Instance))
+			        .ToList();
+
+	        }
+	        catch (Exception exception)
+	        {
+		        throw new MigrationException(ExceptionHelper.BuildMessage(exception));
+	        }
         }
 
         static ISqlMigration CreateSqlMigrationInstance(Type type)
