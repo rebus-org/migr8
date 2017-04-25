@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Database_Sql.cs" />
     <Compile Include="Db.cs" />
+    <Compile Include="Internals\ExceptionHelper.cs" />
     <Compile Include="SqlServer\SqlServerDb.cs" />
     <Compile Include="Internals\IDb.cs" />
     <Compile Include="Internals\IExclusiveDbConnection.cs" />

@@ -58,6 +58,9 @@
     <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs">
       <Link>Internals\DatabaseMigratorCore.cs</Link>
     </Compile>
+    <Compile Include="..\Migr8\Internals\ExceptionHelper.cs">
+      <Link>Internals\ExceptionHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Migr8\Internals\IDb.cs">
       <Link>Internals\IDb.cs</Link>
     </Compile>
