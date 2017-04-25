@@ -13,10 +13,11 @@ services:
 before_build:
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
-  - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
-  - createdb migr8_test
-  - appveyor-retry nuget restore migr8.sln
   - SET SQLSERVER=server=.;database=migr8_test;User ID=sa;Password=Password12!
+  - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
+  - C:\Program Files\PostgreSQL\9.5\bin\createdb migr8_test
+  - sqlcmd -S "(local)" -U "sa" -P "Password12!" -Q "CREATE DATABASE migr8_test;" -d "master"
+  - appveyor-retry nuget restore migr8.sln
 
 build_script:
   - msbuild migr8.sln
