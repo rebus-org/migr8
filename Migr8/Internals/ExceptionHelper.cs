@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Migr8.Internals
 {
-	public static class ExceptionHelper
+	static class ExceptionHelper
 	{
 		/// <summary>
 		/// Builds up a message, using the Message field of the specified exception

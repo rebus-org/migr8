@@ -1,0 +1,22 @@
+image: Visual Studio 2017
+
+shallow_clone: true
+
+cache:
+  - packages -> **\packages.config
+  - '%LocalAppData%\NuGet\Cache'
+
+services:
+  - postgresql95
+  - mssql2016
+
+before_build:
+  - SET PGUSER=postgres
+  - SET PGPASSWORD=Password12!
+  - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
+  - createdb migr8_test
+  - appveyor-retry nuget restore migr8.sln
+
+build_script:
+  - msbuild migr8.sln
+

@@ -24,3 +24,8 @@
 ## `0.13.0`
 * increased SQL migration command timeout to 10 minutes
 * added PostgreSQL support (just use the `Migr8.Npgsql` package instead)
+
+## `0.14.0`
+* better exceptions on errors during type scan - thanks [madstt]
+
+[madstt]: https://github.com/madstt
