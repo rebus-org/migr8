@@ -16,6 +16,7 @@ before_build:
   - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
   - createdb migr8_test
   - appveyor-retry nuget restore migr8.sln
+  - SET SQLSERVER="server=.; database=migr8_test; User ID=sa; Password=Password12!"
 
 build_script:
   - msbuild migr8.sln
