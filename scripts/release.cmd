@@ -44,7 +44,7 @@ if %ERRORLEVEL% neq 0 (
  	goto exit_fail
 )
 
-rem call scripts\push.cmd "%version%"
+call scripts\push.cmd "%version%"
 
 popd
 
