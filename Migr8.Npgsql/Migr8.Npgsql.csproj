@@ -1,16 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CC26B11-BC37-4F43-A650-92C94198F433}</ProjectGuid>
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+ <PropertyGroup>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Migr8</RootNamespace>
+    <RootNamespace>Migr8.Npgsql</RootNamespace>
     <AssemblyName>Migr8.Npgsql</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net45;netstandard1.6</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Authors>mookid8000</Authors>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
+    <Copyright>Copyright 2012-2017</Copyright>
+    <PackageTags>sql rdbms postgresql postgres migrations</PackageTags>
+    <RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,101 +23,50 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Migr8.Npgsql.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>RELEASE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Migr8.Npgsql.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Migr8.Npgsql.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <DefineConstants>NETSTANDARD1_6</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Migr8\Database.cs">
-      <Link>Database.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Db.cs">
-      <Link>Db.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\ExecutableMigration.cs">
-      <Link>ExecutableMigration.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs">
-      <Link>Internals\DatabaseMigratorCore.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\ExceptionHelper.cs">
-      <Link>Internals\ExceptionHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\IDb.cs">
-      <Link>Internals\IDb.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs">
-      <Link>Internals\IExclusiveDbConnection.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs">
-      <Link>Internals\IExecutableSqlMigration.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\IWriter.cs">
-      <Link>Internals\IWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\LogActionWriter.cs">
-      <Link>Internals\LogActionWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs">
-      <Link>Internals\Scanners\AssemblyScanner.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs">
-      <Link>Internals\Scanners\DirectoryScanner.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\ISqlMigration.cs">
-      <Link>ISqlMigration.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\MigrationAttribute.cs">
-      <Link>MigrationAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\MigrationException.cs">
-      <Link>MigrationException.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Migrations.cs">
-      <Link>Migrations.cs</Link>
-    </Compile>
-    <Compile Include="..\Migr8\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
-    <Compile Include="Database_Postgres.cs" />
-    <Compile Include="Postgres\PostgreSqlDb.cs" />
-    <Compile Include="Postgres\PostgresqlExclusiveDbConnection.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
+    <Compile Include="..\Migr8\Db.cs" Link="Db.cs" />
+    <Compile Include="..\Migr8\ExecutableMigration.cs" Link="ExecutableMigration.cs" />
+    <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs" Link="Internals\DatabaseMigratorCore.cs" />
+    <Compile Include="..\Migr8\Internals\ExceptionHelper.cs" Link="Internals\ExceptionHelper.cs" />
+    <Compile Include="..\Migr8\Internals\IDb.cs" Link="Internals\IDb.cs" />
+    <Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs" Link="Internals\IExclusiveDbConnection.cs" />
+    <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs" Link="Internals\IExecutableSqlMigration.cs" />
+    <Compile Include="..\Migr8\Internals\IWriter.cs" Link="Internals\IWriter.cs" />
+    <Compile Include="..\Migr8\Internals\LogActionWriter.cs" Link="Internals\LogActionWriter.cs" />
+    <Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs" Link="Internals\Scanners\AssemblyScanner.cs" />
+    <Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs" Link="Internals\Scanners\DirectoryScanner.cs" />
+    <Compile Include="..\Migr8\ISqlMigration.cs" Link="ISqlMigration.cs" />
+    <Compile Include="..\Migr8\MigrationAttribute.cs" Link="MigrationAttribute.cs" />
+    <Compile Include="..\Migr8\MigrationException.cs" Link="MigrationException.cs" />
+    <Compile Include="..\Migr8\Migrations.cs" Link="Migrations.cs" />
+    <Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="migr8.npgsql.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
+    <Folder Include="Internals\Scanners\" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="npgsql" Version="3.2.5" />
+  </ItemGroup>
 </Project>

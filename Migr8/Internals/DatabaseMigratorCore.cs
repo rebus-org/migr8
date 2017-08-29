@@ -228,7 +228,7 @@ namespace Migr8.Internals
 
                 return majorCompare != 0
                     ? majorCompare
-                    : string.Compare(BranchSpecification, other.BranchSpecification, StringComparison.InvariantCultureIgnoreCase);
+                    : string.Compare(BranchSpecification, other.BranchSpecification, StringComparison.OrdinalIgnoreCase);
             }
         }
 

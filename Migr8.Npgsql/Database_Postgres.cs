@@ -1,5 +1,5 @@
 ﻿using Migr8.Internals;
-using Migr8.Postgres;
+using Migr8.Npgsql.Postgres;
 
 namespace Migr8
 {

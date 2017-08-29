@@ -5,7 +5,7 @@ using Migr8.Internals;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace Migr8.Postgres
+namespace Migr8.Npgsql.Postgres
 {
     class PostgresqlExclusiveDbConnection : IExclusiveDbConnection
     {
@@ -78,8 +78,8 @@ INSERT INTO ""{migrationTableName}"" (
                 command.Parameters.Add("sql", NpgsqlDbType.Text).Value = migration.Sql;
                 command.Parameters.Add("description", NpgsqlDbType.Text).Value = migration.Description;
                 command.Parameters.Add("time", NpgsqlDbType.TimestampTZ).Value = DateTime.Now;
-                command.Parameters.Add("userName", NpgsqlDbType.Text).Value = Environment.UserName;
-                command.Parameters.Add("userDomainName", NpgsqlDbType.Text).Value = Environment.UserDomainName;
+                command.Parameters.Add("userName", NpgsqlDbType.Text).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
+                command.Parameters.Add("userDomainName", NpgsqlDbType.Text).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
                 command.Parameters.Add("machineName", NpgsqlDbType.Text).Value = Environment.MachineName;
 
                 command.ExecuteNonQuery();
