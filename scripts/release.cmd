@@ -32,13 +32,19 @@ if %ERRORLEVEL% neq 0 (
  	goto exit_fail
 )
 
-dotnet pack "%root%/%project%" -c Release -o "%deploydir%" /p:PackageVersion=%version%
+dotnet pack "%root%\migr8\migr8.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version%
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-call scripts\push.cmd "%version%"
+dotnet pack "%root%\migr8.npgsql\migr8.npgsql.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version%
+if %ERRORLEVEL% neq 0 (
+	popd
+ 	goto exit_fail
+)
+
+rem call scripts\push.cmd "%version%"
 
 popd
 
