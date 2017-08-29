@@ -44,7 +44,7 @@ namespace Migr8.Npgsql.Test
                         command.ExecuteNonQuery();
                         Console.WriteLine("OK");
                     }
-                    catch (NpgsqlException exception) when (exception.Code == DoesNotExist)
+                    catch (PostgresException exception) when (exception.SqlState == DoesNotExist)
                     {
                         Console.WriteLine("Did not exist");
                     }
