@@ -40,7 +40,7 @@ namespace Migr8.Internals.Scanners
             {
                 var extension = Path.GetExtension(filePath);
 
-                if (!string.Equals(extension, ".sql", StringComparison.InvariantCultureIgnoreCase))
+                if (!string.Equals(extension, ".sql", StringComparison.OrdinalIgnoreCase))
                 {
                     return null;
                 }

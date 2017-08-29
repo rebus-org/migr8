@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stuff", "stuff", "{F1E3F4CA-B665-4D3A-AA2E-398B9C2711D8}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,13 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A7310F
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8", "Migr8\Migr8.csproj", "{73AACF2F-120D-49B0-AD67-AB1F2A937BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8", "Migr8\Migr8.csproj", "{73AACF2F-120D-49B0-AD67-AB1F2A937BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8.Test", "Migr8.Test\Migr8.Test.csproj", "{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8.Npgsql.Test", "Migr8.Npgsql.Test\Migr8.Npgsql.Test.csproj", "{26F34133-1199-46CC-BEC7-B9656236E744}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migr8.Npgsql", "Migr8.Npgsql\Migr8.Npgsql.csproj", "{2CC26B11-BC37-4F43-A650-92C94198F433}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8.Test", "Migr8.Test\Migr8.Test.csproj", "{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql server", "sql server", "{C3DE140A-D6D9-4A7A-AD54-25C4B2E3162B}"
 EndProject
@@ -45,14 +41,6 @@ Global
 		{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26F34133-1199-46CC-BEC7-B9656236E744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26F34133-1199-46CC-BEC7-B9656236E744}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26F34133-1199-46CC-BEC7-B9656236E744}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26F34133-1199-46CC-BEC7-B9656236E744}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CC26B11-BC37-4F43-A650-92C94198F433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CC26B11-BC37-4F43-A650-92C94198F433}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CC26B11-BC37-4F43-A650-92C94198F433}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CC26B11-BC37-4F43-A650-92C94198F433}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,7 +48,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{73AACF2F-120D-49B0-AD67-AB1F2A937BB1} = {C3DE140A-D6D9-4A7A-AD54-25C4B2E3162B}
 		{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839} = {C3DE140A-D6D9-4A7A-AD54-25C4B2E3162B}
-		{26F34133-1199-46CC-BEC7-B9656236E744} = {BAF2F6D7-4743-4BEF-A94F-38AE17097DAC}
-		{2CC26B11-BC37-4F43-A650-92C94198F433} = {BAF2F6D7-4743-4BEF-A94F-38AE17097DAC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE15E6DC-570C-4587-AD9E-D5388DDCE9D3}
 	EndGlobalSection
 EndGlobal

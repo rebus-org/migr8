@@ -4,8 +4,7 @@ namespace Migr8
 {
     /// <summary>
     /// Decorate a class with this attribute to have it picked up by the assembly scanner when scanning
-    /// for migrations using <see cref="Migrations.FromThisAssembly"/>, <see cref="Migrations.FromAssemblyOf{T}"/>,
-    /// or <see cref="Migrations.FromAssembly"/>
+    /// for migrations using <see cref="Migrations.FromAssemblyOf{T}"/> or <see cref="Migrations.FromAssembly"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class MigrationAttribute : Attribute

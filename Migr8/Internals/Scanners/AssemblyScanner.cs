@@ -23,7 +23,7 @@ namespace Migr8.Internals.Scanners
 			        .Select(t => new
 			        {
 				        Type = t,
-				        Attribute = t.GetCustomAttributes(typeof(MigrationAttribute), false)
+				        Attribute = t.GetTypeInfo().GetCustomAttributes(typeof(MigrationAttribute), false)
 					        .Cast<MigrationAttribute>()
 					        .FirstOrDefault()
 			        })
@@ -46,7 +46,7 @@ namespace Migr8.Internals.Scanners
 
         static ISqlMigration CreateSqlMigrationInstance(Type type)
         {
-            if (!type.GetInterfaces().Contains(typeof(ISqlMigration)))
+            if (!type.GetTypeInfo().GetInterfaces().Contains(typeof(ISqlMigration)))
             {
                 throw new MigrationException($"The type {type} does not implement {typeof(ISqlMigration)}");
             }

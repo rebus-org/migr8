@@ -31,7 +31,7 @@ namespace Migr8.SqlServer
 
         public HashSet<string> GetTableNames()
         {
-            var tableNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            var tableNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             using (var command = CreateCommand())
             {
@@ -77,8 +77,8 @@ INSERT INTO [{migrationTableName}] (
                 command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
                 command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
                 command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
-                command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.UserName;
-                command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.UserDomainName;
+                command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
+                command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
                 command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
 
                 command.ExecuteNonQuery();

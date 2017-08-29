@@ -8,7 +8,7 @@ namespace Migr8.Test.Api
         [Test]
         public void ItWorks()
         {
-            Database.Migrate(TestConfig.ConnectionString, Migrations.FromThisAssembly().Where(m => m.SequenceNumber < 2));
+            Database.Migrate(TestConfig.ConnectionString, Migrations.FromAssemblyOf<CheckFiltering>().Where(m => m.SequenceNumber < 2));
 
             var tableNames = GetTableNames();
 

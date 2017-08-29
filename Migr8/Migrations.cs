@@ -8,8 +8,8 @@ using Migr8.Internals.Scanners;
 namespace Migr8
 {
     /// <summary>
-    /// Wraps a set of database migrations. Get an instance by calling the static <see cref="FromThisAssembly"/>,
-    /// <see cref="FromAssemblyOf{T}"/>, or <see cref="FromAssembly"/>
+    /// Wraps a set of database migrations. Get an instance by calling the static
+    /// <see cref="FromAssemblyOf{T}"/> or <see cref="FromAssembly"/>
     /// </summary>
     public class Migrations
     {
@@ -30,16 +30,11 @@ namespace Migr8
         /// </summary>
         public static Migrations FromFilesInCurrentDirectory()
         {
+#if NET45
             return GetFromDirectory(AppDomain.CurrentDomain.BaseDirectory);
-        }
-
-        /// <summary>
-        /// Gets all migrations found in the assembly calling this method.
-        /// </summary>
-        public static Migrations FromThisAssembly()
-        {
-            var callingAssembly = Assembly.GetCallingAssembly();
-            return GetFromAssembly(callingAssembly);
+#else
+            return GetFromDirectory(AppContext.BaseDirectory);
+#endif
         }
 
         /// <summary>
@@ -48,7 +43,7 @@ namespace Migr8
         /// </summary>
         public static Migrations FromAssemblyOf<T>()
         {
-            var assembly = typeof(T).Assembly;
+            var assembly = typeof(T).GetTypeInfo().Assembly;
             return GetFromAssembly(assembly);
         }
 
