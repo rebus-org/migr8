@@ -17,8 +17,8 @@ before_build:
   - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
   - createdb migr8_test
   - sqlcmd -S "(local)" -U "sa" -P "Password12!" -Q "CREATE DATABASE migr8_test;" -d "master"
-  - appveyor-retry nuget restore migr8.sln
+  - appveyor-retry dotnet restore -v Minimal
 
 build_script:
-  - msbuild migr8.sln
+  - dotnet build migr8.sln -c Release 
 
