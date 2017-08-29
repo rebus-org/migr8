@@ -1,6 +1,6 @@
 ﻿using Migr8.Internals;
 
-namespace Migr8.Postgres
+namespace Migr8.Npgsql.Postgres
 {
     class PostgreSqlDb : IDb
     {

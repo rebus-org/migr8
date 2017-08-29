@@ -11,7 +11,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
     <Copyright>Copyright 2012-2017</Copyright>
-    <PackageTags>sql rdbms migrations</PackageTags>
+    <PackageTags>sql rdbms sql-server mssql migrations</PackageTags>
     <RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>

@@ -39,4 +39,15 @@
   <ItemGroup>
     <ProjectReference Include="..\Migr8\Migr8.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Api\Mix\0001-master.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Api\Mix\Subdir1\0002-feature-subdir1.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Api\Mix\Subdir2\0002-feature-subdir2.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
