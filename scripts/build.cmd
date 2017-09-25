@@ -39,6 +39,12 @@ if %ERRORLEVEL% neq 0 (
  	goto exit_fail
 )
 
+dotnet build "%root%\migr8.mysql\migr8.mysql.csproj" -c Release
+if %ERRORLEVEL% neq 0 (
+	popd
+ 	goto exit_fail
+)
+
 popd
 
 
