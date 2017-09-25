@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Migr8.Mysql</id>
+    <version>$version$</version>
+    <title>Migr8.Mysql</title>
+    <authors>mookid8000</authors>
+    <owners>mookid8000</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://mookid.dk/oncode/migr8</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Lightweight database migration tool for SQL Server that works well with feature branches and general parallelization of development efforts.</description>
+    <copyright>Copyright 2012-2016</copyright>
+    <tags>Mysql migration schema</tags>
+    <dependencies>
+      <dependency id="MySql.Data" version="6.9.9"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Migr8.Mysql.dll" target="lib\NET45" />
+    <file src="bin\Release\Migr8.Mysql.xml" target="lib\NET45" />
+  </files>
+</package>
