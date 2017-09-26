@@ -21,7 +21,7 @@ namespace Migr8.Mysql.Test
 
         public static void ResetDatabase()
         {
-            foreach (var tableName in GetTableNames())
+            foreach (var tableName in GetTableNames(false))
             {
                 DropTable(tableName);
             }

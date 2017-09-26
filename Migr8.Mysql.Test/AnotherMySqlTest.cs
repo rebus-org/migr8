@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Migr8.Mysql.Test
 {
@@ -8,7 +10,8 @@ namespace Migr8.Mysql.Test
         [Test]
         public void TryWithFiles()
         {
-            Database.Migrate(TestConfig.MysqlConnectionString, Migrations.FromFilesIn("Scripts"), new Options(logAction: Log, verboseLogAction: LogVerbose));
+            var directory = Path.Combine(TestContext.CurrentContext.TestDirectory, "Scripts");
+            Database.Migrate(TestConfig.MysqlConnectionString, Migrations.FromFilesIn(directory), new Options(logAction: Log, verboseLogAction: LogVerbose));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Migr8.Mysql.Test
             {
                 new TestMigration(1, "master", @"
 CREATE TABLE `bimmelim` (
-    `Id` BIGINT NOT NULL,
+    `Id` BIGINT  NOT NULL AUTO_INCREMENT,
 	`text` TEXT,
 	PRIMARY KEY (`Id`)
 );

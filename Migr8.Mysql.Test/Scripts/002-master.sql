@@ -5,3 +5,5 @@ CREATE TABLE `Bimse2` (
 	`Data` TEXT,
 	PRIMARY KEY (`Id`)
 );
+
+DROP TABLE `Bimse2`;
