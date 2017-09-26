@@ -37,6 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8.Mysql", "Migr8.MySQL\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8.Mysql.Test", "Migr8.Mysql.Test\Migr8.Mysql.Test.csproj", "{5100C781-80C2-4998-A5C4-FFAFB45DCD7E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C37779B-611E-4C48-B70A-2BD602F74B65}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
