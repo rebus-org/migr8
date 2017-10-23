@@ -8,11 +8,13 @@ namespace Migr8.SqlServer
 {
     class SqlServerExclusiveDbConnection : IExclusiveDbConnection
     {
+        readonly Options _options;
         readonly SqlConnection _connection;
         readonly SqlTransaction _transaction;
 
-        public SqlServerExclusiveDbConnection(string connectionString)
+        public SqlServerExclusiveDbConnection(string connectionString, Options options)
         {
+            _options = options;
             _connection = new SqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
@@ -151,7 +153,7 @@ ALTER TABLE [{migrationTableName}]
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
-            sqlCommand.CommandTimeout = 60*10;//10 minutes
+            sqlCommand.CommandTimeout = (int)_options.SqlCommandTimeout.TotalSeconds;
             return sqlCommand;
         }
     }

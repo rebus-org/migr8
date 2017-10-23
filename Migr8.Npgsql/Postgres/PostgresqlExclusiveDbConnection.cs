@@ -9,11 +9,13 @@ namespace Migr8.Npgsql.Postgres
 {
     class PostgresqlExclusiveDbConnection : IExclusiveDbConnection
     {
+        readonly Options _options;
         readonly NpgsqlConnection _connection;
         readonly NpgsqlTransaction _transaction;
 
-        public PostgresqlExclusiveDbConnection(string connectionString)
+        public PostgresqlExclusiveDbConnection(string connectionString, Options options)
         {
+            _options = options;
             _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
@@ -151,7 +153,7 @@ ALTER TABLE ""{migrationTableName}""
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
-            sqlCommand.CommandTimeout = 60*10;//10 minutes
+            sqlCommand.CommandTimeout = (int)_options.SqlCommandTimeout.TotalSeconds;
             return sqlCommand;
         }
     }

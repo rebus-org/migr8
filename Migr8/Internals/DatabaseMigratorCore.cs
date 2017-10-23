@@ -8,6 +8,7 @@ namespace Migr8.Internals
 {
     class DatabaseMigratorCore
     {
+        readonly Options _options;
         readonly IWriter _writer;
         readonly string _connectionString;
         readonly IDb _db;
@@ -19,6 +20,20 @@ namespace Migr8.Internals
             _connectionString = connectionString;
             _db = db ?? Database.GetDatabase();
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
+
+            _writer.Verbose($"Database migrator core initialized with connection string '{_connectionString}'");
+            _writer.Verbose($"Storing migration log in table '{_migrationTableName}'");
+            _writer.Verbose($"DB implementation: {_db}");
+        }
+
+        public DatabaseMigratorCore(string connectionString, Options options, IDb db)
+        {
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            _migrationTableName = options.MigrationTableName;
+            _writer = options.GetWriter();
 
             _writer.Verbose($"Database migrator core initialized with connection string '{_connectionString}'");
             _writer.Verbose($"Storing migration log in table '{_migrationTableName}'");
@@ -81,8 +96,8 @@ namespace Migr8.Internals
         bool ExecuteNextMigration(List<IExecutableSqlMigration> migrations)
         {
             _writer.Verbose("Opening access to database");
-
-            using (var connection = _db.GetExclusiveDbConnection(_connectionString))
+            
+            using (var connection = _db.GetExclusiveDbConnection(_connectionString, _options))
             {
                 EnsureMigrationTableExists(connection);
 

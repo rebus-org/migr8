@@ -4,9 +4,9 @@ namespace Migr8.Npgsql.Postgres
 {
     class PostgreSqlDb : IDb
     {
-        public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString)
+        public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString, Options options)
         {
-            return new PostgresqlExclusiveDbConnection(connectionString);
+            return new PostgresqlExclusiveDbConnection(connectionString, options);
         }
     }
 }

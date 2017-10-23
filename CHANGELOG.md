@@ -28,9 +28,11 @@
 ## 0.14.0
 * better exceptions on errors during type scan - thanks [madstt]
 
-## 0.20.0-b1
+## 0.20.0-b2
 
 * .NET Core support (targeting .NET 4.5 and .NET Standard 1.6)
+* Add SQL command timeout option
+
 
 ---
 

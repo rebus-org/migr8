@@ -25,7 +25,7 @@ namespace Migr8.Test.Basic
             Try(numberOfThreads, numberOfMigrations);
         }
 
-        [TestCase(100)]
+        [TestCase(30)]
         public void ManyRuns(int iterations)
         {
             var random = new Random(DateTime.Now.GetHashCode());

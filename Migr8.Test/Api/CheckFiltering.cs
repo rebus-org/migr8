@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+// ReSharper disable ArgumentsStyleNamedExpression
+// ReSharper disable ArgumentsStyleOther
 
 namespace Migr8.Test.Api
 {
@@ -8,11 +11,15 @@ namespace Migr8.Test.Api
         [Test]
         public void ItWorks()
         {
-            Database.Migrate(TestConfig.ConnectionString, Migrations.FromAssemblyOf<CheckFiltering>().Where(m => m.SequenceNumber < 2));
+            Database.Migrate(
+                connectionStringOrConnectionStringName: TestConfig.ConnectionString,
+                migrations: Migrations.FromAssemblyOf<CheckFiltering>().Where(m => m.SequenceNumber < 2),
+                options: new Options(sqlCommandTimeout: TimeSpan.FromMinutes(20))
+            );
 
             var tableNames = GetTableNames();
 
-            Assert.That(tableNames, Is.EqualTo(new[] {"MyFirstTable"}));
+            Assert.That(tableNames, Is.EqualTo(new[] { "MyFirstTable" }));
         }
     }
 }

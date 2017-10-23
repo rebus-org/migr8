@@ -8,11 +8,13 @@ namespace Migr8.Mysql.Mysql
 {
     class MysqlDbExclusiveDbConnection : IExclusiveDbConnection
     {
+        readonly Options _options;
         readonly MySqlConnection _connection;
         readonly MySqlTransaction _transaction;
 
-        public MysqlDbExclusiveDbConnection(string connectionString)
+        public MysqlDbExclusiveDbConnection(string connectionString, Options options)
         {
+            _options = options;
             _connection = new MySqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
@@ -142,7 +144,7 @@ INSERT INTO `{migrationTableName}` (
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
-            sqlCommand.CommandTimeout = 60 * 10;//10 minutes
+            sqlCommand.CommandTimeout = (int)_options.SqlCommandTimeout.TotalSeconds;
             return sqlCommand;
         }
     }

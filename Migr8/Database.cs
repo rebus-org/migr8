@@ -1,6 +1,7 @@
 ﻿#if NET45
 using System.Configuration;
 #endif
+using System;
 using Migr8.Internals;
 
 namespace Migr8
@@ -33,11 +34,13 @@ namespace Migr8
 
             var writer = options.GetWriter();
 
-            var migrator = new DatabaseMigratorCore(
-                db: GetDatabase(),
-                migrationTableName: options.MigrationTableName,
-                writer: writer,
-                connectionString: connectionString);
+            var migrator = new DatabaseMigratorCore(connectionString, options, GetDatabase());
+
+            //var migrator = new DatabaseMigratorCore(
+            //    db: GetDatabase(),
+            //    migrationTableName: options.MigrationTableName,
+            //    writer: writer,
+            //    connectionString: connectionString);
 
             var executableSqlMigrations = migrations.GetMigrations();
 
