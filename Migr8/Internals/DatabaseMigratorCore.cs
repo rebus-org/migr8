@@ -20,6 +20,7 @@ namespace Migr8.Internals
             _connectionString = connectionString;
             _db = db ?? Database.GetDatabase();
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
+            _options = new Options();
 
             _writer.Verbose($"Database migrator core initialized with connection string '{_connectionString}'");
             _writer.Verbose($"Storing migration log in table '{_migrationTableName}'");
