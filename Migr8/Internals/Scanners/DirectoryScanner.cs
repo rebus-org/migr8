@@ -91,14 +91,73 @@ namespace Migr8.Internals.Scanners
 
                 var lines = File.ReadAllLines(migrationFilePath);
 
-                Description = ExtractDescription(lines);
-                Sql = ExtractMigration(lines);
+                //Description = ExtractDescription(lines);
+                //Sql = ExtractMigration(lines);
+
+                (Description, Sql) = ExtractDescriptionAndSql(lines);
+
                 SqlMigration = this;
+            }
+
+            static (string,string) ExtractDescriptionAndSql(string[] lines)
+            {
+                var parsingDescription = true;
+                var commentLines = new List<string>();
+                var sqlLines = new List<string>();
+
+                foreach (var line in lines)
+                {
+                    var trimmedLine = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmedLine))
+                    {
+                        if (commentLines.Any())
+                        {
+                            parsingDescription = false;
+                            continue;
+                        }
+                        continue;
+                    }
+
+                    if (parsingDescription)
+                    {
+                        if (trimmedLine.StartsWith("--"))
+                        {
+                            commentLines.Add(trimmedLine);
+                        }
+                    }
+                    else
+                    {
+                        sqlLines.Add(line);
+                    }
+                }
+
+                var description = string.Join(Environment.NewLine, commentLines
+                        .Where(line => !string.IsNullOrWhiteSpace(line))
+                        .Select(line => line.TrimStart(' ', '-')));
+
+                var sql = string.Join(Environment.NewLine, sqlLines);
+
+                return (description,sql);
             }
 
             static string ExtractDescription(string[] lines)
             {
-                var commentLines = lines.TakeWhile(IsPartOfComments);
+                var commentLines = new List<string>();
+
+                foreach (var line in lines)
+                {
+                    var trimmedLine = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmedLine))
+                    {
+                        if (commentLines.Any()) break;
+                        continue;
+                    }
+
+                    if (trimmedLine.StartsWith("--"))
+                    {
+                        commentLines.Add(trimmedLine);
+                    }
+                }
 
                 return string.Join(Environment.NewLine,
                     commentLines

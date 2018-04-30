@@ -76,4 +76,7 @@
       <Version>6.9.9</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="system.valuetuple" Version="4.4.0" />
+  </ItemGroup>
 </Project>

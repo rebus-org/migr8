@@ -8,16 +8,54 @@ namespace Migr8.Test.Api
     [TestFixture]
     public class CheckFileApi : FixtureBase
     {
+        string _directory;
+
+        protected override void SetUp()
+        {
+            _directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Api");
+        }
+
         [Test]
         public void CanPickUpMigrationsFromFiles()
         {
-            var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Api");
-
-            Database.Migrate(TestConfig.ConnectionString, Migrations.FromFilesIn(dir));
+            Database.Migrate(TestConfig.ConnectionString, Migrations.FromFilesIn(_directory));
 
             var tableNames = GetTableNames().ToList();
 
             Assert.That(tableNames, Is.EqualTo(new[] {"Tabelle1", "Tabelle2", "Tabelle3"}));
+        }
+
+        [Test]
+        public void CorrectlyParsesSqlFiles()
+        {
+            var migrations = Migrations.FromFilesIn(_directory).ToList();
+
+            Assert.That(migrations.Count, Is.EqualTo(3));
+
+            var migrationWithInterestingComment = migrations.Single(m => m.SequenceNumber == 1 && m.BranchSpecification == "master");
+
+            Console.WriteLine();
+            Console.WriteLine("THIS IS THE DESCRIPTION:");
+            Console.WriteLine(migrationWithInterestingComment.Description);
+            Console.WriteLine();
+            Console.WriteLine("THIS IS THE MIGRATION:");
+            Console.WriteLine(migrationWithInterestingComment.SqlMigration.Sql);
+            Console.WriteLine();
+
+            Assert.That(migrationWithInterestingComment.Description, Is.EqualTo(@"This is my first migration
+A table is created
+
+This comment SHOULD be included, because it's part of the first comment block"));
+
+            Assert.That(migrationWithInterestingComment.SqlMigration.Sql, Is.EqualTo(@"-- This comment should NOT be included, because it's not considered connected to the first comment block
+-- Create a table
+create table [Tabelle1]
+(
+	[Id] int identity(1,1)
+)
+go
+-- Add a column to that table
+alter table [Tabelle1] add [Text] nvarchar(10);"));
         }
     }
 }

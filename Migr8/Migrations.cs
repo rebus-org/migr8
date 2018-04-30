@@ -88,6 +88,16 @@ namespace Migr8
             return new Migrations(netListOfMigrations);
         }
 
+        /// <summary>
+        /// Gets the contained migrations in a form that can be used to look at
+        /// </summary>
+        public List<ExecutableMigration> ToList()
+        {
+            return _migrations
+                .Select(e => new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description, e.SqlMigration))
+                .ToList();
+        }
+
         readonly List<IExecutableSqlMigration> _migrations = new List<IExecutableSqlMigration>();
 
         internal Migrations(IEnumerable<IExecutableSqlMigration> migrations)

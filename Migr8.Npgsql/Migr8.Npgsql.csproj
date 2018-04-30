@@ -68,5 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="npgsql" Version="3.2.5" />
+    <PackageReference Include="system.valuetuple" Version="4.4.0" />
   </ItemGroup>
 </Project>

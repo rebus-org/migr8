@@ -32,7 +32,8 @@
 
 * .NET Core support (targeting .NET 4.5 and .NET Standard 1.6)
 * Add SQL command timeout option
-
+* Better comment parsing when using .sql files
+* Add `.ToList()` method on `Migrations` to allow for tooling to inspect found migrations
 
 ---
 

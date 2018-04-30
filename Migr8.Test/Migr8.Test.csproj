@@ -34,7 +34,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.8.1" />
+    <PackageReference Include="nunit" Version="3.10.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Migr8\Migr8.csproj" />
@@ -49,5 +49,8 @@
     <None Update="Api\Mix\Subdir2\0002-feature-subdir2.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>
