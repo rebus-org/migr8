@@ -27,16 +27,16 @@ calling assembly, you define these bad boys (which happen to be valid T-SQL):
 class CreateRebusTimeoutsTable : ISqlMigration
 {
     public string Sql => @"
-        CREATE TABLE [dbo].[RebusTimeouts](
-            [id] [int] IDENTITY(1,1) NOT NULL,
-	        [due_time] [datetime2](7) NOT NULL,
-	        [headers] [nvarchar](MAX) NOT NULL,
-	        [body] [varbinary](MAX) NOT NULL,
-            CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
-            (
-	            [id] ASC
-            )
-        )
+		CREATE TABLE [dbo].[RebusTimeouts](
+			[id] [int] IDENTITY(1,1) NOT NULL,
+			[due_time] [datetime2](7) NOT NULL,
+			[headers] [nvarchar](MAX) NOT NULL,
+			[body] [varbinary](MAX) NOT NULL,
+			CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
+			(
+				[id] ASC
+			)
+		)
 	"; 
 }
 
@@ -44,15 +44,15 @@ class CreateRebusTimeoutsTable : ISqlMigration
 class CreateRebusSubscriptionsTable : ISqlMigration
 {
     public string Sql => @"
-        CREATE TABLE [dbo].[RebusSubscriptions] (
-	        [topic] [nvarchar](200) NOT NULL,
-	        [address] [nvarchar](200) NOT NULL,
-            CONSTRAINT [PK_RebusSubscriptions] PRIMARY KEY CLUSTERED 
-            (
-	            [topic] ASC,
-	            [address] ASC
-            )
-        )
+		CREATE TABLE [dbo].[RebusSubscriptions] (
+			[topic] [nvarchar](200) NOT NULL,
+			[address] [nvarchar](200) NOT NULL,
+			CONSTRAINT [PK_RebusSubscriptions] PRIMARY KEY CLUSTERED 
+			(
+				[topic] ASC,
+				[address] ASC
+			)
+		)
 	"; 
 }
 ```
