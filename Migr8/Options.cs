@@ -46,15 +46,9 @@ namespace Migr8
 
         internal TimeSpan SqlCommandTimeout { get; }
 
-        internal IWriter GetWriter()
-        {
-            return new LogActionWriter(LogAction ?? LogToConsole, VerboseLogAction ?? DoNothing);
-        }
+        internal IWriter GetWriter() => new LogActionWriter(LogAction ?? LogToConsole, VerboseLogAction ?? DoNothing);
 
-        static void LogToConsole(string text)
-        {
-            Console.WriteLine(text);
-        }
+        static void LogToConsole(string text) => Console.WriteLine(text);
 
         static void DoNothing(string text)
         {
