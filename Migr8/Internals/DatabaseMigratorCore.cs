@@ -191,7 +191,7 @@ namespace Migr8.Internals
 
         IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
         {
-            var executedMigrationIds = connection.GetExecutedMigrationIds(_migrationTableName);
+            var executedMigrationIds = connection.GetExecutedMigrationIds(_migrationTableName).ToList();
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))
@@ -203,7 +203,9 @@ namespace Migr8.Internals
                 .OrderBy(m => m.SequenceNumber).ThenBy(m => m.BranchSpecification)
                 .FirstOrDefault();
 
-            Console.WriteLine($@"REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.SequenceNumber} // {m.BranchSpecification}"))}");
+            Console.WriteLine($@"EXECUTED: {string.Join(", ", executedMigrationIds)}
+
+REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.SequenceNumber} // {m.BranchSpecification}"))}");
 
             return nextMigration;
         }
