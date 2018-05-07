@@ -95,8 +95,7 @@ namespace Migr8
         public List<ExecutableMigration> ToList()
         {
             return _migrations
-                .Select(e => new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description,
-                    e.SqlMigration, e.Hints))
+                .Select(e => new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description, e.SqlMigration, e.Hints))
                 .ToList();
         }
 

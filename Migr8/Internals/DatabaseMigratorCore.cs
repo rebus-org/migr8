@@ -199,9 +199,9 @@ namespace Migr8.Internals
 
             VerifyMigrationBandit(executedMigrationIds, remainingMigrations);
 
-            remainingMigrations.Sort((m1, m2) => CompareMigrationId(m1.Id, m2.Id));
-
-            var nextMigration = remainingMigrations.FirstOrDefault();
+            var nextMigration = remainingMigrations
+                .OrderBy(m => m.SequenceNumber).ThenBy(m => m.BranchSpecification)
+                .FirstOrDefault();
 
             return nextMigration;
         }
