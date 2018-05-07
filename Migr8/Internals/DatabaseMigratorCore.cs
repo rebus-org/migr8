@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 // ReSharper disable ArgumentsStyleLiteral
+// ReSharper disable EmptyGeneralCatchClause
 
 namespace Migr8.Internals
 {
@@ -205,7 +206,7 @@ namespace Migr8.Internals
 
             Console.WriteLine($@"EXECUTED: {string.Join(", ", executedMigrationIds)}
 
-REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.SequenceNumber} // {m.BranchSpecification}"))}");
+REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.SequenceNumber}-{m.BranchSpecification}"))}");
 
             return nextMigration;
         }
@@ -285,10 +286,32 @@ REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.Se
 
             if (!tableNames.Contains(_migrationTableName))
             {
-                _writer.Verbose(
-                    $"Database does not contain migration log table '{_migrationTableName}' - will create it now");
+                _writer.Verbose($"Database does not contain migration log table '{_migrationTableName}' - will try to create it now");
 
-                CreateMigrationTable(_migrationTableName, connection);
+                try
+                {
+                    CreateMigrationTable(_migrationTableName, connection);
+                }
+                catch (Exception)
+                {
+                    // if table creation failed, we might have run into a race with another process...
+                    // ....therefore, just check if the table NOW exists:
+                    try
+                    {
+                        _writer.Verbose("Could not create the table - checking if someone else created it");
+
+                        if (connection.GetTableNames().Contains(_migrationTableName))
+                        {
+                            _writer.Verbose($"The migration log table '{_migrationTableName}' was now found - we're good");
+                            return;
+                        }
+                    }
+                    catch { }
+
+                    // if it didn't exist, throw the original exception
+                    _writer.Verbose($"Could not find the migration log table '{_migrationTableName}' - re-throwing the exception caught when initally trying to create it");
+                    throw;
+                }
             }
         }
 
