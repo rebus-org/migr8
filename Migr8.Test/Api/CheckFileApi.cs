@@ -64,23 +64,9 @@ namespace Migr8.Test.Api
             Console.WriteLine(migrationWithInterestingComment.SqlMigration.Sql);
             Console.WriteLine();
 
-            Assert.That(migrationWithInterestingComment.Description, Is.EqualTo(@"This is my first migration
-A table is created
+            Assert.That(migrationWithInterestingComment.Description, Is.EqualTo("This is my first migration{newline}A table is created{newline}{newline}This comment SHOULD be included, because it\'s part of the first comment block{newline}{newline}hints: hint1, hint2,    hint3;   hint4{newline}hints: hint5, hint-6".Replace("{newline}", Environment.NewLine)));
 
-This comment SHOULD be included, because it's part of the first comment block
-
-hints: hint1, hint2,    hint3;   hint4
-hints: hint5, hint-6"));
-
-            Assert.That(migrationWithInterestingComment.SqlMigration.Sql, Is.EqualTo(@"-- This comment should NOT be included, because it's not considered connected to the first comment block
--- Create a table
-create table [Tabelle1]
-(
-	[Id] int identity(1,1)
-)
-go
--- Add a column to that table
-alter table [Tabelle1] add [Text] nvarchar(10);"));
+            Assert.That(migrationWithInterestingComment.SqlMigration.Sql, Is.EqualTo("-- This comment should NOT be included, because it\'s not considered connected to the first comment block{newline}-- Create a table{newline}create table [Tabelle1]{newline}({newline}\t[Id] int identity(1,1){newline}){newline}go{newline}-- Add a column to that table{newline}alter table [Tabelle1] add [Text] nvarchar(10);".Replace("{newline}", Environment.NewLine)));
         }
     }
 }
