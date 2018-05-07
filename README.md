@@ -151,6 +151,19 @@ allowing you to keep track of a huge number of migrations, probably only needing
 whenever you integrate a feature branch with master. Comments added at the beginning of the `.sql` file will be
 treated as the migration's description.
 
+An SQL file-based migration could look like this:
+
+```sql
+-- Create some tables
+-- This initial comment will be included as the Description in the migration log
+
+-- This comment is NOT part of the block above and will simply be part of the logged SQL
+CREATE TABLE [Table1] ([Id] INT)
+GO
+-- Same thing with this comment
+CREATE TABLE [Table2] ([Id] INT)
+```
+
 ## Is there more?
 
 One last thing - if you prefer to log things using a logging library, e.g. like the excellent
