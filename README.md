@@ -15,43 +15,47 @@ and then you will be good to go :)
 Execute the migrations - either in a dedicated command line app, or - my favorite - whenever your app starts up,
 just before it connects to the database:
 
-	Database.Migrate("db", Migrations.FromThisAssembly());
+```csharp
+Database.Migrate("db", Migrations.FromThisAssembly());
+```
 
 where `db` is a key in the `connectionStrings` section of your app.config/web.config, and then, elsewhere in the
 calling assembly, you define these bad boys (which happen to be valid T-SQL):
 
-    [Migration(1, "Create table for the Timeout Manager to use")]
-    class CreateRebusTimeoutsTable : ISqlMigration
-    {
-        public string Sql => @"
-            CREATE TABLE [dbo].[RebusTimeouts](
-                [id] [int] IDENTITY(1,1) NOT NULL,
-	            [due_time] [datetime2](7) NOT NULL,
-	            [headers] [nvarchar](MAX) NOT NULL,
-	            [body] [varbinary](MAX) NOT NULL,
-                CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
-                (
-	                [id] ASC
-                )
+```csharp
+[Migration(1, "Create table for the Timeout Manager to use")]
+class CreateRebusTimeoutsTable : ISqlMigration
+{
+    public string Sql => @"
+        CREATE TABLE [dbo].[RebusTimeouts](
+            [id] [int] IDENTITY(1,1) NOT NULL,
+	        [due_time] [datetime2](7) NOT NULL,
+	        [headers] [nvarchar](MAX) NOT NULL,
+	        [body] [varbinary](MAX) NOT NULL,
+            CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
+            (
+	            [id] ASC
             )
-		"; 
-    }
+        )
+	"; 
+}
 
-    [Migration(2, "Create a table for Rebus publishers to use")]
-    class CreateRebusSubscriptionsTable : ISqlMigration
-    {
-        public string Sql => @"
-            CREATE TABLE [dbo].[RebusSubscriptions] (
-	            [topic] [nvarchar](200) NOT NULL,
-	            [address] [nvarchar](200) NOT NULL,
-                CONSTRAINT [PK_RebusSubscriptions] PRIMARY KEY CLUSTERED 
-                (
-	                [topic] ASC,
-	                [address] ASC
-                )
+[Migration(2, "Create a table for Rebus publishers to use")]
+class CreateRebusSubscriptionsTable : ISqlMigration
+{
+    public string Sql => @"
+        CREATE TABLE [dbo].[RebusSubscriptions] (
+	        [topic] [nvarchar](200) NOT NULL,
+	        [address] [nvarchar](200) NOT NULL,
+            CONSTRAINT [PK_RebusSubscriptions] PRIMARY KEY CLUSTERED 
+            (
+	            [topic] ASC,
+	            [address] ASC
             )
-		"; 
-    }
+        )
+	"; 
+}
+```
 
 In the example above, I've created two migrations which will be executed in they order indicated by their
  _sequence number_.
@@ -68,24 +72,25 @@ probably execute the other developer's migration manually.
 
 Luckily, they chose to use Migr8 to evolve their database, so they just go ahead and create
 
-    [Migration(3, "Table for the first cool thing", branchSpecification: "first-cool-thing")]
-    class CreateTableForTheFirstCoolThing : ISqlMigration
-    {
-        public string Sql => @"
-            CREATE TABLE [dbo].[firstCoolTable] ([id] int)
-        "; 
-    }
-
+```csharp
+[Migration(3, "Table for the first cool thing", branchSpecification: "first-cool-thing")]
+class CreateTableForTheFirstCoolThing : ISqlMigration
+{
+    public string Sql => @"
+        CREATE TABLE [dbo].[firstCoolTable] ([id] int)
+    "; 
+}
+```
 and
-
-    [Migration(3, "Table for the next cool thing", branchSpecification: "next-cool-thing")]
-    class CreateTableForTheNextCoolThing : ISqlMigration
-    {
-        public string Sql => @"
-            CREATE TABLE [dbo].[nextCoolTable] ([id] int)
-        "; 
-    }
-
+```csharp
+[Migration(3, "Table for the next cool thing", branchSpecification: "next-cool-thing")]
+class CreateTableForTheNextCoolThing : ISqlMigration
+{
+    public string Sql => @"
+        CREATE TABLE [dbo].[nextCoolTable] ([id] int)
+    "; 
+}
+```
 which will NOT BE A PROBLEM AT ALL, because they remembered to set the `branchSpecification` to the names
 of their branches.
 
@@ -119,10 +124,11 @@ Second: _lean back, chill....._
 
 You can also
 
-    var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "migrations");
+```csharp
+var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "migrations");
 
-    Database.Migrate("db", Migrations.FromFilesIn(dir));
-
+Database.Migrate("db", Migrations.FromFilesIn(dir));
+```
 in order to pick up migrations from files named on the form `"<sequence-number>-<branch-specification>.sql"`,
 e.g. organized like this:
 
@@ -150,16 +156,20 @@ treated as the migration's description.
 One last thing - if you prefer to log things using a logging library, e.g. like the excellent
 [Serilog](https://github.com/serilog/serilog), you can make Migr8 output its text to Serilog like this:
 
-    var options = new Options(logAction: text => Log.Information(text));
+```csharp
+var options = new Options(logAction: text => Log.Information(text));
     
-    Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+```
 
 which is probably what you want to do in all of your applications to be sure that Migr8 was properly invoked.
 Moreover, if you like, you can change the table that Migr8 uses to store its migration log like this:
 
-    var options = new Options(migrationTableName: "__MilliVanilli");
+```csharp
+var options = new Options(migrationTableName: "__MilliVanilli");
     
-    Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+```
 
 so it doesn't collide with all your other tables named `[__Migr8]`.
 
