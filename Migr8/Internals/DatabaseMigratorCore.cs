@@ -203,6 +203,8 @@ namespace Migr8.Internals
                 .OrderBy(m => m.SequenceNumber).ThenBy(m => m.BranchSpecification)
                 .FirstOrDefault();
 
+            Console.WriteLine($@"REMAINING MIGRATIONS: {string.Join(", ", remainingMigrations.Select(m => $"{m.SequenceNumber} // {m.BranchSpecification}"))}");
+
             return nextMigration;
         }
 
