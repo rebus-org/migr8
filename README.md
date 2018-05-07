@@ -162,3 +162,43 @@ Moreover, if you like, you can change the table that Migr8 uses to store its mig
     Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
 
 so it doesn't collide with all your other tables named `[__Migr8]`.
+
+## Transactions, locking and such
+
+Migr8 gains exclusive access to the database whenever it wants to execute a migration by starting a
+transaction with isolation level SERIALIZABLE, and then it tries to perform an INSERT into the
+table that it uses to track migrations.
+
+The inserted row has a migration ID on the form `<number>-<branch-specification>`, which means
+that being able to carry out the insert without any conflicts effectively works as taking a named
+lock.
+
+After that, the same transaction will be used to execute the migration. If the migration contains
+the special `GO` statement (which is an SQL Server Management Studio construction), then each
+migration will be executed in its own SQL command, but inside the same transaction.
+
+If you DO NOT want to execute a migration inside a transaction, e.g. if you want to change
+the database's recovery mode, you can have the migration executed on its own separate SQL connection 
+without a trasaction by specifying the `no-transaction` flag.
+
+If you're using migration classes, you can do it like this by using the `[Hint(...)]` attribute combined
+with the predefined hint `Hints.NoTransaction`:
+
+```csharp
+[Migration(1, "Prepare for big migration")]
+[Hint(Hints.NoTransaction)]
+public class SetRecoveryModeSimple : ISqlTransaction
+{
+	public string Sql => "alter database current set recovery simple";
+}
+```
+
+If you're using SQL files, you can pass hints to the execution engine by having the text `hints:` as part
+of the initial comment of the file, e.g. like this:
+
+```sql
+-- Prepare for big migration
+-- hints: no-transaction
+
+alter database current set recovery simple
+```
