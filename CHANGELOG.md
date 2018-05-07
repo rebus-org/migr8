@@ -34,6 +34,7 @@
 * Add SQL command timeout option
 * Better comment parsing when using .sql files
 * Add `.ToList()` method on `Migrations` to allow for tooling to inspect found migrations
+* Add support for "hints", i.e. passing special tags along with migrations to instruct the execution engine to do certain things. For now, `hints: no-transaction` / `[Hint(Hints.NoTransaction)]` will cause the migration to be executed on its own SQL connection without a transaction
 
 ---
 

@@ -30,7 +30,7 @@ namespace Migr8
             Action<string> logAction = null,
             Action<string> verboseLogAction = null,
             TimeSpan? sqlCommandTimeout = null
-            )
+        )
         {
             MigrationTableName = migrationTableName;
             LogAction = logAction;

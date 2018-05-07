@@ -48,6 +48,8 @@
     <Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
     <Compile Include="..\Migr8\Db.cs" Link="Db.cs" />
     <Compile Include="..\Migr8\ExecutableMigration.cs" Link="ExecutableMigration.cs" />
+    <Compile Include="..\Migr8\HintAttribute.cs" Link="HintAttribute.cs" />
+    <Compile Include="..\Migr8\Hints.cs" Link="Hints.cs" />
     <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs" Link="Internals\DatabaseMigratorCore.cs" />
     <Compile Include="..\Migr8\Internals\ExceptionHelper.cs" Link="Internals\ExceptionHelper.cs" />
     <Compile Include="..\Migr8\Internals\IDb.cs" Link="Internals\IDb.cs" />

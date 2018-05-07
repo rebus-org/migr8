@@ -79,7 +79,8 @@ namespace Migr8
             var netListOfMigrations = _migrations
                 .Where(e =>
                 {
-                    var migration = new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description, e.SqlMigration);
+                    var migration = new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description,
+                        e.SqlMigration, e.Hints);
 
                     return predicate(migration);
                 })
@@ -94,7 +95,8 @@ namespace Migr8
         public List<ExecutableMigration> ToList()
         {
             return _migrations
-                .Select(e => new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description, e.SqlMigration))
+                .Select(e => new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description,
+                    e.SqlMigration, e.Hints))
                 .ToList();
         }
 

@@ -97,9 +97,44 @@ namespace Migr8.Internals.Scanners
                 (Description, Sql) = ExtractDescriptionAndSql(lines);
 
                 SqlMigration = this;
+
+                Hints = ExtractHints(Description);
             }
 
-            static (string,string) ExtractDescriptionAndSql(string[] lines)
+            List<string> ExtractHints(string description)
+            {
+                const string hintsPrefix = "hints:";
+
+                var commentLines =
+                    description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+
+                var hintsLines = commentLines
+                    .Select(line => line.Trim())
+                    .Where(line => line.StartsWith(hintsPrefix, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                try
+                {
+                    var hints = hintsLines
+                        .SelectMany(line => line.Substring(hintsPrefix.Length).Split(new[] {",", ";"}, StringSplitOptions.RemoveEmptyEntries))
+                        .Select(hint => hint.Trim())
+                        .Where(hint => !string.IsNullOrWhiteSpace(hint))
+                        .Distinct()
+                        .OrderBy(hint => hint)
+                        .ToList();
+
+                    return hints;
+                }
+                catch (Exception exception)
+                {
+                    throw new FormatException($@"An error occurred when extracting hints from the following found hints lines:
+
+{string.Join(Environment.NewLine, hintsLines)}
+", exception);
+                }
+            }
+
+            static (string, string) ExtractDescriptionAndSql(string[] lines)
             {
                 var parsingDescription = true;
                 var commentLines = new List<string>();
@@ -115,6 +150,7 @@ namespace Migr8.Internals.Scanners
                             parsingDescription = false;
                             continue;
                         }
+
                         continue;
                     }
 
@@ -132,12 +168,12 @@ namespace Migr8.Internals.Scanners
                 }
 
                 var description = string.Join(Environment.NewLine, commentLines
-                        .Where(line => !string.IsNullOrWhiteSpace(line))
-                        .Select(line => line.TrimStart(' ', '-')));
+                    .Where(line => !string.IsNullOrWhiteSpace(line))
+                    .Select(line => line.TrimStart(' ', '-')));
 
                 var sql = string.Join(Environment.NewLine, sqlLines);
 
-                return (description,sql);
+                return (description, sql);
             }
 
             static string ExtractDescription(string[] lines)
@@ -184,6 +220,7 @@ namespace Migr8.Internals.Scanners
             public int SequenceNumber { get; }
             public string BranchSpecification { get; }
             public ISqlMigration SqlMigration { get; }
+            public List<string> Hints { get; }
             public string MigrationFilePath { get; }
         }
     }

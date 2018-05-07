@@ -2,6 +2,6 @@
 {
     interface IDb
     {
-        IExclusiveDbConnection GetExclusiveDbConnection(string connectionString, Options options);
+        IExclusiveDbConnection GetExclusiveDbConnection(string connectionString, Options options, bool useTransaction = true);
     }
 }

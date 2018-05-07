@@ -13,23 +13,23 @@ namespace Migr8.Npgsql.Postgres
         readonly NpgsqlConnection _connection;
         readonly NpgsqlTransaction _transaction;
 
-        public PostgresqlExclusiveDbConnection(string connectionString, Options options)
+        public PostgresqlExclusiveDbConnection(string connectionString, Options options, bool useTransaction)
         {
             _options = options;
             _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
-            _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
+            _transaction = useTransaction ? _connection.BeginTransaction(IsolationLevel.Serializable) : null;
         }
 
         public void Dispose()
         {
-            _transaction.Dispose();
+            _transaction?.Dispose();
             _connection.Dispose();
         }
 
         public void Complete()
         {
-            _transaction.Commit();
+            _transaction?.Commit();
         }
 
         public HashSet<string> GetTableNames()

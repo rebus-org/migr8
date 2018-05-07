@@ -12,23 +12,23 @@ namespace Migr8.Mysql.Mysql
         readonly MySqlConnection _connection;
         readonly MySqlTransaction _transaction;
 
-        public MysqlDbExclusiveDbConnection(string connectionString, Options options)
+        public MysqlDbExclusiveDbConnection(string connectionString, Options options, bool useTransaction)
         {
             _options = options;
             _connection = new MySqlConnection(connectionString);
             _connection.Open();
-            _transaction = _connection.BeginTransaction(IsolationLevel.Serializable);
+            _transaction = useTransaction ? _connection.BeginTransaction(IsolationLevel.Serializable) : null;
         }
 
         public void Dispose()
         {
-            _transaction.Dispose();
+            _transaction?.Dispose();
             _connection.Dispose();
         }
 
         public void Complete()
         {
-            _transaction.Commit();
+            _transaction?.Commit();
         }
 
         public HashSet<string> GetTableNames()

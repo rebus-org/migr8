@@ -1,4 +1,6 @@
-﻿namespace Migr8.Internals
+﻿using System.Collections.Generic;
+
+namespace Migr8.Internals
 {
     interface IExecutableSqlMigration
     {
@@ -8,5 +10,6 @@
         int SequenceNumber { get; }
         string BranchSpecification { get; }
         ISqlMigration SqlMigration { get; }
+        List<string> Hints { get; }
     }
 }

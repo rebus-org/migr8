@@ -26,6 +26,28 @@ namespace Migr8.Test.Api
         }
 
         [Test]
+        public void ExtractsHintsFromCommentsSection()
+        {
+            var migrations = Migrations.FromFilesIn(_directory).ToList()
+                .OrderBy(m => m.SequenceNumber).ThenBy(m => m.BranchSpecification)
+                .ToList();
+
+            Assert.That(migrations.Select(m => $"{m.SequenceNumber}-{m.BranchSpecification}"), Is.EqualTo(new[]
+            {
+                "1-master",
+                "2-feature-subdir1",
+                "2-feature-subdir2",
+            }));
+
+            Assert.That(migrations.Select(m => string.Join(",", m.Hints)), Is.EqualTo(new[]
+            {
+                "hint1,hint2,hint3,hint4,hint5,hint-6",
+                "",
+                "no-transaction"
+            }));
+        }
+
+        [Test]
         public void CorrectlyParsesSqlFiles()
         {
             var migrations = Migrations.FromFilesIn(_directory).ToList();
@@ -45,7 +67,10 @@ namespace Migr8.Test.Api
             Assert.That(migrationWithInterestingComment.Description, Is.EqualTo(@"This is my first migration
 A table is created
 
-This comment SHOULD be included, because it's part of the first comment block"));
+This comment SHOULD be included, because it's part of the first comment block
+
+hints: hint1, hint2,    hint3;   hint4
+hints: hint5, hint-6"));
 
             Assert.That(migrationWithInterestingComment.SqlMigration.Sql, Is.EqualTo(@"-- This comment should NOT be included, because it's not considered connected to the first comment block
 -- Create a table

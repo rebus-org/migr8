@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+// ReSharper disable ArgumentsStyleLiteral
 
 namespace Migr8.Internals
 {
@@ -14,7 +15,8 @@ namespace Migr8.Internals
         readonly IDb _db;
         readonly string _migrationTableName;
 
-        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null, IDb db = null)
+        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null,
+            IDb db = null)
         {
             _writer = writer;
             _connectionString = connectionString;
@@ -63,7 +65,8 @@ namespace Migr8.Internals
 
                 if (!didExecuteMigration)
                 {
-                    _writer.Info($"No more migrations to run (execution took {stopwatchTotal.Elapsed.TotalSeconds:0.0} s)");
+                    _writer.Info(
+                        $"No more migrations to run (execution took {stopwatchTotal.Elapsed.TotalSeconds:0.0} s)");
                     break;
                 }
             }
@@ -97,7 +100,7 @@ namespace Migr8.Internals
         bool ExecuteNextMigration(List<IExecutableSqlMigration> migrations)
         {
             _writer.Verbose("Opening access to database");
-            
+
             using (var connection = _db.GetExclusiveDbConnection(_connectionString, _options))
             {
                 EnsureMigrationTableExists(connection);
@@ -117,7 +120,18 @@ namespace Migr8.Internals
                 var executionStopwatch = Stopwatch.StartNew();
                 try
                 {
-                    ExecuteMigration(nextMigration, connection);
+                    if (nextMigration.Hints.Contains(Hints.NoTransaction))
+                    {
+                        using (var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, useTransaction: false))
+                        {
+                            ExecuteMigration(nextMigration, connection, separateConnection);
+                            separateConnection.Complete();
+                        }
+                    }
+                    else
+                    {
+                        ExecuteMigration(nextMigration, connection, connection);
+                    }
 
                     connection.Complete();
 
@@ -130,19 +144,20 @@ namespace Migr8.Internals
                 }
                 finally
                 {
-                    _writer.Verbose($"Execution of migration {nextMigration.Id} took {executionStopwatch.Elapsed.TotalSeconds:0.0} s");
+                    _writer.Verbose(
+                        $"Execution of migration {nextMigration.Id} took {executionStopwatch.Elapsed.TotalSeconds:0.0} s");
                 }
             }
         }
 
-        void ExecuteMigration(IExecutableSqlMigration migration, IExclusiveDbConnection connection)
+        void ExecuteMigration(IExecutableSqlMigration migration, IExclusiveDbConnection logConnection, IExclusiveDbConnection migrationConnection)
         {
             var id = migration.Id;
             var sql = migration.Sql;
 
             _writer.Verbose($"Inserting log row for migration {id}");
 
-            LogMigration(connection, migration);
+            LogMigration(logConnection, migration);
 
             const RegexOptions options = RegexOptions.Multiline
                                          | RegexOptions.IgnorePatternWhitespace
@@ -163,7 +178,7 @@ namespace Migr8.Internals
 
                 try
                 {
-                    connection.ExecuteStatement(sqlStatement);
+                    migrationConnection.ExecuteStatement(sqlStatement);
                 }
                 catch (Exception exception)
                 {
@@ -206,7 +221,8 @@ namespace Migr8.Internals
             {
                 var ids = string.Join(", ", migrationsThatShouldHaveBeenExecutedByNow.Select(m => m.Id));
 
-                throw new MigrationException($"Cannot execute migrations because migration the following migrations have NOT been executed by now, even though they should have been: {ids}");
+                throw new MigrationException(
+                    $"Cannot execute migrations because migration the following migrations have NOT been executed by now, even though they should have been: {ids}");
             }
         }
 
@@ -214,8 +230,10 @@ namespace Migr8.Internals
         {
             var migrationId = MigrationId.FromString(executableSqlMigration.Id);
 
-            var migrationsForThisParticularBranch = executedMigrationsByBranch.FirstOrDefault(b => b.Key == migrationId.BranchSpecification)?.ToList() 
-                ?? new List<MigrationId>();
+            var migrationsForThisParticularBranch = executedMigrationsByBranch
+                                                        .FirstOrDefault(b => b.Key == migrationId.BranchSpecification)
+                                                        ?.ToList()
+                                                    ?? new List<MigrationId>();
 
             return migrationsForThisParticularBranch.Any(id => id.CompareTo(migrationId) > 0);
         }
@@ -244,7 +262,8 @@ namespace Migr8.Internals
 
                 return majorCompare != 0
                     ? majorCompare
-                    : string.Compare(BranchSpecification, other.BranchSpecification, StringComparison.OrdinalIgnoreCase);
+                    : string.Compare(BranchSpecification, other.BranchSpecification,
+                        StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -262,7 +281,8 @@ namespace Migr8.Internals
 
             if (!tableNames.Contains(_migrationTableName))
             {
-                _writer.Verbose($"Database does not contain migration log table '{_migrationTableName}' - will create it now");
+                _writer.Verbose(
+                    $"Database does not contain migration log table '{_migrationTableName}' - will create it now");
 
                 CreateMigrationTable(_migrationTableName, connection);
             }
@@ -284,7 +304,7 @@ namespace Migr8.Internals
 
         void LogMigration(IExclusiveDbConnection connection, IExecutableSqlMigration migration)
         {
-            connection.LogMigration( migration, _migrationTableName);
+            connection.LogMigration(migration, _migrationTableName);
         }
     }
 }

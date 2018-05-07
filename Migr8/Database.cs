@@ -21,13 +21,15 @@ namespace Migr8
         /// <param name="connectionStringOrConnectionStringName">Specifies a connection string or the name of a connection string in the current application configuration file to use.</param>
         /// <param name="migrations">Supplies the migrations to be executed.</param>
         /// <param name="options">Optionally specifies some custom options to use.</param>
-        public static void Migrate(string connectionStringOrConnectionStringName, Migrations migrations, Options options = null)
+        public static void Migrate(string connectionStringOrConnectionStringName, Migrations migrations,
+            Options options = null)
         {
             options = options ?? new Options();
 
 #if NET45
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringOrConnectionStringName]?.ConnectionString
-                                ?? connectionStringOrConnectionStringName;
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringOrConnectionStringName]
+                                       ?.ConnectionString
+                                   ?? connectionStringOrConnectionStringName;
 #else
             var connectionString = connectionStringOrConnectionStringName;
 #endif
