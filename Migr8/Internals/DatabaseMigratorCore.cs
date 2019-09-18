@@ -16,8 +16,7 @@ namespace Migr8.Internals
         readonly IDb _db;
         readonly string _migrationTableName;
 
-        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null,
-            IDb db = null)
+        public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null, IDb db = null)
         {
             _writer = writer;
             _connectionString = connectionString;

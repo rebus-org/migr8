@@ -30,11 +30,7 @@ namespace Migr8
         /// </summary>
         public static Migrations FromFilesInCurrentDirectory()
         {
-#if NET45
             return GetFromDirectory(AppDomain.CurrentDomain.BaseDirectory);
-#else
-            return GetFromDirectory(AppContext.BaseDirectory);
-#endif
         }
 
         /// <summary>

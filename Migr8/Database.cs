@@ -1,8 +1,4 @@
-﻿#if NET45
-using System.Configuration;
-#endif
-using System;
-using Migr8.Internals;
+﻿using Migr8.Internals;
 
 namespace Migr8
 {
@@ -26,14 +22,7 @@ namespace Migr8
         {
             options = options ?? new Options();
 
-#if NET45
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringOrConnectionStringName]
-                                       ?.ConnectionString
-                                   ?? connectionStringOrConnectionStringName;
-#else
             var connectionString = connectionStringOrConnectionStringName;
-#endif
-
             var writer = options.GetWriter();
 
             var migrator = new DatabaseMigratorCore(connectionString, options, GetDatabase());
