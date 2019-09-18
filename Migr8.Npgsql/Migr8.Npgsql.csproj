@@ -35,9 +35,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\Migr8.Npgsql.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
     <Compile Include="..\Migr8\Db.cs" Link="Db.cs" />
