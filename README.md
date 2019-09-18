@@ -16,11 +16,12 @@ Execute the migrations - either in a dedicated command line app, or - my favorit
 just before it connects to the database:
 
 ```csharp
-Database.Migrate("db", Migrations.FromThisAssembly());
+var connectionString = GetConnectionStringFromSomewhere();
+
+Database.Migrate(connectionString, Migrations.FromThisAssembly());
 ```
 
-where `db` is a key in the `connectionStrings` section of your app.config/web.config, and then, elsewhere in the
-calling assembly, you define these bad boys (which happen to be valid T-SQL):
+and then, elsewhere in the calling assembly, you define these bad boys (which happen to be valid T-SQL):
 
 ```csharp
 [Migration(1, "Create table for the Timeout Manager to use")]
@@ -170,18 +171,20 @@ One last thing - if you prefer to log things using a logging library, e.g. like 
 [Serilog](https://github.com/serilog/serilog), you can make Migr8 output its text to Serilog like this:
 
 ```csharp
+var connectionString = GetConnectionStringFromSomewhere();
 var options = new Options(logAction: text => Log.Information(text));
     
-Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+Database.Migrate(connectionString, Migrations.FromAssemblyOf<FirstMigration>(), options);
 ```
 
 which is probably what you want to do in all of your applications to be sure that Migr8 was properly invoked.
 Moreover, if you like, you can change the table that Migr8 uses to store its migration log like this:
 
 ```csharp
+var connectionString = GetConnectionStringFromSomewhere();
 var options = new Options(migrationTableName: "__MilliVanilli");
     
-Database.Migrate("db", Migrations.FromAssemblyOf<FirstMigration>(), options);
+Database.Migrate(connectionString, Migrations.FromAssemblyOf<FirstMigration>(), options);
 ```
 
 so it doesn't collide with all your other tables named `[__Migr8]`.
