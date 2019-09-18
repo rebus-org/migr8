@@ -14,15 +14,14 @@ namespace Migr8
         /// <summary>
         /// Executes the given migrations on the specified database.
         /// </summary>
-        /// <param name="connectionStringOrConnectionStringName">Specifies a connection string or the name of a connection string in the current application configuration file to use.</param>
+        /// <param name="connectionString">Specifies a connection string or the name of a connection string in the current application configuration file to use.</param>
         /// <param name="migrations">Supplies the migrations to be executed.</param>
         /// <param name="options">Optionally specifies some custom options to use.</param>
-        public static void Migrate(string connectionStringOrConnectionStringName, Migrations migrations, Options options = null)
+        public static void Migrate(string connectionString, Migrations migrations, Options options = null)
         {
             options = options ?? new Options();
 
-            var connectionString = connectionStringOrConnectionStringName;
-            var writer = options.GetWriter();
+            //var writer = options.GetWriter();
 
             var migrator = new DatabaseMigratorCore(connectionString, options, GetDatabase());
 

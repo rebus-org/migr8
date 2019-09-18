@@ -12,7 +12,7 @@ namespace Migr8.Test.Api
         public void ItWorks()
         {
             Database.Migrate(
-                connectionStringOrConnectionStringName: TestConfig.ConnectionString,
+                connectionString: TestConfig.ConnectionString,
                 migrations: Migrations.FromAssemblyOf<CheckFiltering>().Where(m => m.SequenceNumber < 2),
                 options: new Options(sqlCommandTimeout: TimeSpan.FromMinutes(20))
             );
