@@ -79,7 +79,7 @@ INSERT INTO ""{migrationTableName}"" (
                 command.Parameters.Add("id", NpgsqlDbType.Text).Value = migration.Id;
                 command.Parameters.Add("sql", NpgsqlDbType.Text).Value = migration.Sql;
                 command.Parameters.Add("description", NpgsqlDbType.Text).Value = migration.Description;
-                command.Parameters.Add("time", NpgsqlDbType.TimestampTZ).Value = DateTime.Now;
+                command.Parameters.Add("time", NpgsqlDbType.TimestampTz).Value = DateTime.Now;
                 command.Parameters.Add("userName", NpgsqlDbType.Text).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
                 command.Parameters.Add("userDomainName", NpgsqlDbType.Text).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
                 command.Parameters.Add("machineName", NpgsqlDbType.Text).Value = Environment.MachineName;
