@@ -37,7 +37,6 @@ namespace Migr8.Mysql.Mysql
 
             using (var command = CreateCommand())
             {
-                
                 command.CommandText = $@"SELECT * FROM information_schema.tables WHERE table_schema = '{_connection.DataSource}'";
 
                 using (var reader = command.ExecuteReader())
@@ -93,7 +92,7 @@ INSERT INTO `{migrationTableName}` (
             {
                 command.CommandText =
                     $@"
-                    CREATE TABLE IF NOT EXISTS `{migrationTableName}` (
+                    CREATE TABLE `{migrationTableName}` (
                         `Id` BIGINT NOT NULL AUTO_INCREMENT,
                         `MigrationId` VARCHAR(100) NOT NULL,
                         `Sql` TEXT NOT NULL,
