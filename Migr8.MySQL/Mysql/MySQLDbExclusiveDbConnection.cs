@@ -37,7 +37,7 @@ namespace Migr8.Mysql.Mysql
 
             using (var command = CreateCommand())
             {
-                command.CommandText = $@"SELECT * FROM information_schema.tables WHERE table_schema = '{_connection.DataSource}'";
+                command.CommandText = $@"SELECT table_name FROM information_schema.tables WHERE table_schema = '{_connection.DataSource}'";
 
                 using (var reader = command.ExecuteReader())
                 {

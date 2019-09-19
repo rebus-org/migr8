@@ -290,6 +290,8 @@ namespace Migr8.Internals
             {
                 _writer.Verbose($"Database does not contain migration log table '{_migrationTableName}' - will try to create it now");
 
+                _writer.Verbose($"Database contains these tables: {string.Join(", ", tableNames)}");
+
                 try
                 {
                     CreateMigrationTable(_migrationTableName, connection);
@@ -304,6 +306,8 @@ namespace Migr8.Internals
 
                         if (connection.GetTableNames().Contains(_migrationTableName))
                         {
+                            _writer.Verbose($"Database contains these tables: {string.Join(", ", tableNames)}");
+                
                             _writer.Verbose($"The migration log table '{_migrationTableName}' was now found - we're good");
                             return;
                         }
