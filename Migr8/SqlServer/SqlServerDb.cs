@@ -1,4 +1,6 @@
-﻿using Migr8.Internals;
+﻿using System;
+using Migr8.Internals;
+// ReSharper disable ArgumentsStyleNamedExpression
 
 namespace Migr8.SqlServer
 {
@@ -6,7 +8,24 @@ namespace Migr8.SqlServer
     {
         public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString, Options options, bool useTransaction = true)
         {
-            return new SqlServerExclusiveDbConnection(connectionString, options, useTransaction);
+            var connectionStringMutator = new ConnectionStringMutator(connectionString);
+
+            var useManagedIdentity = connectionStringMutator.HasElement("Authentication", "ManagedIdentity", comparison: StringComparison.OrdinalIgnoreCase);
+
+            if (useManagedIdentity)
+            {
+                if (connectionStringMutator.HasElement("Integrated Security", "SSPI", comparison: StringComparison.OrdinalIgnoreCase)
+                    || connectionStringMutator.HasElement("Integrated Security", "true", comparison: StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new ArgumentException("The connection string cannot be used with Authentication=ManagedIdentity, because it also contains Integrated Security = true or SSPI");
+                }
+            }
+
+            var connectionStringToUse = connectionStringMutator
+                .Without(k => string.Equals(k.Key, "Authentication", StringComparison.OrdinalIgnoreCase))
+                .ToString();
+
+            return new SqlServerExclusiveDbConnection(connectionStringToUse, options, useTransaction, useManagedIdentity);
         }
     }
 }

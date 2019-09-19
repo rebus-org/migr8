@@ -42,6 +42,7 @@
 * Update MySQL driver to 8.0.17
 * Update Postgres driver to 4.0.10
 * Remove support for `System.Configuration.ConfigurationManager`
+* Support Azure Managed Identity authentication by setting `Authentication=ManagedIdentity` in the connection string
 
 ---
 

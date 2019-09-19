@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.Azure.Services.AppAuthentication;
 using Migr8.Internals;
 
 namespace Migr8.SqlServer
@@ -12,10 +13,27 @@ namespace Migr8.SqlServer
         readonly SqlConnection _connection;
         readonly SqlTransaction _transaction;
 
-        public SqlServerExclusiveDbConnection(string connectionString, Options options, bool useTransaction)
+        public SqlServerExclusiveDbConnection(string connectionString, Options options, bool useTransaction, bool useManagedIdentity)
         {
             _options = options;
             _connection = new SqlConnection(connectionString);
+            
+            if (useManagedIdentity)
+            {
+                _connection.AccessToken = AsyncHelpers.GetSync(async () =>
+                {
+                    try
+                    {
+                        return await new AzureServiceTokenProvider()
+                            .GetAccessTokenAsync("https://database.windows.net/");
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new ApplicationException("Could not get access token from 'https://database.windows.net/'", exception);
+                    }
+                });
+            }
+            
             _connection.Open();
             _transaction = useTransaction ? _connection.BeginTransaction(IsolationLevel.Serializable) : null;
         }
