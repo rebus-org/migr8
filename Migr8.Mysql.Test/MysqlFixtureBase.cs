@@ -22,6 +22,8 @@ namespace Migr8.Mysql.Test
 
         public static void ResetDatabase()
         {
+            Console.WriteLine("Resetting database");
+
             foreach (var tableName in GetTableNames(automaticallyExcludeMigrationTable: false))
             {
                 DropTable(tableName);
