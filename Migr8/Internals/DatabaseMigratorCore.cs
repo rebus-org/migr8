@@ -107,7 +107,7 @@ namespace Migr8.Internals
 
                 _writer.Verbose("Getting next migration to run...");
 
-                var nextMigration = GetNextMigration(connection, migrations);
+                var nextMigration = GetNextMigration(connection, migrations, _writer);
 
                 if (nextMigration == null)
                 {
@@ -189,9 +189,12 @@ namespace Migr8.Internals
             _writer.Info($"Migration {id} executed");
         }
 
-        IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection, List<IExecutableSqlMigration> migrations)
+        IExecutableSqlMigration GetNextMigration(IExclusiveDbConnection connection,
+            List<IExecutableSqlMigration> migrations, IWriter writer)
         {
             var executedMigrationIds = connection.GetExecutedMigrationIds(_migrationTableName).ToList();
+
+            writer.Verbose($"Database reports the following migrations have been executed: {string.Join(", ", executedMigrationIds)}");
 
             var remainingMigrations = migrations
                 .Where(m => !executedMigrationIds.Contains(m.Id))
@@ -199,9 +202,13 @@ namespace Migr8.Internals
 
             VerifyMigrationBandit(executedMigrationIds, remainingMigrations);
 
-            var nextMigration = remainingMigrations
+            var remainingMigrationsList = remainingMigrations
                 .OrderBy(m => m.SequenceNumber).ThenBy(m => m.BranchSpecification)
-                .FirstOrDefault();
+                .ToList();
+
+            writer.Verbose($"The following migrations remain in order: {string.Join(", ", remainingMigrationsList.Select(m => m.Id))}");
+
+            var nextMigration = remainingMigrationsList.FirstOrDefault();
 
             return nextMigration;
         }
