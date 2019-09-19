@@ -35,7 +35,7 @@ namespace Migr8.Mysql.Test
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"DROP TABLE `{tableName.ToLowerInvariant()}`";
+                    command.CommandText = $@"DROP TABLE `{tableName}`";
 
                     Console.Write($@"Dropping table ""{tableName}"" - ");
                     try
@@ -87,7 +87,7 @@ namespace Migr8.Mysql.Test
                     {
                         while (reader.Read())
                         {
-                            list.Add(reader["table_name"].ToString());
+                            list.Add(reader["table_name"].ToString().ToLowerInvariant());
                         }
                     }
                 }
