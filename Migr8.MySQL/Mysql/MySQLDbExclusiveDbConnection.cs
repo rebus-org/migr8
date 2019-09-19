@@ -37,7 +37,7 @@ namespace Migr8.Mysql.Mysql
 
             using (var command = CreateCommand())
             {
-                command.CommandText = $@"SELECT table_name FROM information_schema.tables WHERE table_schema = '{_connection.DataSource}'";
+                command.CommandText = $@"SELECT table_name FROM information_schema.tables";// WHERE table_schema = '{_connection.DataSource}'";
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -108,7 +108,6 @@ INSERT INTO `{migrationTableName}` (
 
                 command.ExecuteNonQuery();
             }
-            
         }
 
         public void ExecuteStatement(string sqlStatement)
