@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using NUnit.Framework;
 using MySql.Data.MySqlClient;
+// ReSharper disable ArgumentsStyleLiteral
 
 namespace Migr8.Mysql.Test
 {
@@ -21,7 +22,7 @@ namespace Migr8.Mysql.Test
 
         public static void ResetDatabase()
         {
-            foreach (var tableName in GetTableNames(false))
+            foreach (var tableName in GetTableNames(automaticallyExcludeMigrationTable: false))
             {
                 DropTable(tableName);
             }
@@ -34,7 +35,7 @@ namespace Migr8.Mysql.Test
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"DROP TABLE `{tableName}`";
+                    command.CommandText = $@"DROP TABLE `{tableName.ToLowerInvariant()}`";
 
                     Console.Write($@"Dropping table ""{tableName}"" - ");
                     try
@@ -57,9 +58,7 @@ namespace Migr8.Mysql.Test
         [TearDown]
         public void TearDown()
         {
-            IDisposable disposable;
-
-            while (_disposables.TryPop(out disposable))
+            while (_disposables.TryPop(out var disposable))
             {
                 Console.WriteLine($"Disposing {disposable}");
                 disposable.Dispose();
@@ -75,6 +74,7 @@ namespace Migr8.Mysql.Test
         protected static IEnumerable<string> GetTableNames(bool automaticallyExcludeMigrationTable = true)
         {
             var list = new List<string>();
+
             using (var connection = new MySqlConnection(TestConfig.MysqlConnectionString))
             {
                 connection.Open();
