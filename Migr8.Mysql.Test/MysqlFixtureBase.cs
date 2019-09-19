@@ -83,7 +83,7 @@ namespace Migr8.Mysql.Test
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"SELECT * FROM information_schema.tables WHERE table_schema = '{connection.DataSource}'";
+                    command.CommandText = $@"SELECT * FROM information_schema.tables ";//WHERE table_schema = '{connection.DataSource}'";
 
                     using (var reader = command.ExecuteReader())
                     {
