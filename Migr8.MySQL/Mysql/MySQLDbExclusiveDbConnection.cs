@@ -33,7 +33,7 @@ namespace Migr8.Mysql.Mysql
 
         public HashSet<string> GetTableNames()
         {
-            var tableNames = new HashSet<string>();
+            var tableNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             using (var command = CreateCommand())
             {
