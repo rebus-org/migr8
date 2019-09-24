@@ -28,7 +28,7 @@
 ## 0.14.0
 * better exceptions on errors during type scan - thanks [madstt]
 
-## 0.20.0
+## 0.21.0
 
 * Target .NET Standard 2.0, because that's a good sane target
 * Add SQL command timeout option
@@ -38,7 +38,7 @@
 * Update MySQL driver to 8.0.17
 * Update Postgres driver to 4.0.10
 * Remove support for `System.Configuration.ConfigurationManager`
-* Support Azure Managed Identity authentication by setting `Authentication=ManagedIdentity` in the connection string
+* Support Azure Managed Identity authentication by setting `Authentication=ManagedIdentity` or `Authentication=Active Directory Interactive` in the connection string
 * Fix bug in MySQL implementation that would return incorrect table names when querying the database for them
 
 ---

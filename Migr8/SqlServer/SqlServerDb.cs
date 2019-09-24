@@ -10,7 +10,8 @@ namespace Migr8.SqlServer
         {
             var connectionStringMutator = new ConnectionStringMutator(connectionString);
 
-            var useManagedIdentity = connectionStringMutator.HasElement("Authentication", "ManagedIdentity", comparison: StringComparison.OrdinalIgnoreCase);
+            var useManagedIdentity = connectionStringMutator.HasElement("Authentication", "ManagedIdentity", comparison: StringComparison.OrdinalIgnoreCase)
+                || connectionStringMutator.HasElement("Authentication", "Active Directory Interactive", comparison: StringComparison.OrdinalIgnoreCase);
 
             if (useManagedIdentity)
             {
