@@ -41,6 +41,10 @@
 * Support Azure Managed Identity authentication by setting `Authentication=ManagedIdentity` or `Authentication=Active Directory Interactive` in the connection string
 * Fix bug in MySQL implementation that would return incorrect table names when querying the database for them
 
+## 0.22.0
+
+* Make managed identity token retrieval use the hostname from the connection string to obtain the token
+
 ---
 
 [madstt]: https://github.com/madstt

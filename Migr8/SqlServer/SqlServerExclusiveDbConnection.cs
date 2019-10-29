@@ -13,40 +13,39 @@ namespace Migr8.SqlServer
         readonly SqlConnection _connection;
         readonly SqlTransaction _transaction;
 
-        public SqlServerExclusiveDbConnection(string connectionString, Options options, bool useTransaction, bool useManagedIdentity)
+        public SqlServerExclusiveDbConnection(string connectionString, Options options, bool useTransaction, bool useManagedIdentity, string tokenUrl)
         {
             _options = options;
             _connection = new SqlConnection(connectionString);
-            
+
             if (useManagedIdentity)
             {
                 _connection.AccessToken = AsyncHelpers.GetSync(async () =>
                 {
                     try
                     {
-                        return await new AzureServiceTokenProvider()
-                            .GetAccessTokenAsync("https://database.windows.net/");
+                        return await new AzureServiceTokenProvider().GetAccessTokenAsync(tokenUrl);
                     }
                     catch (Exception exception)
                     {
-                        throw new ApplicationException("Could not get access token from 'https://database.windows.net/'", exception);
+                        throw new ApplicationException($"Could not get access token from '{tokenUrl}'", exception);
                     }
                 });
             }
-            
+
             _connection.Open();
             _transaction = useTransaction ? _connection.BeginTransaction(IsolationLevel.Serializable) : null;
+        }
+
+        public void Complete()
+        {
+            _transaction?.Commit();
         }
 
         public void Dispose()
         {
             _transaction?.Dispose();
             _connection.Dispose();
-        }
-
-        public void Complete()
-        {
-            _transaction?.Commit();
         }
 
         public HashSet<string> GetTableNames()

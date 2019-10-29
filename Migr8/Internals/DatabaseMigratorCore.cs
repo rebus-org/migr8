@@ -101,7 +101,7 @@ namespace Migr8.Internals
         {
             _writer.Verbose("Opening access to database");
 
-            using (var connection = _db.GetExclusiveDbConnection(_connectionString, _options))
+            using (var connection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer))
             {
                 EnsureMigrationTableExists(connection);
 
@@ -122,7 +122,7 @@ namespace Migr8.Internals
                 {
                     if (nextMigration.Hints.Contains(Hints.NoTransaction))
                     {
-                        using (var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, useTransaction: false))
+                        using (var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer, useTransaction: false))
                         {
                             ExecuteMigration(nextMigration, connection, separateConnection);
                             separateConnection.Complete();
@@ -307,7 +307,7 @@ namespace Migr8.Internals
                         if (connection.GetTableNames().Contains(_migrationTableName))
                         {
                             _writer.Verbose($"Database contains these tables: {string.Join(", ", tableNames)}");
-                
+
                             _writer.Verbose($"The migration log table '{_migrationTableName}' was now found - we're good");
                             return;
                         }

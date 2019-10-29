@@ -8,6 +8,8 @@ namespace Migr8.Internals
     {
         readonly List<KeyValuePair<string, string>> _pairs;
 
+        ConnectionStringMutator(IEnumerable<KeyValuePair<string, string>> pairs) => _pairs = pairs.ToList();
+
         public ConnectionStringMutator(string connectionString)
         {
             _pairs = connectionString.Split(';')
@@ -25,17 +27,19 @@ namespace Migr8.Internals
             return new ConnectionStringMutator(_pairs.Except(pairsToRemove));
         }
 
-        public override string ToString()
-        {
-            return string.Join("; ", _pairs.Select(p => $"{p.Key}={p.Value}"));
-        }
-
-        ConnectionStringMutator(IEnumerable<KeyValuePair<string, string>> pairs) => _pairs = pairs.ToList();
-
-        public bool HasElement(string key, string value = null, StringComparison comparison = StringComparison.CurrentCulture)
+        public bool HasElement(string key, string value = null, StringComparison comparison = StringComparison.CurrentCultureIgnoreCase)
         {
             return _pairs.Any(p => string.Equals(p.Key, key, comparison)
                                    && string.Equals(p.Value, value ?? "", comparison));
         }
+
+        public string GetElement(string key, StringComparison comparison = StringComparison.CurrentCultureIgnoreCase)
+        {
+            var index = _pairs.FindIndex(p => string.Equals(p.Key, key, comparison));
+
+            return index < 0 ? null : _pairs[index].Value;
+        }
+
+        public override string ToString() => string.Join("; ", _pairs.Select(p => $"{p.Key}={p.Value}"));
     }
 }
