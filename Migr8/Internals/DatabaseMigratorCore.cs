@@ -120,10 +120,13 @@ namespace Migr8.Internals
                 var executionStopwatch = Stopwatch.StartNew();
                 try
                 {
+                    
                     if (nextMigration.Hints.Contains(Hints.NoTransaction))
                     {
+                        
                         using (var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer, useTransaction: false))
                         {
+                            
                             ExecuteMigration(nextMigration, connection, separateConnection);
                             separateConnection.Complete();
                         }
@@ -178,7 +181,10 @@ namespace Migr8.Internals
 
                 try
                 {
-                    migrationConnection.ExecuteStatement(sqlStatement);
+                    var hints = HintParser.ParseHints(migration.Hints);
+                    var commandTimeout = hints.GetHint("sql-command-timeout")?.GetValueAsTimeSpan();
+
+                    migrationConnection.ExecuteStatement(sqlStatement, commandTimeout);
                 }
                 catch (Exception exception)
                 {

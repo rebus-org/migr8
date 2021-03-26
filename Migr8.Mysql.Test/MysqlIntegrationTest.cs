@@ -21,9 +21,10 @@ CREATE TABLE `bimmelim` (
 	`text` TEXT,
 	PRIMARY KEY (`Id`)
 );
-"), 
+"),
                 new TestMigration(2, "master", @"INSERT INTO `bimmelim` (`text`) VALUES ('HEJ DU');"),
-                new TestMigration(3, "master", @"DROP TABLE `bimmelim`;")
+                new TestMigration(3, "master", @"DROP TABLE `bimmelim`;"),
+                //new TestMigration(4, "master", @"CREATE TABLE `yepper`;")
             });
             
         }
