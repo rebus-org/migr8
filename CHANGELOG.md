@@ -29,7 +29,6 @@
 * better exceptions on errors during type scan - thanks [madstt]
 
 ## 0.21.0
-
 * Target .NET Standard 2.0, because that's a good sane target
 * Add SQL command timeout option
 * Better comment parsing when using .sql files
@@ -42,9 +41,12 @@
 * Fix bug in MySQL implementation that would return incorrect table names when querying the database for them
 
 ## 0.22.0
-
 * Make managed identity token retrieval use the hostname from the connection string to obtain the token
+
+## 0.23.0
+* Add ability to configure SQL command timeout individually for a script - thanks [ctrlenter]
 
 ---
 
+[ctrlenter]: https://github.com/ctrlenter
 [madstt]: https://github.com/madstt
