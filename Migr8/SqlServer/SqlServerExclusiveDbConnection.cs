@@ -139,9 +139,9 @@ ALTER TABLE [{migrationTableName}]
             }
         }
 
-        public void ExecuteStatement(string sqlStatement)
+        public void ExecuteStatement(string sqlStatement, TimeSpan? sqlCommandTimeout = null)
         {
-            using (var command = CreateCommand())
+            using (var command = CreateCommand(sqlCommandTimeout))
             {
                 command.CommandText = sqlStatement;
                 command.ExecuteNonQuery();
@@ -167,11 +167,11 @@ ALTER TABLE [{migrationTableName}]
             return list;
         }
 
-        SqlCommand CreateCommand()
+        SqlCommand CreateCommand(TimeSpan? sqlCommandTimeout = null)
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
-            sqlCommand.CommandTimeout = (int)_options.SqlCommandTimeout.TotalSeconds;
+            sqlCommand.CommandTimeout = (int)(sqlCommandTimeout?.TotalSeconds ?? _options.SqlCommandTimeout.TotalSeconds);
             return sqlCommand;
         }
     }

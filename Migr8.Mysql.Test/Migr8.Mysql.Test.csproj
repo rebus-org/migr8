@@ -5,7 +5,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Migr8.Mysql.Test</RootNamespace>
     <AssemblyName>Migr8.Mysql.Test</AssemblyName>
-    <TargetFrameworks>net462</TargetFrameworks>
+    <TargetFrameworks>net48</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>mookid8000</Authors>
     <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>
@@ -42,6 +42,9 @@
     <ProjectReference Include="..\Migr8.Mysql\Migr8.Mysql.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="hints\scripts\001-master.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\001-master.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

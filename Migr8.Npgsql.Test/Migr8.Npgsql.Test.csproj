@@ -5,7 +5,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Migr8.Npgsql.Test</RootNamespace>
     <AssemblyName>Migr8.Npgsql.Test</AssemblyName>
-    <TargetFrameworks>net462</TargetFrameworks>
+    <TargetFrameworks>net48</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>mookid8000</Authors>
     <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>

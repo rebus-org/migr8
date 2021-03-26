@@ -10,5 +10,7 @@
         /// This makes sense only when the migration is idempotent and thus safe to retry.
         /// </summary>
         public const string NoTransaction = "no-transaction";
+
+        public const string SqlCommandTimeout = "sql-command-timeout";
     }
 }

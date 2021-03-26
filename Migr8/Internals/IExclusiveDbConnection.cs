@@ -9,7 +9,7 @@ namespace Migr8.Internals
         HashSet<string> GetTableNames();
         void LogMigration(IExecutableSqlMigration migration, string migrationTableName);
         void CreateMigrationTable(string migrationTableName);
-        void ExecuteStatement(string sqlStatement);
+        void ExecuteStatement(string sqlStatement, TimeSpan? sqlCommandTimeout = null);
         IEnumerable<string> GetExecutedMigrationIds(string migrationTableName);
     }
 }

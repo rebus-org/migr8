@@ -48,6 +48,7 @@
     <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs" Link="Internals\IExecutableSqlMigration.cs" />
     <Compile Include="..\Migr8\Internals\IWriter.cs" Link="Internals\IWriter.cs" />
     <Compile Include="..\Migr8\Internals\LogActionWriter.cs" Link="Internals\LogActionWriter.cs" />
+    <Compile Include="..\Migr8\Internals\HintParser.cs" Link="Internals\HintParser.cs" />
     <Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs" Link="Internals\Scanners\AssemblyScanner.cs" />
     <Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs" Link="Internals\Scanners\DirectoryScanner.cs" />
     <Compile Include="..\Migr8\ISqlMigration.cs" Link="ISqlMigration.cs" />
