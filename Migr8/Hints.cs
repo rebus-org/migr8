@@ -11,6 +11,11 @@
         /// </summary>
         public const string NoTransaction = "no-transaction";
 
+        /// <summary>
+        /// When a migration is tagged with this hint, it will set the command timeout of the migration. 
+        /// The value of the command timeout needs to be passed as "value" in the Hint Attribute.
+        /// Format: hh:mm:ss
+        /// </summary>
         public const string SqlCommandTimeout = "sql-command-timeout";
     }
 }
