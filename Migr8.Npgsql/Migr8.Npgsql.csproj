@@ -8,12 +8,13 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>mookid8000</Authors>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
     <Copyright>Copyright 2012-2017</Copyright>
     <PackageTags>sql rdbms postgresql postgres migrations</PackageTags>
     <RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
