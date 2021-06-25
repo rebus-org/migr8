@@ -9,18 +9,21 @@ namespace Migr8.SqlServer
     {
         public IExclusiveDbConnection GetExclusiveDbConnection(string connectionString, Options options, IWriter writer, bool useTransaction = true)
         {
+            const StringComparison ignoreCase = StringComparison.OrdinalIgnoreCase;
+            
             var connectionStringMutator = new ConnectionStringMutator(connectionString);
             
-            var authentication = connectionStringMutator.GetElement("Authentication", comparison: StringComparison.OrdinalIgnoreCase);
-            var useManagedIdentity = string.Equals(authentication, "Active Directory Interactive", StringComparison.OrdinalIgnoreCase);
+            var authentication = connectionStringMutator.GetElement("Authentication", comparison: ignoreCase);
+            var useManagedIdentity = string.Equals(authentication, "Active Directory Interactive", ignoreCase)
+                                     || string.Equals(authentication, "Active Directory Integrated", ignoreCase);
             var tokenUrl = "";
 
             if (useManagedIdentity)
             {
                 writer.Verbose($"Connection string with Authentication = {authentication} detected - configuring for use with managed identity");
 
-                if (connectionStringMutator.HasElement("Integrated Security", "SSPI", comparison: StringComparison.OrdinalIgnoreCase)
-                    || connectionStringMutator.HasElement("Integrated Security", "true", comparison: StringComparison.OrdinalIgnoreCase))
+                if (connectionStringMutator.HasElement("Integrated Security", "SSPI", comparison: ignoreCase)
+                    || connectionStringMutator.HasElement("Integrated Security", "true", comparison: ignoreCase))
                 {
                     throw new ArgumentException("The connection string cannot be used with Authentication=ManagedIdentity, because it also contains Integrated Security = true or SSPI");
                 }
@@ -36,7 +39,7 @@ namespace Migr8.SqlServer
             }
 
             var connectionStringToUse = connectionStringMutator
-                .Without(k => string.Equals(k.Key, "Authentication", StringComparison.OrdinalIgnoreCase))
+                .Without(k => string.Equals(k.Key, "Authentication", ignoreCase))
                 .ToString();
 
             return new SqlServerExclusiveDbConnection(connectionStringToUse, options, useTransaction, useManagedIdentity, tokenUrl);

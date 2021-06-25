@@ -46,6 +46,9 @@
 ## 0.23.0
 * Add ability to configure SQL command timeout individually for a script - thanks [ctrlenter]
 
+## 0.24.0
+* Detect `Authentication=Active Directory Integrated` the same way as `Authentication=Active Directory Interactive`
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter
