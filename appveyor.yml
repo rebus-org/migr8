@@ -20,10 +20,10 @@ before_build:
   - ps: iex "& $cmd"
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
-  - SET SQLSERVER=server=.;database=migr8_test;User ID=sa;Password=Password12!
+  - SET SQLSERVER=server=(local)\SQL2019;database=migr8_test;User ID=sa;Password=Password12!;encrypt=false
   - PATH=C:\Program Files\PostgreSQL\13\bin\;%PATH%
   - createdb migr8_test
-  - sqlcmd -S "(local)" -U "sa" -P "Password12!" -Q "CREATE DATABASE migr8_test;" -d "master"
+  - sqlcmd -S "(local)\SQL2019" -U "sa" -P "Password12!" -Q "CREATE DATABASE migr8_test;" -d "master"
   - appveyor-retry dotnet restore -v Minimal
 
 build_script:
