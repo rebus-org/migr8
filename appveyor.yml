@@ -7,7 +7,7 @@ cache:
   - '%LocalAppData%\NuGet\Cache'
 
 services:
-  - postgresql95
+  - postgresql13
   - mssql2016
   - mysql
 
@@ -21,7 +21,7 @@ before_build:
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
   - SET SQLSERVER=server=.;database=migr8_test;User ID=sa;Password=Password12!
-  - PATH=C:\Program Files\PostgreSQL\9.5\bin\;%PATH%
+  - PATH=C:\Program Files\PostgreSQL\13\bin\;%PATH%
   - createdb migr8_test
   - sqlcmd -S "(local)" -U "sa" -P "Password12!" -Q "CREATE DATABASE migr8_test;" -d "master"
   - appveyor-retry dotnet restore -v Minimal
