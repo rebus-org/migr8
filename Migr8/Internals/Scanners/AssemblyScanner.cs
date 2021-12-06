@@ -28,15 +28,22 @@ namespace Migr8.Internals.Scanners
                             .FirstOrDefault()
                     })
                     .Where(a => a.Attribute != null)
-                    .Select(a => new
+                    .Select(a =>
                     {
-                        Type = a.Type,
-                        Attribute = a.Attribute,
-                        Instance = CreateSqlMigrationInstance(a.Type),
-                        Hints = a.Type.GetTypeInfo().GetCustomAttributes(typeof(HintAttribute), false)
-                            .Cast<HintAttribute>()
-                            .Select(h => h.Hint)
-                            .ToList()
+                        var type = a.Type;
+
+                        return new
+                        {
+                            Type = type,
+                            Attribute = a.Attribute,
+                            Instance = CreateSqlMigrationInstance(type),
+                            Hints = type.GetTypeInfo().GetCustomAttributes(typeof(HintAttribute), false)
+                                .Cast<HintAttribute>()
+                                .Select(h => h.Hint)
+                                .Distinct()
+                                .OrderBy(h => h)
+                                .ToList()
+                        };
                     })
                     .Select(a => CreateExecutableSqlMigration(a.Attribute, a.Instance, a.Hints))
                     .ToList();
@@ -56,7 +63,7 @@ namespace Migr8.Internals.Scanners
 
             try
             {
-                return (ISqlMigration) Activator.CreateInstance(type);
+                return (ISqlMigration)Activator.CreateInstance(type);
             }
             catch (Exception exception)
             {
@@ -64,8 +71,7 @@ namespace Migr8.Internals.Scanners
             }
         }
 
-        static IExecutableSqlMigration CreateExecutableSqlMigration(MigrationAttribute attribute,
-            ISqlMigration instance, List<string> hints)
+        static IExecutableSqlMigration CreateExecutableSqlMigration(MigrationAttribute attribute, ISqlMigration instance, IEnumerable<string> hints)
         {
             var sequenceNumber = attribute.SequenceNumber;
             var branchSpecification = attribute.OptionalBranchSpecification ?? "master";
@@ -73,8 +79,7 @@ namespace Migr8.Internals.Scanners
             var sql = instance.Sql;
             var description = attribute.Description;
 
-            return new ExecutableSqlMigration(id, sql, description, sequenceNumber, branchSpecification, instance,
-                hints);
+            return new ExecutableSqlMigration(id, sql, description, sequenceNumber, branchSpecification, instance, hints);
         }
 
         class ExecutableSqlMigration : IExecutableSqlMigration

@@ -41,7 +41,7 @@ namespace Migr8.Test.Api
 
             Assert.That(migrations.Select(m => string.Join(",", m.Hints)), Is.EqualTo(new[]
             {
-                "hint1,hint2,hint3,hint4,hint5,hint-6",
+                "hint-6,hint1,hint2,hint3,hint4,hint5",
                 "",
                 "no-transaction"
             }));

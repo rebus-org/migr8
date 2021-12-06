@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -86,13 +87,33 @@ namespace Migr8.Test.Basic
                 .Select(a => new TestMigration(a.Number, "test", $"CREATE TABLE [{a.TableName}] ([Id] INT)"))
                 .ToList();
 
+            var errors = new ConcurrentQueue<Exception>();
+
             var threads = Enumerable.Range(0, numberOfThreads)
-                .Select(_ => new Thread(() => { _migrator.Execute(migrations); }))
+                .Select(_ => new Thread(() =>
+                {
+                    try
+                    {
+                        _migrator.Execute(migrations);
+                    }
+                    catch (Exception exception)
+                    {
+                        errors.Enqueue(exception);
+                    }
+                }))
                 .ToList();
 
             threads.ForEach(t => t.Start());
 
             threads.ForEach(t => t.Join(TimeSpan.FromSeconds(20)));
+
+//            if (errors.Any())
+//            {
+//                throw new AssertionException(
+//                    $@"Got the following errors when executing {numberOfMigrations} in parallel on {numberOfThreads} threads:
+
+//{string.Join(Environment.NewLine + Environment.NewLine, errors)}");
+//            }
 
             var tableNames = GetTableNames();
 

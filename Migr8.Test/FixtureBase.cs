@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using NUnit.Framework;
 
 namespace Migr8.Test
@@ -9,7 +9,8 @@ namespace Migr8.Test
     public abstract class FixtureBase
     {
         const int DoesNotExist = 3701;
-        readonly ConcurrentStack<IDisposable> _disposables = new ConcurrentStack<IDisposable>();
+        
+        readonly ConcurrentStack<IDisposable> _disposables = new();
 
         [SetUp]
         public void InnerSetUp()
@@ -31,24 +32,21 @@ namespace Migr8.Test
 
         static void DropTable(string tableName)
         {
-            using (var connection = new SqlConnection(TestConfig.ConnectionString))
-            {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $"DROP TABLE [{tableName}]";
+            using var connection = new SqlConnection(TestConfig.ConnectionString);
+            connection.Open();
+            
+            using var command = connection.CreateCommand();
+            command.CommandText = $"DROP TABLE [{tableName}]";
 
-                    Console.Write($"Dropping table [{tableName}] - ");
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                        Console.WriteLine("OK");
-                    }
-                    catch (SqlException sqlException) when (sqlException.Number == DoesNotExist)
-                    {
-                        Console.WriteLine("Did not exist");
-                    }
-                }
+            Console.Write($"Dropping table [{tableName}] - ");
+            try
+            {
+                command.ExecuteNonQuery();
+                Console.WriteLine("OK");
+            }
+            catch (SqlException sqlException) when (sqlException.Number == DoesNotExist)
+            {
+                Console.WriteLine("Did not exist");
             }
         }
 

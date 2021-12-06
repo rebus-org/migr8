@@ -101,56 +101,56 @@ namespace Migr8.Internals
         {
             _writer.Verbose("Opening access to database");
 
-            using (var connection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer))
+            using var connection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer);
+            
+            EnsureMigrationTableExists(connection);
+
+            _writer.Verbose("Getting next migration to run...");
+
+            var nextMigration = GetNextMigration(connection, migrations, _writer);
+
+            if (nextMigration == null)
             {
-                EnsureMigrationTableExists(connection);
-
-                _writer.Verbose("Getting next migration to run...");
-
-                var nextMigration = GetNextMigration(connection, migrations, _writer);
-
-                if (nextMigration == null)
-                {
-                    _writer.Verbose("Found no migration");
-                    return false;
-                }
-
-                _writer.Verbose($"Found migration {nextMigration.Id} - executing!");
-
-                var executionStopwatch = Stopwatch.StartNew();
-                try
-                {
-                    
-                    if (nextMigration.Hints.Contains(Hints.NoTransaction))
-                    {
-                        
-                        using (var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer, useTransaction: false))
-                        {
-                            
-                            ExecuteMigration(nextMigration, connection, separateConnection);
-                            separateConnection.Complete();
-                        }
-                    }
-                    else
-                    {
-                        ExecuteMigration(nextMigration, connection, connection);
-                    }
-
-                    connection.Complete();
-
-                    return true;
-                }
-                catch (Exception exception)
-                {
-                    throw new MigrationException(
-                        $"Could not execute migration with ID '{nextMigration.Id}': {nextMigration.Sql}", exception);
-                }
-                finally
-                {
-                    _writer.Verbose(
-                        $"Execution of migration {nextMigration.Id} took {executionStopwatch.Elapsed.TotalSeconds:0.0} s");
-                }
+                _writer.Verbose("Found no migration");
+                return false;
             }
+
+            _writer.Verbose($"Found migration {nextMigration.Id} - executing!");
+
+            var executionStopwatch = Stopwatch.StartNew();
+            try
+            {
+
+                if (nextMigration.Hints.Contains(Hints.NoTransaction))
+                {
+                    ExecuteMigrationWithSeparateConnection(nextMigration, connection);
+                }
+                else
+                {
+                    ExecuteMigration(nextMigration, connection, connection);
+                }
+
+                connection.Complete();
+                    
+                return true;
+            }
+            catch (Exception exception)
+            {
+                throw new MigrationException(
+                    $"Could not execute migration with ID '{nextMigration.Id}': {nextMigration.Sql}", exception);
+            }
+            finally
+            {
+                _writer.Verbose(
+                    $"Execution of migration {nextMigration.Id} took {executionStopwatch.Elapsed.TotalSeconds:0.0} s");
+            }
+        }
+
+        void ExecuteMigrationWithSeparateConnection(IExecutableSqlMigration nextMigration, IExclusiveDbConnection connection)
+        {
+            using var separateConnection = _db.GetExclusiveDbConnection(_connectionString, _options, _writer, useTransaction: false);
+            ExecuteMigration(nextMigration, connection, separateConnection);
+            separateConnection.Complete();
         }
 
         void ExecuteMigration(IExecutableSqlMigration migration, IExclusiveDbConnection logConnection, IExclusiveDbConnection migrationConnection)

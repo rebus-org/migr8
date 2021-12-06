@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Migr8.Internals;
 using Migr8.Test.Basic;
 using NUnit.Framework;
@@ -37,33 +37,29 @@ namespace Migr8.Test.Ordering
         {
             _migrator.Execute(AllMigrations);
 
-            using (var connection = new SqlConnection(TestConfig.ConnectionString))
+            using var connection = new SqlConnection(TestConfig.ConnectionString);
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT [Number] FROM [Table] ORDER BY [Id]";
+
+            var actualNumbers = new List<int>();
+
+            using (var reader = command.ExecuteReader())
             {
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
+                while (reader.Read())
                 {
-                    command.CommandText = "SELECT [Number] FROM [Table] ORDER BY [Id]";
-
-                    var actualNumbers = new List<int>();
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            actualNumbers.Add((int)reader["Number"]);
-                        }
-                    }
-                    //var actualNumbers = connection
-                    //    .Select<int>("Number", "SELECT [Number] FROM [Table] ORDER BY [Id]")
-                    //    .ToArray();
-
-                    var expectedNumbers = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-
-                    Assert.That(actualNumbers, Is.EqualTo(expectedNumbers),
-                        $"Expected {string.Join(", ", expectedNumbers)} but got {string.Join(", ", actualNumbers)}");
+                    actualNumbers.Add((int)reader["Number"]);
                 }
             }
+            //var actualNumbers = connection
+            //    .Select<int>("Number", "SELECT [Number] FROM [Table] ORDER BY [Id]")
+            //    .ToArray();
+
+            var expectedNumbers = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
+            Assert.That(actualNumbers, Is.EqualTo(expectedNumbers),
+                $"Expected {string.Join(", ", expectedNumbers)} but got {string.Join(", ", actualNumbers)}");
         }
     }
 }

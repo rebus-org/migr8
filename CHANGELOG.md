@@ -49,6 +49,9 @@
 ## 0.24.0
 * Detect `Authentication=Active Directory Integrated` the same way as `Authentication=Active Directory Interactive`
 
+## 0.25.0
+* Use Microsoft.Data.SqlClient instead
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter

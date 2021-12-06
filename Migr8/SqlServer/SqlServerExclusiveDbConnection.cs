@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Data.SqlClient;
 using Migr8.Internals;
 
 namespace Migr8.SqlServer
@@ -52,17 +52,13 @@ namespace Migr8.SqlServer
         {
             var tableNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            using (var command = CreateCommand())
-            {
-                command.CommandText = "SELECT [TABLE_NAME] FROM [information_schema].[tables]";
+            using var command = CreateCommand();
+            command.CommandText = "SELECT [TABLE_NAME] FROM [information_schema].[tables]";
 
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        tableNames.Add((string)reader["TABLE_NAME"]);
-                    }
-                }
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                tableNames.Add((string)reader["TABLE_NAME"]);
             }
 
             return tableNames;
@@ -70,9 +66,8 @@ namespace Migr8.SqlServer
 
         public void LogMigration(IExecutableSqlMigration migration, string migrationTableName)
         {
-            using (var command = CreateCommand())
-            {
-                command.CommandText = $@"
+            using var command = CreateCommand();
+            command.CommandText = $@"
 INSERT INTO [{migrationTableName}] (
     [MigrationId],
     [Sql],
@@ -92,16 +87,15 @@ INSERT INTO [{migrationTableName}] (
 )
 ";
 
-                command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
-                command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
-                command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
-                command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
-                command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
-                command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
-                command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
+            command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
+            command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
+            command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
+            command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
+            command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
+            command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
+            command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
 
-                command.ExecuteNonQuery();
-            }
+            command.ExecuteNonQuery();
         }
 
         public void CreateMigrationTable(string migrationTableName)
@@ -141,27 +135,22 @@ ALTER TABLE [{migrationTableName}]
 
         public void ExecuteStatement(string sqlStatement, TimeSpan? sqlCommandTimeout = null)
         {
-            using (var command = CreateCommand(sqlCommandTimeout))
-            {
-                command.CommandText = sqlStatement;
-                command.ExecuteNonQuery();
-            }
+            using var command = CreateCommand(sqlCommandTimeout);
+            command.CommandText = sqlStatement;
+            command.ExecuteNonQuery();
         }
 
         public IEnumerable<string> GetExecutedMigrationIds(string migrationTableName)
         {
             var list = new List<string>();
-            using (var command = CreateCommand())
-            {
-                command.CommandText = $"SELECT [MigrationId] FROM [{migrationTableName}]";
+            
+            using var command = CreateCommand();
+            command.CommandText = $"SELECT [MigrationId] FROM [{migrationTableName}]";
 
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add((string)reader["MigrationId"]);
-                    }
-                }
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add((string)reader["MigrationId"]);
             }
 
             return list;
