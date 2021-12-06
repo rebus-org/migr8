@@ -8,7 +8,7 @@ cache:
 
 services:
   - postgresql13
-  - mssql2016
+  - mssql2019
   - mysql
 
 environment:
