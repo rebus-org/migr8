@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <LangVersion>latest</LangVersion>
     <RootNamespace>Migr8.MySQL</RootNamespace>
     <AssemblyName>Migr8.MySQL</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
@@ -47,6 +47,7 @@
     <Compile Include="..\Migr8\Internals\IDb.cs" Link="Internals\IDb.cs" />
     <Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs" Link="Internals\IExclusiveDbConnection.cs" />
     <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs" Link="Internals\IExecutableSqlMigration.cs" />
+    <Compile Include="..\Migr8\Internals\InternalsVisibleTo.cs" Link="InternalsVisibleTo.cs" />
     <Compile Include="..\Migr8\Internals\IWriter.cs" Link="Internals\IWriter.cs" />
     <Compile Include="..\Migr8\Internals\HintParser.cs" Link="Internals\HintParser.cs" />
     <Compile Include="..\Migr8\Internals\LogActionWriter.cs" Link="Internals\LogActionWriter.cs" />

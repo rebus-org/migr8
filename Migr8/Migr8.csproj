@@ -3,7 +3,6 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Migr8</RootNamespace>
     <AssemblyName>Migr8</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>

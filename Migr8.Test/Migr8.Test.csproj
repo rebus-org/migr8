@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Migr8.Test</RootNamespace>
     <AssemblyName>Migr8.Test</AssemblyName>
     <TargetFrameworks>net6.0</TargetFrameworks>
