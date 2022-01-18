@@ -55,6 +55,9 @@
 ## 0.26.0
 * Extend accepted Microsoft.Data.SqlClient version range
 
+## 0.27.0
+* Extend accepted Microsoft.Data.SqlClient version range
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter

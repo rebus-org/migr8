@@ -21,25 +21,25 @@ set Version=%version%
 
 pushd %root%
 
-dotnet restore
+dotnet restore --interactive
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet build "%root%\migr8\migr8.csproj" -c Release
+dotnet build "%root%\migr8\migr8.csproj" -c Release --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet build "%root%\migr8.npgsql\migr8.npgsql.csproj" -c Release
+dotnet build "%root%\migr8.npgsql\migr8.npgsql.csproj" -c Release --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet build "%root%\migr8.mysql\migr8.mysql.csproj" -c Release
+dotnet build "%root%\migr8.mysql\migr8.mysql.csproj" -c Release --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail

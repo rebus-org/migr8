@@ -26,25 +26,25 @@ if exist "%deploydir%" (
 
 pushd %root%
 
-dotnet restore
+dotnet restore --interactive
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet pack "%root%\migr8\migr8.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version%
+dotnet pack "%root%\migr8\migr8.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version% --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet pack "%root%\migr8.npgsql\migr8.npgsql.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version%
+dotnet pack "%root%\migr8.npgsql\migr8.npgsql.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version% --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail
 )
 
-dotnet pack "%root%\migr8.mysql\migr8.mysql.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version%
+dotnet pack "%root%\migr8.mysql\migr8.mysql.csproj" -c Release -o "%deploydir%" /p:PackageVersion=%version% --no-restore
 if %ERRORLEVEL% neq 0 (
 	popd
  	goto exit_fail

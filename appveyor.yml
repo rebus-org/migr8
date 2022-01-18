@@ -29,3 +29,5 @@ before_build:
 build_script:
   - dotnet build migr8.sln -c Release 
 
+test_script:
+  - dotnet test

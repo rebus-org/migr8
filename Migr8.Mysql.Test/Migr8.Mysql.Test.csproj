@@ -2,35 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
  <PropertyGroup>
     <OutputType>Library</OutputType>
-    <RootNamespace>Migr8.Mysql.Test</RootNamespace>
-    <AssemblyName>Migr8.Mysql.Test</AssemblyName>
     <TargetFrameworks>net48</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Authors>mookid8000</Authors>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/migr8/master/LICENSE.md</PackageLicenseUrl>
-    <PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
-    <Copyright>Copyright 2012-2017</Copyright>
-    <PackageTags>mysql rdbms migrations</PackageTags>
-    <RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>RELEASE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="microsoft.net.test.sdk" Version="16.2.0" />
