@@ -58,6 +58,9 @@
 ## 0.27.0
 * Extend accepted Microsoft.Data.SqlClient version range
 
+## 0.28.0
+* Fix bug that would result in not picking up migrations from files when there was no description
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter

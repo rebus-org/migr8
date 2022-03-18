@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+// ReSharper disable ArgumentsStyleLiteral
 
 namespace Migr8.Internals.Scanners
 {
@@ -91,9 +92,6 @@ namespace Migr8.Internals.Scanners
 
                 var lines = File.ReadAllLines(migrationFilePath);
 
-                //Description = ExtractDescription(lines);
-                //Sql = ExtractMigration(lines);
-
                 (Description, Sql) = ExtractDescriptionAndSql(lines);
 
                 SqlMigration = this;
@@ -136,44 +134,55 @@ namespace Migr8.Internals.Scanners
 
             static (string, string) ExtractDescriptionAndSql(string[] lines)
             {
-                var parsingDescription = true;
-                var commentLines = new List<string>();
-                var sqlLines = new List<string>();
+                bool IsCommentLine(string line) => line.Trim().StartsWith("--");
 
-                foreach (var line in lines)
-                {
-                    var trimmedLine = line.Trim();
-                    if (string.IsNullOrWhiteSpace(trimmedLine))
-                    {
-                        if (commentLines.Any())
-                        {
-                            parsingDescription = false;
-                            continue;
-                        }
+                var descriptionLines = lines.TakeWhile(IsCommentLine).ToList();
+                var sqlLines = lines.SkipWhile(IsCommentLine).ToList();
 
-                        continue;
-                    }
+                return (
+                    string.Join(Environment.NewLine, descriptionLines.Select(line => line.Trim().Substring(2).Trim())),
+                    string.Join(Environment.NewLine, sqlLines.Where(line => !string.IsNullOrWhiteSpace(line)))
+                );
 
-                    if (parsingDescription)
-                    {
-                        if (trimmedLine.StartsWith("--"))
-                        {
-                            commentLines.Add(trimmedLine);
-                        }
-                    }
-                    else
-                    {
-                        sqlLines.Add(line);
-                    }
-                }
+                //var firstLineIsComment = lines.FirstOrDefault()?.StartsWith("--") ?? false;
+                //var parsingDescription = firstLineIsComment;
+                //var commentLines = new List<string>();
+                //var sqlLines = new List<string>();
 
-                var description = string.Join(Environment.NewLine, commentLines
-                    .Where(line => !string.IsNullOrWhiteSpace(line))
-                    .Select(line => line.TrimStart(' ', '-')));
+                //foreach (var line in lines)
+                //{
+                //    var trimmedLine = line.Trim();
+                //    if (string.IsNullOrWhiteSpace(trimmedLine))
+                //    {
+                //        if (commentLines.Any())
+                //        {
+                //            parsingDescription = false;
+                //            continue;
+                //        }
 
-                var sql = string.Join(Environment.NewLine, sqlLines);
+                //        continue;
+                //    }
 
-                return (description, sql);
+                //    if (parsingDescription)
+                //    {
+                //        if (trimmedLine.StartsWith("--"))
+                //        {
+                //            commentLines.Add(trimmedLine);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        sqlLines.Add(line);
+                //    }
+                //}
+
+                //var description = string.Join(Environment.NewLine, commentLines
+                //    .Where(line => !string.IsNullOrWhiteSpace(line))
+                //    .Select(line => line.TrimStart(' ', '-')));
+
+                //var sql = string.Join(Environment.NewLine, sqlLines);
+
+                //return (description, sql);
             }
 
             static string ExtractDescription(string[] lines)
