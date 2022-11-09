@@ -61,6 +61,9 @@
 ## 0.28.0
 * Fix bug that would result in not picking up migrations from files when there was no description
 
+## 0.29.0
+* Update all the packages
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter

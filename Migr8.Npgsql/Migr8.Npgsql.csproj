@@ -39,7 +39,7 @@
     <Folder Include="Internals\Scanners\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="npgsql" Version="4.0.10" />
+    <PackageReference Include="npgsql" Version="6.0.7" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>
 </Project>

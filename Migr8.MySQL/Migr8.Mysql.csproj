@@ -39,7 +39,7 @@
     <Folder Include="Internals\Scanners\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.17" />
+    <PackageReference Include="MySql.Data" Version="8.0.31" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>
 </Project>
