@@ -11,13 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stuff", "stuff", "{F1E3F4CA
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A7310FA2-EC70-4F23-AC08-B4A5D337BE50}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8", "Migr8\Migr8.csproj", "{73AACF2F-120D-49B0-AD67-AB1F2A937BB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migr8.Test", "Migr8.Test\Migr8.Test.csproj", "{14A2F46C-4FE2-4EA9-A892-F1E1FD5B2839}"
