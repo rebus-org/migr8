@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Migr8.Internals
+﻿namespace Migr8.Internals
 {
     static class StringExtensions
     {

@@ -182,7 +182,7 @@ namespace Migr8.Internals
                 try
                 {
                     var hints = HintParser.ParseHints(migration.Hints);
-                    var commandTimeout = hints.GetHint("sql-command-timeout")?.GetValueAsTimeSpan();
+                    var commandTimeout = hints.GetHint(Hints.SqlCommandTimeout)?.GetValueAsTimeSpan();
 
                     migrationConnection.ExecuteStatement(sqlStatement, commandTimeout);
                 }

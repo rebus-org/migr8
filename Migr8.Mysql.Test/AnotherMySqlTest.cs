@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Migr8.Mysql.Test
 {
