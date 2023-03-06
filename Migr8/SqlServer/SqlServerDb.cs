@@ -36,13 +36,15 @@ namespace Migr8.SqlServer
                 tokenUrl = $"https://{databaseHostname}";
 
                 writer.Verbose($"Will retrieve access token from URL {tokenUrl}");
+
+                var connectionStringToUse = connectionStringMutator
+                    .Without(k => string.Equals(k.Key, "Authentication", ignoreCase))
+                    .ToString();
+
+                return new SqlServerExclusiveDbConnection(connectionStringToUse, options, useTransaction, true, tokenUrl);
             }
 
-            var connectionStringToUse = connectionStringMutator
-                .Without(k => string.Equals(k.Key, "Authentication", ignoreCase))
-                .ToString();
-
-            return new SqlServerExclusiveDbConnection(connectionStringToUse, options, useTransaction, useManagedIdentity, tokenUrl);
+            return new SqlServerExclusiveDbConnection(connectionString, options, useTransaction, false, tokenUrl);
         }
     }
 }
