@@ -22,7 +22,7 @@ namespace Migr8.Test.Api
 
             var tableNames = GetTableNames().ToList();
 
-            Assert.That(tableNames, Is.EqualTo(new[] {"Tabelle1", "Tabelle2", "Tabelle3"}));
+            Assert.That(tableNames, Is.EqualTo(new[] { "Tabelle1", "Tabelle2", "Tabelle3" }));
         }
 
         [Test]
@@ -40,14 +40,14 @@ namespace Migr8.Test.Api
             }));
 
             var actualLinesOfHints = migrations
-                .Select(m => string.Join(",", m.Hints.OrderBy(h => h, StringComparer.InvariantCulture)))
+                .Select(m => m.Hints.OrderBy(h => h, StringComparer.InvariantCulture))
                 .ToList();
 
             Assert.That(actualLinesOfHints, Is.EqualTo(new[]
             {
-                "hint-6,hint1,hint2,hint3,hint4,hint5",
-                "",
-                "no-transaction"
+                new[]{"hint-6","hint1","hint2","hint3","hint4","hint5"}.OrderBy(s => s, StringComparer.InvariantCulture).ToArray(),
+                Array.Empty<string>(),
+                new[]{"no-transaction"}
             }));
         }
 
