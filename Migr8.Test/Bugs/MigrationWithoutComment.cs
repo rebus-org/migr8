@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Testy.Files;
@@ -18,10 +19,10 @@ CREATE TABLE [TestTable] ([Id] INT)", "wat", "CREATE TABLE [TestTable] ([Id] INT
 CREATE TABLE [TestTable] ([Id] INT)", @"wat
 wat2
 wat3", "CREATE TABLE [TestTable] ([Id] INT)")]
-        
+
         [TestCase(@"-- wat
 CREATE TABLE [TestTable] ([Id] INT)", "wat", "CREATE TABLE [TestTable] ([Id] INT)")]
-        
+
         [TestCase(@"CREATE TABLE [TestTable] ([Id] INT)", "", "CREATE TABLE [TestTable] ([Id] INT)")]
         public void PicksUpMigrationSqlAsExpected(string contents, string expectedDescription, string expectedSql)
         {
@@ -35,8 +36,10 @@ CREATE TABLE [TestTable] ([Id] INT)", "wat", "CREATE TABLE [TestTable] ([Id] INT
 
             var migration = migrations.First();
 
-            Assert.That(migration.Description, Is.EqualTo(expectedDescription));
+            Assert.That(NormalizeLineBreaks(migration.Description), Is.EqualTo(NormalizeLineBreaks(expectedDescription)));
             Assert.That(migration.SqlMigration.Sql, Is.EqualTo(expectedSql));
         }
+
+        private static string NormalizeLineBreaks(string str) => string.Join(Environment.NewLine, str.Split(new[] { Environment.NewLine, "\r", "\n" }, StringSplitOptions.None));
     }
 }
