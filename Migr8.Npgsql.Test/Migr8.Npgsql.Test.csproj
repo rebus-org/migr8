@@ -1,24 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>net48</TargetFrameworks>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="microsoft.net.test.sdk" Version="17.4.0" />
-    <PackageReference Include="nunit" Version="3.13.3" />
-    <PackageReference Include="nunit3testadapter" Version="4.3.0" />
-    <PackageReference Include="system.valuetuple" Version="4.5.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Migr8.Npgsql\Migr8.Npgsql.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Scripts\001-master.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Scripts\002-master.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net48</TargetFrameworks>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="microsoft.net.test.sdk" Version="17.5.0" />
+		<PackageReference Include="nunit" Version="3.13.3" />
+		<PackageReference Include="nunit3testadapter" Version="4.4.2" />
+		<PackageReference Include="system.valuetuple" Version="4.5.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Migr8.Npgsql\Migr8.Npgsql.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Scripts\001-master.sql">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Scripts\002-master.sql">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

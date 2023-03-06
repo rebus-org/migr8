@@ -1,27 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="microsoft.net.test.sdk" Version="17.4.0" />
-    <PackageReference Include="nunit" Version="3.13.3" />
-    <PackageReference Include="nunit3testadapter" Version="4.3.0" />
-    <PackageReference Include="testy" Version="0.8.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Migr8\Migr8.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Api\Mix\0001-master.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Api\Mix\Subdir1\0002-feature-subdir1.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Api\Mix\Subdir2\0002-feature-subdir2.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="microsoft.net.test.sdk" Version="17.5.0" />
+		<PackageReference Include="nunit" Version="3.13.3" />
+		<PackageReference Include="nunit3testadapter" Version="4.4.2" />
+		<PackageReference Include="testy" Version="0.8.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Migr8\Migr8.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Api\Mix\0001-master.sql">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Api\Mix\Subdir1\0002-feature-subdir1.sql">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Api\Mix\Subdir2\0002-feature-subdir2.sql">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

@@ -1,45 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <LangVersion>10</LangVersion>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Authors>mookid8000</Authors>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
-    <Copyright>Copyright 2012-2017</Copyright>
-    <PackageTags>sql rdbms postgresql postgres migrations</PackageTags>
-    <RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
-    <Compile Include="..\Migr8\Db.cs" Link="Db.cs" />
-    <Compile Include="..\Migr8\ExecutableMigration.cs" Link="ExecutableMigration.cs" />
-    <Compile Include="..\Migr8\HintAttribute.cs" Link="HintAttribute.cs" />
-    <Compile Include="..\Migr8\Hints.cs" Link="Hints.cs" />
-    <Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs" Link="Internals\DatabaseMigratorCore.cs" />
-    <Compile Include="..\Migr8\Internals\ExceptionHelper.cs" Link="Internals\ExceptionHelper.cs" />
-    <Compile Include="..\Migr8\Internals\IDb.cs" Link="Internals\IDb.cs" />
-    <Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs" Link="Internals\IExclusiveDbConnection.cs" />
-    <Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs" Link="Internals\IExecutableSqlMigration.cs" />
-    <Compile Include="..\Migr8\Internals\IWriter.cs" Link="Internals\IWriter.cs" />
-    <Compile Include="..\Migr8\Internals\HintParser.cs" Link="Internals\HintParser.cs" />
-    <Compile Include="..\Migr8\Internals\LogActionWriter.cs" Link="Internals\LogActionWriter.cs" />
-    <Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs" Link="Internals\Scanners\AssemblyScanner.cs" />
-    <Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs" Link="Internals\Scanners\DirectoryScanner.cs" />
-    <Compile Include="..\Migr8\ISqlMigration.cs" Link="ISqlMigration.cs" />
-    <Compile Include="..\Migr8\MigrationAttribute.cs" Link="MigrationAttribute.cs" />
-    <Compile Include="..\Migr8\MigrationException.cs" Link="MigrationException.cs" />
-    <Compile Include="..\Migr8\Migrations.cs" Link="Migrations.cs" />
-    <Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internals\Scanners\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.31" />
-    <PackageReference Include="system.valuetuple" Version="4.5.0" />
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<LangVersion>10</LangVersion>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<Authors>mookid8000</Authors>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
+		<Copyright>Copyright 2012-2017</Copyright>
+		<PackageTags>sql rdbms postgresql postgres migrations</PackageTags>
+		<RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
+		<Compile Include="..\Migr8\ExecutableMigration.cs" Link="ExecutableMigration.cs" />
+		<Compile Include="..\Migr8\HintAttribute.cs" Link="HintAttribute.cs" />
+		<Compile Include="..\Migr8\Hints.cs" Link="Hints.cs" />
+		<Compile Include="..\Migr8\Internals\DatabaseMigratorCore.cs" Link="Internals\DatabaseMigratorCore.cs" />
+		<Compile Include="..\Migr8\Internals\ExceptionHelper.cs" Link="Internals\ExceptionHelper.cs" />
+		<Compile Include="..\Migr8\Internals\IDb.cs" Link="Internals\IDb.cs" />
+		<Compile Include="..\Migr8\Internals\IExclusiveDbConnection.cs" Link="Internals\IExclusiveDbConnection.cs" />
+		<Compile Include="..\Migr8\Internals\IExecutableSqlMigration.cs" Link="Internals\IExecutableSqlMigration.cs" />
+		<Compile Include="..\Migr8\Internals\IWriter.cs" Link="Internals\IWriter.cs" />
+		<Compile Include="..\Migr8\Internals\HintParser.cs" Link="Internals\HintParser.cs" />
+		<Compile Include="..\Migr8\Internals\LogActionWriter.cs" Link="Internals\LogActionWriter.cs" />
+		<Compile Include="..\Migr8\Internals\Scanners\AssemblyScanner.cs" Link="Internals\Scanners\AssemblyScanner.cs" />
+		<Compile Include="..\Migr8\Internals\Scanners\DirectoryScanner.cs" Link="Internals\Scanners\DirectoryScanner.cs" />
+		<Compile Include="..\Migr8\ISqlMigration.cs" Link="ISqlMigration.cs" />
+		<Compile Include="..\Migr8\MigrationAttribute.cs" Link="MigrationAttribute.cs" />
+		<Compile Include="..\Migr8\MigrationException.cs" Link="MigrationException.cs" />
+		<Compile Include="..\Migr8\Migrations.cs" Link="Migrations.cs" />
+		<Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Internals\Scanners\" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MySql.Data" Version="8.0.32" />
+		<PackageReference Include="system.valuetuple" Version="4.5.0" />
+	</ItemGroup>
 </Project>
