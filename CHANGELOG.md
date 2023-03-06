@@ -64,6 +64,9 @@
 ## 0.29.0
 * Update all the packages
 
+## 0.30.0
+* Update all the packages :)
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter
