@@ -39,7 +39,11 @@ namespace Migr8.Test.Api
                 "2-feature-subdir2",
             }));
 
-            Assert.That(migrations.Select(m => string.Join(",", m.Hints.OrderBy(h => h))), Is.EqualTo(new[]
+            var actualLinesOfHints = migrations
+                .Select(m => string.Join(",", m.Hints.OrderBy(h => h, StringComparer.InvariantCulture)))
+                .ToList();
+
+            Assert.That(actualLinesOfHints, Is.EqualTo(new[]
             {
                 "hint-6,hint1,hint2,hint3,hint4,hint5",
                 "",
