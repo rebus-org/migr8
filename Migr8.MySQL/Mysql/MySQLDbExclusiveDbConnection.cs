@@ -73,7 +73,7 @@ INSERT INTO `{migrationTableName}` (
     @userDomainName,
     @machineName
 )
-";                
+";
                 command.Parameters.Add("id", MySqlDbType.Text).Value = migration.Id;
                 command.Parameters.Add("sql", MySqlDbType.Text).Value = migration.Sql;
                 command.Parameters.Add("description", MySqlDbType.Text).Value = migration.Description;
@@ -142,7 +142,7 @@ INSERT INTO `{migrationTableName}` (
         {
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.Transaction = _transaction;
-            sqlCommand.CommandTimeout = (int) (sqlCommandTimeout?.TotalSeconds ?? _options.SqlCommandTimeout.TotalSeconds);
+            sqlCommand.CommandTimeout = (int)(sqlCommandTimeout?.TotalSeconds ?? _options.SqlCommandTimeout.TotalSeconds);
             return sqlCommand;
         }
     }

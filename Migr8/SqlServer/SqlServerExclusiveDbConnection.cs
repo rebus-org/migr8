@@ -143,7 +143,7 @@ ALTER TABLE [{migrationTableName}]
         public IEnumerable<string> GetExecutedMigrationIds(string migrationTableName)
         {
             var list = new List<string>();
-            
+
             using var command = CreateCommand();
             command.CommandText = $"SELECT [MigrationId] FROM [{migrationTableName}]";
 

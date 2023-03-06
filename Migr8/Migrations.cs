@@ -75,8 +75,13 @@ namespace Migr8
             var netListOfMigrations = _migrations
                 .Where(e =>
                 {
-                    var migration = new ExecutableMigration(e.SequenceNumber, e.BranchSpecification, e.Description,
-                        e.SqlMigration, e.Hints);
+                    var migration = new ExecutableMigration(
+                        sequenceNumber: e.SequenceNumber,
+                        branchSpecification: e.BranchSpecification,
+                        description: e.Description,
+                        sqlMigration: e.SqlMigration,
+                        hints: e.Hints
+                    );
 
                     return predicate(migration);
                 })
@@ -95,7 +100,7 @@ namespace Migr8
                 .ToList();
         }
 
-        readonly List<IExecutableSqlMigration> _migrations = new List<IExecutableSqlMigration>();
+        readonly List<IExecutableSqlMigration> _migrations = new();
 
         internal Migrations(IEnumerable<IExecutableSqlMigration> migrations)
         {
@@ -107,6 +112,6 @@ namespace Migr8
             return _migrations;
         }
 
-        internal static Migrations None => new Migrations(Enumerable.Empty<IExecutableSqlMigration>());
+        internal static Migrations None => new(Enumerable.Empty<IExecutableSqlMigration>());
     }
 }

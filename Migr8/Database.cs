@@ -19,18 +19,10 @@ namespace Migr8
         /// <param name="options">Optionally specifies some custom options to use.</param>
         public static void Migrate(string connectionString, Migrations migrations, Options options = null)
         {
-            options = options ?? new Options();
+            var database = GetDatabase();
+            var optionsToUse = options ?? new Options();
 
-            //var writer = options.GetWriter();
-
-            var migrator = new DatabaseMigratorCore(connectionString, options, GetDatabase());
-
-            //var migrator = new DatabaseMigratorCore(
-            //    db: GetDatabase(),
-            //    migrationTableName: options.MigrationTableName,
-            //    writer: writer,
-            //    connectionString: connectionString);
-
+            var migrator = new DatabaseMigratorCore(connectionString, optionsToUse, database);
             var executableSqlMigrations = migrations.GetMigrations();
 
             migrator.Execute(executableSqlMigrations);

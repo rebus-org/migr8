@@ -89,7 +89,7 @@ namespace Migr8.Internals.Scanners
             {
                 Id = id;
                 Sql = sql;
-                Description = description;
+                Description = description ?? "";
                 SequenceNumber = sequenceNumber;
                 BranchSpecification = branchSpecification;
                 SqlMigration = instance;
