@@ -1,5 +1,20 @@
-﻿namespace Migr8.Test.Api
+﻿using System;
+
+namespace Migr8.Test.Api
 {
+    public static class MyMigrations
+    {
+        public static readonly Type[] All =
+        {
+            typeof(CreateMyFirstTable),
+            typeof(CreateMySecondTable),
+            typeof(AddColumnToMyFirstTable),
+            typeof(AddColumnsToBothTables),
+            typeof(ChangeRecoveryMode),
+            typeof(ChangeRecoveryModeBack),
+        };
+    }
+
     [Migration(1, "This is my first migration", "master")]
     class CreateMyFirstTable : ISqlMigration
     {

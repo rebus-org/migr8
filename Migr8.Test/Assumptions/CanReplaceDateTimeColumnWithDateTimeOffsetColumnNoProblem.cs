@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Metrics;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using NUnit.Framework;
@@ -14,16 +13,22 @@ public class CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem : Fixture
     {
         base.SetUp();
 
-        //Using(new DisposableCallback(ResetDatabase));
+        Using(new DisposableCallback(ResetDatabase));
     }
 
     [Test]
+    [Description("Tests what happens when running Migr8 with DateTimeOffset type on old DateTime2-based schema")]
     public async Task SimulateMigrationScenario()
     {
-        await CreateMigrationsTableWithOldLayout();
+        await CreateMigrationsTableWithOldSchema();
 
         await InsertMigrationRowToEmulateOneMigrationHavingBeenExecuted();
 
+        ExecuteAnotherMigration();
+    }
+
+    static void ExecuteAnotherMigration()
+    {
         var migrations = Migrations
             .FromAssemblyOf<CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem>()
             .Where(m => m.SqlMigration is MyNextMigration);
@@ -31,7 +36,7 @@ public class CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem : Fixture
         Database.Migrate(TestConfig.ConnectionString, migrations);
     }
 
-    static async Task CreateMigrationsTableWithOldLayout()
+    static async Task CreateMigrationsTableWithOldSchema()
     {
         var tableName = Options.DefaultMigrationTableName;
 

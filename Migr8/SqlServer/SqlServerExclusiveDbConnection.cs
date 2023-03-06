@@ -90,7 +90,7 @@ INSERT INTO [{migrationTableName}] (
             command.Parameters.Add("id", SqlDbType.NVarChar, 200).Value = migration.Id;
             command.Parameters.Add("sql", SqlDbType.NVarChar).Value = migration.Sql;
             command.Parameters.Add("description", SqlDbType.NVarChar).Value = migration.Description;
-            command.Parameters.Add("time", SqlDbType.DateTime2).Value = DateTime.Now;
+            command.Parameters.Add("time", SqlDbType.DateTimeOffset).Value = DateTimeOffset.Now;
             command.Parameters.Add("userName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERNAME") ?? "??";
             command.Parameters.Add("userDomainName", SqlDbType.NVarChar).Value = Environment.GetEnvironmentVariable("USERDOMAIN") ?? "??";
             command.Parameters.Add("machineName", SqlDbType.NVarChar).Value = Environment.MachineName;
@@ -109,7 +109,7 @@ CREATE TABLE [{migrationTableName}] (
     [MigrationId] NVARCHAR(200) NOT NULL,
     [Sql] NVARCHAR(MAX) NOT NULL,
     [Description] NVARCHAR(MAX) NOT NULL,
-    [Time] DATETIME2 NOT NULL,
+    [Time] DATETIMEOFFSET(3) NOT NULL,
     [UserName] NVARCHAR(MAX) NOT NULL,
     [UserDomainName] NVARCHAR(MAX) NOT NULL,
     [MachineName] NVARCHAR(MAX) NOT NULL,

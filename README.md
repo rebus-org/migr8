@@ -30,7 +30,7 @@ class CreateRebusTimeoutsTable : ISqlMigration
     public string Sql => @"
 		CREATE TABLE [dbo].[RebusTimeouts](
 			[id] [int] IDENTITY(1,1) NOT NULL,
-			[due_time] [datetime2](7) NOT NULL,
+			[due_time] [datetimeoffset](3) NOT NULL,
 			[headers] [nvarchar](MAX) NOT NULL,
 			[body] [varbinary](MAX) NOT NULL,
 			CONSTRAINT [PK_RebusTimeouts] PRIMARY KEY NONCLUSTERED 
