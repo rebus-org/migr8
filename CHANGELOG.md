@@ -70,6 +70,9 @@
 ## 0.31.0
 * Avoid mutating the connection string unless required to do so
 
+## 0.32.0
+* Update packages
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter
