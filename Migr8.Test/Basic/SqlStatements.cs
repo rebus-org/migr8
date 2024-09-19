@@ -4,12 +4,14 @@ using NUnit.Framework;
 namespace Migr8.Test.Basic
 {
     [TestFixture]
-    public class SqlStatements : FixtureBase
+    public class SqlStatements : DbFixtureBase
     {
         DatabaseMigratorCore _migrator;
 
         protected override void SetUp()
         {
+            base.SetUp();
+
             _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 

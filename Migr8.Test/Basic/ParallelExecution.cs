@@ -9,12 +9,14 @@ using NUnit.Framework;
 namespace Migr8.Test.Basic
 {
     [TestFixture]
-    public class ParallelExecution : FixtureBase
+    public class ParallelExecution : DbFixtureBase
     {
         DatabaseMigratorCore _migrator;
 
         protected override void SetUp()
         {
+            base.SetUp();
+
             _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 

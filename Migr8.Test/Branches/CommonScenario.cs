@@ -7,12 +7,13 @@ using NUnit.Framework;
 namespace Migr8.Test.Branches
 {
     [TestFixture]
-    public class CommonScenario : FixtureBase
+    public class CommonScenario : DbFixtureBase
     {
         DatabaseMigratorCore _migrator;
 
         protected override void SetUp()
         {
+            base.SetUp();
             _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Migr8.Test.Constraints
 {
     [TestFixture]
-    public class DoesNotAcceptMigrationsThatShouldHaveBeenExecutedByNow : FixtureBase
+    public class DoesNotAcceptMigrationsThatShouldHaveBeenExecutedByNow : DbFixtureBase
     {
         [Test]
         public void TryIt()

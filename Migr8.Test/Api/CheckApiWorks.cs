@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Migr8.Test.Api
 {
     [TestFixture]
-    public class CheckApiWorks : FixtureBase
+    public class CheckApiWorks : DbFixtureBase
     {
         [Test]
         public void ItWorks()

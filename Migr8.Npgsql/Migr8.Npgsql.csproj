@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<LangVersion>10</LangVersion>
+		<LangVersion>12</LangVersion>
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
@@ -33,10 +33,7 @@
 		<Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Internals\Scanners\" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="npgsql" Version="8.0.1" />
+		<PackageReference Include="npgsql" Version="8.0.4" />
 		<PackageReference Include="system.valuetuple" Version="4.5.0" />
 	</ItemGroup>
 </Project>

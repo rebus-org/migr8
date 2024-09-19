@@ -1,29 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net8.0</TargetFrameworks>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="microsoft.net.test.sdk" Version="17.8.0" />
-		<PackageReference Include="nunit" Version="4.0.1" />
-		<PackageReference Include="nunit3testadapter" Version="4.5.0" />
-		<PackageReference Include="testy" Version="0.9.0" />
+		<PackageReference Include="microsoft.net.test.sdk" Version="17.11.1" />
+		<PackageReference Include="nunit" Version="4.2.2" />
+		<PackageReference Include="nunit3testadapter" Version="4.6.0" />
+		<PackageReference Include="testy" Version="0.10.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Migr8\Migr8.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="Api\Mix\0001-master.sql">
+		<None Update="**\*.sql">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Api\Mix\Subdir1\0002-feature-subdir1.sql">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Api\Mix\Subdir2\0002-feature-subdir2.sql">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Assumptions\" />
 	</ItemGroup>
 </Project>

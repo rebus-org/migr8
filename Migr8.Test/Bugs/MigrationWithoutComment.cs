@@ -7,7 +7,7 @@ using Testy.Files;
 namespace Migr8.Test.Bugs
 {
     [TestFixture]
-    public class MigrationWithoutComment : FixtureBase
+    public class MigrationWithoutComment : DbFixtureBase
     {
         [TestCase(@"-- wat
 

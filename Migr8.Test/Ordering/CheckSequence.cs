@@ -7,12 +7,13 @@ using NUnit.Framework;
 namespace Migr8.Test.Ordering
 {
     [TestFixture]
-    public class CheckSequence : FixtureBase
+    public class CheckSequence : DbFixtureBase
     {
         DatabaseMigratorCore _migrator;
 
         protected override void SetUp()
         {
+            base.SetUp();
             _migrator = new DatabaseMigratorCore(new ThreadPrintingConsoleWriter(), TestConfig.ConnectionString);
         }
 

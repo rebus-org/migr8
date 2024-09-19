@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Migr8.Test.Constraints
 {
     [TestFixture]
-    public class DoesNotAcceptDuplicatedIds : FixtureBase
+    public class DoesNotAcceptDuplicatedIds : DbFixtureBase
     {
         [Test]
         public void TryIt()

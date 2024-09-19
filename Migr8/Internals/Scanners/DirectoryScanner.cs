@@ -104,7 +104,7 @@ namespace Migr8.Internals.Scanners
                 const string hintsPrefix = "hints:";
 
                 var commentLines =
-                    description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+                    description.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries);
 
                 var hintsLines = commentLines
                     .Select(line => line.Trim())
@@ -114,7 +114,7 @@ namespace Migr8.Internals.Scanners
                 try
                 {
                     var hints = hintsLines
-                        .SelectMany(line => line.Substring(hintsPrefix.Length).Split(new[] {",", ";"}, StringSplitOptions.RemoveEmptyEntries))
+                        .SelectMany(line => line.Substring(hintsPrefix.Length).Split([",", ";"], StringSplitOptions.RemoveEmptyEntries))
                         .Select(hint => hint.Trim())
                         .Where(hint => !string.IsNullOrWhiteSpace(hint))
                         .Distinct()

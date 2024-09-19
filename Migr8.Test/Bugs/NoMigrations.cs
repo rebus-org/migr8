@@ -3,7 +3,7 @@
 namespace Migr8.Test.Bugs
 {
     [TestFixture]
-    public class NoMigrations : FixtureBase
+    public class NoMigrations : DbFixtureBase
     {
         [Test]
         public void ReturnsJustFineEvenWhenThereAreNoMigrations()

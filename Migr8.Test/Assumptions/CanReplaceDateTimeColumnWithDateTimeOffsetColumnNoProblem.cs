@@ -7,7 +7,7 @@ using Testy.General;
 namespace Migr8.Test.Assumptions;
 
 [TestFixture]
-public class CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem : FixtureBase
+public class CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem : DbFixtureBase
 {
     protected override void SetUp()
     {

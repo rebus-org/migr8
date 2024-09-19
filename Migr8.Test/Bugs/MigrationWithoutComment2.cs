@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using Migr8.Test.Assumptions;
+﻿using Migr8.Test.Assumptions;
 using NUnit.Framework;
 using Testy.General;
+// ReSharper disable ClassNeverInstantiated.Local
 
 namespace Migr8.Test.Bugs;
 
 [TestFixture]
-public class MigrationWithoutComment2 : FixtureBase
+public class MigrationWithoutComment2 : DbFixtureBase
 {
     protected override void SetUp()
     {
@@ -16,7 +16,7 @@ public class MigrationWithoutComment2 : FixtureBase
     }
 
     [Test]
-    public async Task ExecutesWithoutError()
+    public void ExecutesWithoutError()
     {
         var migrations = Migrations.FromAssemblyOf<CanReplaceDateTimeColumnWithDateTimeOffsetColumnNoProblem>()
             .Where(m => m.SqlMigration is MyMigrationWithoutDescription);
@@ -29,5 +29,4 @@ public class MigrationWithoutComment2 : FixtureBase
     {
         public string Sql => @"CREATE TABLE Bim (Id int not null)";
     }
-
 }

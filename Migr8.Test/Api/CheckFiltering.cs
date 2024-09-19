@@ -8,7 +8,7 @@ using Testy.Extensions;
 namespace Migr8.Test.Api
 {
     [TestFixture]
-    public class CheckFiltering : FixtureBase
+    public class CheckFiltering : DbFixtureBase
     {
         [Test]
         public void ItWorks()

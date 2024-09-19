@@ -6,7 +6,7 @@ namespace Migr8.Test.Basic
 {
     [TestFixture]
     [Ignore("Doesn't work - just used to test if connection string could be properly parsed")]
-    public class SimpleScenarioWithCustomConnectionFactory : FixtureBase
+    public class SimpleScenarioWithCustomConnectionFactory : DbFixtureBase
     {
         readonly string _connectionString = "Server=(localdb)\\MsSqlLocalDb; Database=migr8_test; Authentication=ManagedIdentity";
 

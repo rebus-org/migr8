@@ -55,7 +55,7 @@ ALTER TABLE [MySecondTable] ADD [MoreText] NVARCHAR(100) NULL
     }
 
     [Migration(5, "Change recovery mode back to full")]
-    [Hint(Hints.NoTransaction)]
+    [Hint(Migr8.Hints.NoTransaction)]
     class ChangeRecoveryModeBack : ISqlMigration
     {
         public string Sql => @"ALTER DATABASE CURRENT SET RECOVERY FULL";

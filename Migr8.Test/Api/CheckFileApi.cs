@@ -6,12 +6,13 @@ using NUnit.Framework;
 namespace Migr8.Test.Api
 {
     [TestFixture]
-    public class CheckFileApi : FixtureBase
+    public class CheckFileApi : DbFixtureBase
     {
         string _directory;
 
         protected override void SetUp()
         {
+            base.SetUp();
             _directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Api");
         }
 

@@ -17,16 +17,10 @@ namespace Migr8.Internals
         }
     }
 
-    class Hint
+    class Hint(string name, string value)
     {
-        public string Name { get; }
-        public string Value { get; }
-
-        public Hint(string name, string value)
-        {
-            Name = name;
-            Value = value;
-        }
+        public string Name { get; } = name;
+        public string Value { get; } = value;
 
         public bool HasValue => Value != null;
 
@@ -36,7 +30,8 @@ namespace Migr8.Internals
             {
                 return TimeSpan.Parse(Value);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new FormatException($"Could not parse command timeout. Value is {Value}. Format required: hh:mm:ss", ex);
             }
@@ -44,12 +39,9 @@ namespace Migr8.Internals
 
         public static Hint Parse(string str)
         {
-            var index = str.IndexOf(':');
-            if (index == -1) return new Hint(str, null);
-
-            var name = str.Substring(0, index);
-            var value = index != -1 ? str.Substring(index+1).Trim() : null;
-            return new Hint(name, value);
+            var parts = str.Split(':').Select(p => p.Trim()).ToList();
+            
+            return new Hint(parts.First(), string.Join(":", parts.Skip(1)));
         }
     }
 }

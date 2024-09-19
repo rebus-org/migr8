@@ -3,21 +3,21 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using NUnit.Framework;
+using Testy;
 
 namespace Migr8.Test
 {
-    public abstract class FixtureBase
+    public abstract class DbFixtureBase : FixtureBase
     {
         const int DoesNotExist = 3701;
         
         readonly ConcurrentStack<IDisposable> _disposables = new();
 
-        [SetUp]
-        public void InnerSetUp()
+        protected override void SetUp()
         {
-            ResetDatabase();
+            base.SetUp();
 
-            SetUp();
+            ResetDatabase();
         }
 
         public static void ResetDatabase()
@@ -48,10 +48,6 @@ namespace Migr8.Test
             {
                 Console.WriteLine("Did not exist");
             }
-        }
-
-        protected virtual void SetUp()
-        {
         }
 
         [TearDown]
