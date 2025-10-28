@@ -18,9 +18,9 @@ namespace Migr8.Internals
 
         public DatabaseMigratorCore(IWriter writer, string connectionString, string migrationTableName = null, IDb db = null)
         {
-            _writer = writer;
-            _connectionString = connectionString;
-            _db = db ?? Database.GetDatabase();
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
             _migrationTableName = migrationTableName ?? Options.DefaultMigrationTableName;
             _options = new Options();
 

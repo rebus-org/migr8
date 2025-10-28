@@ -38,15 +38,30 @@ namespace Migr8
             SqlCommandTimeout = sqlCommandTimeout ?? TimeSpan.FromMinutes(SqlCommandTimeoutMinutes);
         }
 
-        internal string MigrationTableName { get; }
+        /// <summary>
+        /// Gets the name of the table in which executed migrations will be logged.
+        /// </summary>
+        public string MigrationTableName { get; }
 
-        internal Action<string> LogAction { get; }
+        /// <summary>
+        /// Gets the log action to use.
+        /// </summary>
+        public Action<string> LogAction { get; }
 
-        internal Action<string> VerboseLogAction { get; }
+        /// <summary>
+        /// Gets the verbose log action to use.
+        /// </summary>
+        public Action<string> VerboseLogAction { get; }
 
-        internal TimeSpan SqlCommandTimeout { get; }
+        /// <summary>
+        /// Gets the SQL command timeout to use for each command.
+        /// </summary>
+        public TimeSpan SqlCommandTimeout { get; }
 
-        internal IWriter GetWriter() => new LogActionWriter(LogAction ?? LogToConsole, VerboseLogAction ?? DoNothing);
+        /// <summary>
+        /// Gets a writer for logging.
+        /// </summary>
+        public IWriter GetWriter() => new LogActionWriter(LogAction ?? LogToConsole, VerboseLogAction ?? DoNothing);
 
         static void LogToConsole(string text) => Console.WriteLine(text);
 

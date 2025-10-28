@@ -6,17 +6,13 @@
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
 		<Copyright>Copyright Rebus FM ApS 2012</Copyright>
-		<PackageTags>sql rdbms sql-server mssql migrations</PackageTags>
+		<PackageTags>sql rdbms migrations core</PackageTags>
 		<RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Core abstractions and logic for the Migr8 database migration library</Description>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
 		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Migr8.Core\Migr8.Core.csproj" />
 	</ItemGroup>
 </Project>

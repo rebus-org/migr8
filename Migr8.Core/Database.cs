@@ -1,25 +1,24 @@
 ﻿using Migr8.Internals;
 
-namespace Migr8
+namespace Migr8.Core
 {
     /// <summary>
-    /// This is the entry point: Use Migr8 by calling <see cref="Migrate"/>, supplying a connection string (or a connection
-    /// string name), some migrations (by calling <see cref="Migrations.FromAssemblyOf{T}"/>,
-    /// or <see cref="Migrations.FromAssembly"/>), and possibly some <see cref="Options"/> if you want to customize something.
+    /// This is the core database migration class that contains the shared migration logic.
+    /// Database-specific implementations (SQL Server, PostgreSQL, MySQL) should call <see cref="Migrate"/> method.
     /// Migrations are classes decorated with the <see cref="MigrationAttribute"/>, which must implement <see cref="ISqlMigration"/>
     /// in order to provide some SQL to be executed.
     /// </summary>
-    public static partial class Database
+    public static class Database
     {
         /// <summary>
-        /// Executes the given migrations on the specified database.
+        /// Executes the given migrations on the specified database using the provided database implementation.
         /// </summary>
+        /// <param name="database">The database-specific implementation to use.</param>
         /// <param name="connectionString">Specifies a connection string or the name of a connection string in the current application configuration file to use.</param>
         /// <param name="migrations">Supplies the migrations to be executed.</param>
         /// <param name="options">Optionally specifies some custom options to use.</param>
-        public static void Migrate(string connectionString, Migrations migrations, Options options = null)
+        public static void Migrate(IDb database, string connectionString, Migrations migrations, Options options = null)
         {
-            var database = GetDatabase();
             var optionsToUse = options ?? new Options();
 
             var migrator = new DatabaseMigratorCore(connectionString, optionsToUse, database);

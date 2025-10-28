@@ -2,7 +2,7 @@
 
 namespace Migr8.Internals
 {
-    interface IExecutableSqlMigration
+    public interface IExecutableSqlMigration
     {
         string Id { get; }
         string Sql { get; }

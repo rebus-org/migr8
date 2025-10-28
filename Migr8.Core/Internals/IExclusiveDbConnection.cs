@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Migr8.Internals
 {
-    interface IExclusiveDbConnection : IDisposable
+    public interface IExclusiveDbConnection : IDisposable
     {
         void Complete();
         HashSet<string> GetTableNames();
