@@ -82,7 +82,8 @@
 ## 0.35.0
 * Update all the packages again
 
-
+## 0.36.0
+* Add readme to NuGet packages
 
 ---
 

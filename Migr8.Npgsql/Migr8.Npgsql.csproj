@@ -10,7 +10,14 @@
 		<RepositoryUrl>https://github.com/rebus-org/migr8</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Migr8\Database.cs" Link="Database.cs" />
 		<Compile Include="..\Migr8\ExecutableMigration.cs" Link="ExecutableMigration.cs" />
