@@ -33,7 +33,7 @@
 		<Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="MySql.Data" Version="9.0.0" />
-		<PackageReference Include="system.valuetuple" Version="4.5.0" />
+		<PackageReference Include="MySql.Data" Version="9.5.0" />
+		<PackageReference Include="system.valuetuple" Version="4.6.1" />
 	</ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
 		<LangVersion>12</LangVersion>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
 		<Copyright>Copyright Rebus FM ApS 2012</Copyright>
@@ -33,7 +33,7 @@
 		<Compile Include="..\Migr8\Options.cs" Link="Options.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="npgsql" Version="8.0.4" />
-		<PackageReference Include="system.valuetuple" Version="4.5.0" />
+		<PackageReference Include="npgsql" Version="10.0.0" />
+		<PackageReference Include="system.valuetuple" Version="4.6.1" />
 	</ItemGroup>
 </Project>
