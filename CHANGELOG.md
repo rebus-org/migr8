@@ -85,6 +85,9 @@
 ## 0.36.0
 * Add readme to NuGet packages
 
+## 0.37.0
+* Update dependencies
+
 ---
 
 [ctrlenter]: https://github.com/ctrlenter

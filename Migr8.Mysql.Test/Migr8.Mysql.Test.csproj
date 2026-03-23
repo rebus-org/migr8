@@ -5,9 +5,9 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="microsoft.net.test.sdk" Version="18.0.1" />
-		<PackageReference Include="nunit" Version="4.4.0" />
-		<PackageReference Include="nunit3testadapter" Version="6.0.0" />
+		<PackageReference Include="microsoft.net.test.sdk" Version="18.3.0" />
+		<PackageReference Include="nunit" Version="4.5.1" />
+		<PackageReference Include="nunit3testadapter" Version="6.2.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Migr8.Mysql\Migr8.Mysql.csproj" />

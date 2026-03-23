@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<LangVersion>12</LangVersion>
+		<LangVersion>14</LangVersion>
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<Authors>mookid8000</Authors>
 		<PackageProjectUrl>http://mookid.dk/oncode/migr8-2</PackageProjectUrl>
@@ -20,7 +20,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
-		<PackageReference Include="System.ValueTuple" Version="4.6.1" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
+		<PackageReference Include="System.ValueTuple" Version="4.6.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
 	</ItemGroup>
 </Project>
